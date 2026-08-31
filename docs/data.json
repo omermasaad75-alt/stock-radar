@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-31T12:09:13.891462+00:00",
+  "generated_at": "2026-08-31T13:08:20.796396+00:00",
   "stocks": [
     {
       "tk": "MSGY",
@@ -351,7 +351,7 @@
       "floatShares": 65069,
       "shortShares": 19354,
       "shortUnknown": false,
-      "mcapUSD": 3687736,
+      "mcapUSD": 409747,
       "openPrice": 3.549999952316284,
       "openHigh": 4.340000152587891,
       "support": 0.33,
@@ -436,7 +436,7 @@
       "mcapUSD": 2187699,
       "openPrice": 2.696000099182129,
       "openHigh": 6.639999866485596,
-      "support": 0.342,
+      "support": 2.56,
       "supportHoldSessions": 30,
       "droppedCandles": [
         3.1,
@@ -448,8 +448,8 @@
       "macd": "إيجابي خفيف",
       "rsi": 31.0,
       "ma20": 2.991,
-      "ma50": 4.5506,
-      "ma200": 29.2297,
+      "ma50": 4.6007,
+      "ma200": 29.2422,
       "vwap": 4.0209,
       "newsFlags": []
     },
@@ -477,7 +477,7 @@
       "mcapUSD": 24472612,
       "openPrice": 8.75,
       "openHigh": 13.1899995803833,
-      "support": 1.06,
+      "support": 5.51,
       "supportHoldSessions": 30,
       "droppedCandles": [
         14.5,
@@ -489,8 +489,8 @@
       "macd": "إيجابي",
       "rsi": 60.3,
       "ma20": 11.3339,
-      "ma50": 12.5432,
-      "ma200": 17.4587,
+      "ma50": 12.7376,
+      "ma200": 17.5073,
       "vwap": 9.7812,
       "newsFlags": []
     },
@@ -515,10 +515,10 @@
       "floatShares": 435803,
       "shortShares": 93955,
       "shortUnknown": false,
-      "mcapUSD": 2012782,
+      "mcapUSD": 4293161,
       "openPrice": 1.899999976158142,
       "openHigh": 2.700000047683716,
-      "support": 0.474,
+      "support": 0.78,
       "supportHoldSessions": 30,
       "droppedCandles": [
         2.9,
@@ -530,8 +530,8 @@
       "macd": "سلبي",
       "rsi": 29.3,
       "ma20": 1.8599,
-      "ma50": 2.7159,
-      "ma200": 19.2094,
+      "ma50": 2.7543,
+      "ma200": 19.219,
       "vwap": 1.9813,
       "newsFlags": []
     },
@@ -546,7 +546,7 @@
         0,
         1,
         0,
-        1,
+        0,
         1,
         0
       ],
@@ -559,21 +559,21 @@
       "mcapUSD": 1770728,
       "openPrice": 3.5799999237060547,
       "openHigh": 3.75,
-      "support": 2.17,
+      "support": 0.53,
       "supportHoldSessions": 30,
       "droppedCandles": [
-        3.75,
-        11.05
+        4.09,
+        4.95
       ],
       "dailyVolume": 45015300,
       "entryPhase": "not-applicable",
       "entryModel": null,
-      "macd": "إيجابي خفيف",
+      "macd": "سلبي",
       "rsi": 32.7,
-      "ma20": 2.8685,
-      "ma50": 3.5074,
-      "ma200": 10.4691,
-      "vwap": 2.6104,
+      "ma20": 2.866,
+      "ma50": 1.7874,
+      "ma200": 2.3775,
+      "vwap": 2.6123,
       "newsFlags": [
         {
           "headline": "Aethlon Medical announces pricing of $4.5M common stock, warrant offering",
@@ -592,7 +592,7 @@
         1,
         1,
         0,
-        0,
+        1,
         1,
         0
       ],
@@ -605,20 +605,20 @@
       "mcapUSD": 95182104,
       "openPrice": 2.5,
       "openHigh": 3.549999952316284,
-      "support": 0.07,
+      "support": 1.39,
       "supportHoldSessions": 30,
       "droppedCandles": [
         3.25,
-        3.33
+        3.55
       ],
       "dailyVolume": 100700,
       "entryPhase": "not-applicable",
       "entryModel": null,
-      "macd": "سلبي",
+      "macd": "إيجابي خفيف",
       "rsi": 31.3,
       "ma20": 2.1203,
-      "ma50": 1.1611,
-      "ma200": 0.7129,
+      "ma50": 3.2781,
+      "ma200": 13.4968,
       "vwap": 2.0263,
       "newsFlags": []
     },
@@ -643,25 +643,33 @@
       "floatShares": 283905,
       "shortShares": 114481,
       "shortUnknown": false,
-      "mcapUSD": 49533,
+      "mcapUSD": 49536,
       "openPrice": 3.740000009536743,
       "openHigh": 4.260000228881836,
-      "support": 0.017,
+      "support": 2.81,
       "supportHoldSessions": 30,
       "droppedCandles": [
         3.75,
         4.09
       ],
       "dailyVolume": 71800,
-      "entryPhase": "retesting-support",
+      "entryPhase": "entry-confirmed",
       "entryModel": {
-        "breakoutHigh": 44.4
+        "support1": 2.81,
+        "breakoutHigh": 482.0,
+        "breakoutPct": 20,
+        "retestLow": 2.95,
+        "retestSessions": 3,
+        "entryLow": 2.86,
+        "entryMid": 98.673,
+        "entryHigh": 194.486,
+        "stopLoss": 2.81
       },
-      "macd": "سلبي",
+      "macd": "إيجابي خفيف",
       "rsi": 42.2,
       "ma20": 3.2775,
-      "ma50": 3.2016,
-      "ma200": 28.321,
+      "ma50": 111.983,
+      "ma200": 5532.1058,
       "vwap": 3.8,
       "newsFlags": []
     },
@@ -689,10 +697,11 @@
       "mcapUSD": 17103562,
       "openPrice": 5.900000095367432,
       "openHigh": 5.900000095367432,
-      "support": 0.373,
+      "support": 4.21,
       "supportHoldSessions": 30,
       "droppedCandles": [
-        12.886
+        12.886,
+        15.15
       ],
       "dailyVolume": 61900,
       "entryPhase": "not-applicable",
@@ -700,8 +709,8 @@
       "macd": "إيجابي خفيف",
       "rsi": 72.9,
       "ma20": 8.5968,
-      "ma50": 4.3622,
-      "ma200": 1.6799,
+      "ma50": 8.4544,
+      "ma200": 10.9538,
       "vwap": 9.6577,
       "newsFlags": []
     },
@@ -716,7 +725,7 @@
         0,
         1,
         1,
-        0,
+        1,
         0,
         0
       ],
@@ -729,7 +738,7 @@
       "mcapUSD": 56283488,
       "openPrice": 4.059999942779541,
       "openHigh": 4.230000019073486,
-      "support": 0.23,
+      "support": 1.65,
       "supportHoldSessions": 30,
       "droppedCandles": [
         4.9,
@@ -738,11 +747,11 @@
       "dailyVolume": 689600,
       "entryPhase": "not-applicable",
       "entryModel": null,
-      "macd": "سلبي",
+      "macd": "إيجابي خفيف",
       "rsi": 28.3,
       "ma20": 2.678,
-      "ma50": 1.603,
-      "ma200": 0.9524,
+      "ma50": 3.9662,
+      "ma200": 9.2655,
       "vwap": 2.3953,
       "newsFlags": [
         {
@@ -779,11 +788,11 @@
       "mcapUSD": 18074488,
       "openPrice": 4.699999809265137,
       "openHigh": 5.439000129699707,
-      "support": 0.088,
+      "support": 2.652,
       "supportHoldSessions": 30,
       "droppedCandles": [
-        11.13,
-        13.68
+        10.2,
+        11.13
       ],
       "dailyVolume": 345600,
       "entryPhase": "not-applicable",
@@ -791,8 +800,8 @@
       "macd": "إيجابي خفيف",
       "rsi": 79.6,
       "ma20": 4.8205,
-      "ma50": 2.4265,
-      "ma200": 1.5873,
+      "ma50": 6.1172,
+      "ma200": 50.5635,
       "vwap": 6.8228,
       "newsFlags": [
         {
@@ -825,20 +834,20 @@
       "mcapUSD": 9224348,
       "openPrice": 3.1500000953674316,
       "openHigh": 3.240000009536743,
-      "support": 0.415,
+      "support": 2.25,
       "supportHoldSessions": 30,
       "droppedCandles": [
         3.0,
-        3.5
+        4.795
       ],
       "dailyVolume": 47900,
       "entryPhase": "not-applicable",
       "entryModel": null,
-      "macd": "سلبي",
+      "macd": "إيجابي خفيف",
       "rsi": 65.3,
       "ma20": 2.6122,
-      "ma50": 1.8293,
-      "ma200": 1.3606,
+      "ma50": 4.2912,
+      "ma200": 7.3955,
       "vwap": 2.6205,
       "newsFlags": []
     },
@@ -866,7 +875,7 @@
       "mcapUSD": 2069593216,
       "openPrice": 10.010000228881836,
       "openHigh": 11.90999984741211,
-      "support": 1.68,
+      "support": 8.4,
       "supportHoldSessions": 30,
       "droppedCandles": [],
       "dailyVolume": 247200,
@@ -875,8 +884,8 @@
       "macd": "إيجابي",
       "rsi": 74.9,
       "ma20": 12.6527,
-      "ma50": 6.9441,
-      "ma200": 2.4691,
+      "ma50": 10.9561,
+      "ma200": 6.4045,
       "vwap": 12.8471,
       "newsFlags": []
     },
@@ -891,7 +900,7 @@
         1,
         1,
         0,
-        0,
+        1,
         1,
         1
       ],
@@ -904,7 +913,7 @@
       "mcapUSD": 6165021,
       "openPrice": 7.199999809265137,
       "openHigh": 7.210000038146973,
-      "support": 0.027,
+      "support": 2.7,
       "supportHoldSessions": 30,
       "droppedCandles": [
         53.59,
@@ -913,11 +922,11 @@
       "dailyVolume": 2165200,
       "entryPhase": "not-applicable",
       "entryModel": null,
-      "macd": "سلبي",
+      "macd": "إيجابي خفيف",
       "rsi": 50.5,
       "ma20": 13.7657,
-      "ma50": 9.3879,
-      "ma200": 2.8735,
+      "ma50": 40.6343,
+      "ma200": 62.8096,
       "vwap": 16.0418,
       "newsFlags": []
     },
@@ -1121,7 +1130,7 @@
       "mcapUSD": 33629324,
       "openPrice": 3.0799999237060547,
       "openHigh": 4.980000019073486,
-      "support": 0.625,
+      "support": 0.657,
       "supportHoldSessions": 30,
       "droppedCandles": [
         3.02,
@@ -1133,8 +1142,8 @@
       "macd": "سلبي",
       "rsi": 33.1,
       "ma20": 2.6577,
-      "ma50": 1.6009,
-      "ma200": 1.3411,
+      "ma50": 1.6087,
+      "ma200": 1.3462,
       "vwap": 2.4661,
       "newsFlags": [
         {
@@ -2204,7 +2213,7 @@
       "floatShares": 455328,
       "shortShares": 217839,
       "shortUnknown": false,
-      "mcapUSD": 4377211,
+      "mcapUSD": 486356,
       "openPrice": 2.2899999618530273,
       "openHigh": 5.889999866485596,
       "support": 0.49,
@@ -2330,7 +2339,7 @@
       "floatShares": 1637009,
       "shortShares": 36392,
       "shortUnknown": false,
-      "mcapUSD": 22800912,
+      "mcapUSD": 4650877,
       "openPrice": 1.600000023841858,
       "openHigh": 1.86899995803833,
       "support": 1.15,
