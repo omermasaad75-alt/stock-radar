@@ -1,0 +1,507 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+سكربت المسح والتحليل — يقرأ:
+  1) reverse_split_candidates.json  (اكتشاف تلقائي عبر discover_splits.py / BusinessQuant)
+  2) watchlist.json                  (إضافات يدوية اختيارية — مفيدة لنموذج الموجة
+                                       الثانية، لأن BusinessQuant يغطي التقسيمات فقط
+                                       وليس الصعودات الحادة)
+كل بيانات الأسعار/الشموع/التقسيمات/الفلوت/القيمة السوقية/الشورت/الأخبار تُسحب
+من yfinance مجانًا وبدون مفتاح API. يكتب النتيجة في docs/data.json.
+
+تشغيل محلي للتجربة:
+    python scripts/discover_splits.py     # يحتاج BUSINESSQUANT_API_KEY
+    python scripts/scanner.py
+
+⚠️ محدوديات معروفة:
+- بيانات الشورت من yfinance ليست لحظية — Yahoo يحدّثها من تقارير FINRA/البورصات
+  كل أسبوعين تقريبًا، فقد تكون متأخرة عدة أيام عن الواقع. أفضل من عدم وجودها
+  إطلاقًا، لكن راجعها يدويًا لحظة اتخاذ القرار.
+- "الفلوت" هو أفضل تقدير من yfinance (floatShares أو sharesOutstanding كبديل) —
+  مش دايمًا دقيق 100٪ لكل الشركات الصغيرة جدًا.
+- فلترة الأخبار السلبية تعتمد على كلمات مفتاحية بسيطة في عناوين آخر الأخبار
+  من yfinance — تقريبية، ليست تحليلاً دلاليًا كاملاً.
+- اكتشاف الدعم/الاختراق/إعادة الاختبار/الشمعة الساقطة مبني على قواعد مبسّطة
+  (Heuristics) على الشموع اليومية — مرشح أولي يوفر وقت الفحص اليدوي، مش قرار نهائي.
+"""
+
+import os
+import sys
+import json
+import math
+from datetime import datetime, timezone
+
+import yfinance as yf
+import pandas as pd
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CANDIDATES_PATH = os.path.join(REPO_ROOT, "reverse_split_candidates.json")
+WATCHLIST_PATH = os.path.join(REPO_ROOT, "watchlist.json")
+OUTPUT_PATH = os.path.join(REPO_ROOT, "docs", "data.json")
+
+# ---------- إعدادات الاستراتيجية (نفس أرقام الداشبورد بالظبط) ----------
+SUPPORT_HOLD_SESSIONS = 5
+RETEST_HOLD_SESSIONS = 3
+BREAKOUT_PCT = 0.20
+RSI_MAX = 30
+FLOAT_MAX = 5_000_000
+SHORT_SHARES_MAX = 20_000
+PRICE_MIN, PRICE_MAX = 1.0, 5.0
+OPEN_DAY_RISE_MAX_PCT = 20.0
+DAILY_VOLUME_DORMANT_MAX = 300_000
+SPIKE_MIN_PCT = 100.0
+SPIKE_WINDOW_DAYS = 25
+RETEST_WINDOW_MIN_DAYS, RETEST_WINDOW_MAX_DAYS = 4, 20
+
+NEGATIVE_KEYWORDS = [
+    "offering", "dilution", "going concern", "delisting", "delist",
+    "bankruptcy", "chapter 11", "default", "restatement",
+    "sec investigation", "class action", "resign", "auditor",
+    "non-compliance", "notice of non-compliance",
+]
+
+
+# ==================== جلب البيانات عبر yfinance ====================
+
+def get_daily_candles(symbol, period="1y"):
+    try:
+        t = yf.Ticker(symbol)
+        hist = t.history(period=period, auto_adjust=False)
+        if hist is None or hist.empty:
+            return None
+        df = hist.reset_index()
+        df = df.rename(columns={
+            "Date": "t", "Open": "o", "High": "h", "Low": "l",
+            "Close": "c", "Volume": "v",
+        })
+        df["t"] = pd.to_datetime(df["t"]).dt.tz_localize(None)
+        return df[["t", "o", "h", "l", "c", "v"]].dropna()
+    except Exception as e:
+        print(f"  [!] فشل جلب الشموع لـ {symbol}: {e}")
+        return None
+
+
+def get_latest_reverse_split(symbol):
+    """يرجّع (تاريخ آخر تقسيم عكسي، النسبة كنص) أو (None, None)."""
+    try:
+        t = yf.Ticker(symbol)
+        splits = t.splits
+        if splits is None or splits.empty:
+            return None, None
+        latest_date, latest_ratio = None, None
+        for date, ratio in splits.items():
+            if ratio is None or ratio >= 1:
+                continue  # ratio < 1 يعني تقسيم عكسي (مثال: 0.05 = 1:20)
+            d = pd.Timestamp(date).tz_localize(None).date()
+            if latest_date is None or d > latest_date:
+                latest_date, latest_ratio = d, ratio
+        if latest_date is None:
+            return None, None
+        ratio_text = f"1:{round(1/latest_ratio)}" if latest_ratio > 0 else "—"
+        return str(latest_date), ratio_text
+    except Exception:
+        return None, None
+
+
+def get_financials(symbol):
+    """فلوت تقريبي + قيمة سوقية + شورت — كل ده من yfinance.info (مجاني)."""
+    out = {"float": None, "mcap": None, "short_shares": None, "short_date": None}
+    try:
+        t = yf.Ticker(symbol)
+        info = t.get_info() if hasattr(t, "get_info") else t.info
+        out["float"] = info.get("floatShares") or info.get("sharesOutstanding")
+        out["mcap"] = info.get("marketCap")
+        out["short_shares"] = info.get("sharesShort")
+        out["short_date"] = info.get("dateShortInterest")
+    except Exception as e:
+        print(f"  [!] فشل جلب البيانات المالية لـ {symbol}: {e}")
+    return out
+
+
+def get_news_flags(symbol, limit=15):
+    try:
+        t = yf.Ticker(symbol)
+        news = t.news or []
+        hits = []
+        for n in news[:limit]:
+            content = n.get("content", n)  # بعض إصدارات yfinance تلف المحتوى في content{}
+            title = (content.get("title") or "").lower()
+            summary = (content.get("summary") or "") if isinstance(content, dict) else ""
+            text = title + " " + str(summary).lower()
+            for kw in NEGATIVE_KEYWORDS:
+                if kw in text:
+                    hits.append({"headline": content.get("title"), "keyword": kw})
+                    break
+        return hits
+    except Exception:
+        return []
+
+
+# ==================== المؤشرات الفنية ====================
+
+def rsi(series, period=14):
+    delta = series.diff()
+    gain = delta.clip(lower=0)
+    loss = -delta.clip(upper=0)
+    avg_gain = gain.rolling(period).mean()
+    avg_loss = loss.rolling(period).mean()
+    rs = avg_gain / avg_loss.replace(0, 1e-9)
+    return 100 - (100 / (1 + rs))
+
+
+def macd(series, fast=12, slow=26, signal=9):
+    ema_fast = series.ewm(span=fast, adjust=False).mean()
+    ema_slow = series.ewm(span=slow, adjust=False).mean()
+    macd_line = ema_fast - ema_slow
+    signal_line = macd_line.ewm(span=signal, adjust=False).mean()
+    hist = macd_line - signal_line
+    return macd_line, signal_line, hist
+
+
+def classify_macd(macd_line, signal_line, hist):
+    if len(hist) < 2 or pd.isna(hist.iloc[-1]):
+        return "—"
+    h, m = hist.iloc[-1], macd_line.iloc[-1]
+    if h > 0 and m > 0 and h > hist.iloc[-2]:
+        return "إيجابي"
+    if h > 0:
+        return "إيجابي خفيف"
+    if h < 0:
+        return "سلبي"
+    return "محايد"
+
+
+def anchored_vwap(df, window=20):
+    recent = df.tail(window)
+    typical = (recent["h"] + recent["l"] + recent["c"]) / 3
+    return (typical * recent["v"]).sum() / max(recent["v"].sum(), 1)
+
+
+# ==================== الدعم / الاختراق / إعادة الاختبار ====================
+
+def find_support(df, lookback=30, buffer_pct=0.02):
+    recent = df.tail(lookback).reset_index(drop=True)
+    if recent.empty:
+        return None, 0
+    support = float(recent["l"].min())
+    hold = 0
+    for close in reversed(recent["c"].tolist()):
+        if close >= support * (1 - buffer_pct):
+            hold += 1
+        else:
+            break
+    return round(support, 4), hold
+
+
+def find_dropped_candles(df, lookback=250, current_price=None, max_levels=2):
+    recent = df.tail(lookback).reset_index(drop=True)
+    if recent.empty:
+        return []
+    highs = recent["h"]
+    candidates = []
+    for i in range(2, len(recent) - 2):
+        if highs[i] > highs[i-1] and highs[i] > highs[i-2] and highs[i] > highs[i+1] and highs[i] > highs[i+2]:
+            level = float(highs[i])
+            if (recent["c"][i+1:] < level).all():
+                candidates.append(level)
+    candidates = sorted(set(round(c, 3) for c in candidates))
+    if current_price:
+        candidates = [c for c in candidates if c > current_price * 0.95]
+    return candidates[:max_levels] if candidates else []
+
+
+def detect_entry_phase(df, support, support_hold):
+    """دعم أول ثابت 5 جلسات -> اختراق ~20% -> ارتداد لنفس الدعم (قاع مزدوج)
+    وثبات 2-3 جلسات بدون كسر = دخول مؤكد."""
+    if support is None or support_hold < SUPPORT_HOLD_SESSIONS:
+        return "awaiting-breakout", None
+
+    breakout_level = support * (1 + BREAKOUT_PCT)
+    closes = df["c"].tolist()
+    window = closes[-40:]
+    breakout_idx = breakout_high = None
+    for i, c in enumerate(window):
+        if c >= breakout_level and (breakout_high is None or c > breakout_high):
+            breakout_high, breakout_idx = c, i
+    if breakout_idx is None:
+        return "awaiting-breakout", None
+
+    after_breakout = window[breakout_idx + 1:]
+    if not after_breakout:
+        return "testing-resistance", {"breakoutHigh": round(breakout_high, 4)}
+
+    if min(after_breakout) < support * 0.97:
+        return "invalidated", None
+
+    near_support = [c for c in after_breakout if c <= support * 1.06]
+    if len(near_support) >= RETEST_HOLD_SESSIONS:
+        retest_low = min(after_breakout[-RETEST_HOLD_SESSIONS:])
+        entry_low = round(support + 0.05, 3)
+        entry_high = round(support + (breakout_high - support) * 0.4, 3)
+        entry_mid = round((entry_low + entry_high) / 2, 3)
+        return "entry-confirmed", {
+            "support1": round(support, 3), "breakoutHigh": round(breakout_high, 3),
+            "breakoutPct": round(BREAKOUT_PCT * 100), "retestLow": round(retest_low, 3),
+            "retestSessions": RETEST_HOLD_SESSIONS, "entryLow": entry_low,
+            "entryMid": entry_mid, "entryHigh": entry_high, "stopLoss": round(support, 3),
+        }
+    return "retesting-support", {"breakoutHigh": round(breakout_high, 4)}
+
+
+def detect_spike(df):
+    recent = df.tail(SPIKE_WINDOW_DAYS + 5).reset_index(drop=True)
+    if len(recent) < 3:
+        return None
+    recent["prev_close"] = recent["c"].shift(1)
+    recent["gain_pct"] = (recent["c"] - recent["prev_close"]) / recent["prev_close"] * 100
+    spikes = recent[recent["gain_pct"] >= SPIKE_MIN_PCT]
+    if spikes.empty:
+        return None
+    spike_idx = spikes.index[-1]
+    spike_row = spikes.iloc[-1]
+    peak_price = float(recent["h"].iloc[spike_idx:].max())
+    after = recent.iloc[spike_idx:].reset_index(drop=True)
+    pullback_low = float(after["l"].min())
+    pullback_days = len(after) - 1
+    pre_spike_base = float(recent["c"].iloc[max(0, spike_idx - 3):spike_idx].min()) if spike_idx > 0 else float(spike_row["prev_close"])
+    support_match_pct = abs(pullback_low - pre_spike_base) / pre_spike_base * 100 if pre_spike_base else None
+    return {
+        "openPrice": round(float(spike_row["prev_close"]), 4),
+        "peakPrice": round(peak_price, 4),
+        "spikePct": round((peak_price - float(spike_row["prev_close"])) / float(spike_row["prev_close"]) * 100),
+        "pullbackDays": pullback_days, "pullbackLow": round(pullback_low, 4),
+        "preSpikeBase": round(pre_spike_base, 4),
+        "supportMatchPct": round(support_match_pct, 1) if support_match_pct is not None else None,
+        "inWindow": RETEST_WINDOW_MIN_DAYS <= pullback_days <= RETEST_WINDOW_MAX_DAYS,
+    }
+
+
+# ==================== التسجيل حسب النموذج ====================
+
+def score_split_model(symbol, df, split_date, split_ratio, fin, news_hits):
+    price = float(df["c"].iloc[-1])
+    prev_close = float(df["c"].iloc[-2]) if len(df) > 1 else price
+    chg = round((price - prev_close) / prev_close * 100, 2) if prev_close else 0
+
+    support, support_hold = find_support(df)
+    dropped = find_dropped_candles(df, current_price=price)
+    daily_vol = int(df["v"].iloc[-1])
+
+    r = rsi(df["c"]).iloc[-1]
+    macd_line, signal_line, hist = macd(df["c"])
+    macd_state = classify_macd(macd_line, signal_line, hist)
+    ma20 = df["c"].rolling(20).mean().iloc[-1] if len(df) >= 20 else None
+    ma50 = df["c"].rolling(50).mean().iloc[-1] if len(df) >= 50 else None
+    ma200 = df["c"].rolling(200).mean().iloc[-1] if len(df) >= 200 else None
+    vwap = anchored_vwap(df)
+
+    float_shares = fin.get("float")
+    mcap_usd = fin.get("mcap")
+    short_shares = fin.get("short_shares")
+    short_unknown = short_shares is None
+
+    open_price = open_high = None
+    excluded_reason = None
+    if split_date:
+        try:
+            day_rows = df[df["t"].dt.date == pd.to_datetime(split_date).date()]
+            if not day_rows.empty:
+                open_price = float(day_rows["o"].iloc[0])
+                open_high = float(day_rows["h"].iloc[0])
+        except Exception:
+            pass
+    if open_price and open_high and open_price > 0:
+        if (open_high - open_price) / open_price * 100 > OPEN_DAY_RISE_MAX_PCT:
+            excluded_reason = "open-rise"
+    if not (PRICE_MIN <= price <= PRICE_MAX):
+        excluded_reason = excluded_reason or "price-range"
+
+    cond_support = support_hold >= SUPPORT_HOLD_SESSIONS
+    cond_news = len(news_hits) == 0
+    cond_macd = macd_state in ("سلبي", "محايد", "إيجابي خفيف")
+    cond_rsi = (r is not None) and (not math.isnan(r)) and r < RSI_MAX
+    cond_below_ma = all([
+        ma20 is None or pd.isna(ma20) or price < ma20,
+        ma50 is None or pd.isna(ma50) or price < ma50,
+        ma200 is None or pd.isna(ma200) or price < ma200,
+        price < vwap if vwap else True,
+    ])
+    cond_float = (float_shares is not None) and (float_shares < FLOAT_MAX)
+    cond_short = short_unknown or (short_shares < SHORT_SHARES_MAX)
+
+    conds = [int(cond_support), int(cond_news), int(cond_macd), int(cond_rsi),
+             int(cond_below_ma), int(cond_float), int(cond_short)]
+    met = sum(conds)
+
+    if excluded_reason:
+        status = "excluded"
+    elif met == 7:
+        status = "ready"
+    elif met >= 5:
+        status = "near"
+    elif met >= 3:
+        status = "watch"
+    else:
+        status = "flag"
+
+    entry_phase, entry_model = ("not-applicable", None)
+    if status in ("ready", "near") and support is not None:
+        entry_phase, entry_model = detect_entry_phase(df, support, support_hold)
+
+    return {
+        "tk": symbol, "price": round(price, 4), "chg": chg, "status": status, "model": "split",
+        "conds": conds, "exclusionReason": excluded_reason,
+        "split": split_date, "ratio": split_ratio,
+        "floatShares": float_shares, "shortShares": short_shares, "shortUnknown": short_unknown,
+        "mcapUSD": mcap_usd, "openPrice": open_price, "openHigh": open_high,
+        "support": support, "supportHoldSessions": support_hold, "droppedCandles": dropped,
+        "dailyVolume": daily_vol, "entryPhase": entry_phase, "entryModel": entry_model,
+        "macd": macd_state, "rsi": None if r is None or math.isnan(r) else round(r, 1),
+        "ma20": None if ma20 is None or pd.isna(ma20) else round(ma20, 4),
+        "ma50": None if ma50 is None or pd.isna(ma50) else round(ma50, 4),
+        "ma200": None if ma200 is None or pd.isna(ma200) else round(ma200, 4),
+        "vwap": round(vwap, 4) if vwap else None, "newsFlags": news_hits,
+    }
+
+
+def score_spike_model(symbol, df, spike, fin, news_hits):
+    price = float(df["c"].iloc[-1])
+    prev_close = float(df["c"].iloc[-2]) if len(df) > 1 else price
+    chg = round((price - prev_close) / prev_close * 100, 2) if prev_close else 0
+
+    r = rsi(df["c"]).iloc[-1]
+    float_shares = fin.get("float")
+    mcap_usd = fin.get("mcap")
+    short_shares = fin.get("short_shares")
+
+    short_pct = None
+    if short_shares is not None and mcap_usd:
+        threshold = 0.5 if mcap_usd <= 5_000_000 else (0.4 if mcap_usd <= 15_000_000 else 0.3)
+        short_usd_est = short_shares * price
+        short_pct = short_usd_est / mcap_usd * 100
+        cond_short = short_pct <= threshold
+    else:
+        cond_short = True
+
+    cond_float = (float_shares is not None) and (float_shares < FLOAT_MAX)
+    cond_rsi = (r is not None) and (not math.isnan(r)) and r < RSI_MAX
+    cond_news = len(news_hits) == 0
+    vol_recent = df["v"].tail(3).mean()
+    vol_avg = df["v"].tail(10).mean()
+    cond_vol_dryup = vol_recent < vol_avg if vol_avg else False
+
+    conds = [1, int(bool(spike.get("inWindow"))), int(cond_float), int(cond_short),
+             int(cond_rsi), int(cond_news), int(cond_vol_dryup)]
+    met = sum(conds)
+
+    excluded_reason = "price-range" if not (PRICE_MIN <= price <= PRICE_MAX) else None
+    if excluded_reason:
+        status = "excluded"
+    elif met == 7:
+        status = "ready"
+    elif met >= 5:
+        status = "near"
+    elif met >= 3:
+        status = "watch"
+    else:
+        status = "flag"
+
+    return {
+        "tk": symbol, "price": round(price, 4), "chg": chg, "status": status, "model": "spike",
+        "exclusionReason": excluded_reason, "conds": conds,
+        "peakPrice": spike["peakPrice"], "spikePct": f'+{spike["spikePct"]}%',
+        "openPrice": spike["openPrice"], "pullbackDays": spike["pullbackDays"],
+        "pullbackLow": spike["pullbackLow"],
+        "supportMatch": (f'مطابقة تقريبية (فرق {spike["supportMatchPct"]}٪)'
+                          if spike.get("supportMatchPct") is not None else "غير محسوبة"),
+        "floatShares": float_shares, "mcapUSD": mcap_usd,
+        "shortPct": round(short_pct, 3) if short_pct is not None else None,
+        "rsi": None if r is None or math.isnan(r) else round(r, 1), "newsFlags": news_hits,
+    }
+
+
+# ==================== التشغيل الرئيسي ====================
+
+def load_json(path):
+    if not os.path.exists(path):
+        return []
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def build_symbol_list():
+    """يدمج المرشحين المكتشفين تلقائيًا (BusinessQuant) مع أي إضافات يدوية
+    اختيارية من watchlist.json، مع إزالة التكرار."""
+    auto = load_json(CANDIDATES_PATH)
+    manual = load_json(WATCHLIST_PATH)
+
+    merged = {}
+    for c in auto:
+        sym = c["symbol"].upper()
+        merged[sym] = {"symbol": sym, "model_hint": "split", "split_date": c.get("split_date")}
+    for m in manual:
+        sym = m["symbol"].upper()
+        if sym in merged and m.get("model_hint", "auto") == "auto":
+            continue  # موجود بالفعل من الاكتشاف التلقائي، ما نكرروش
+        merged[sym] = {"symbol": sym, "model_hint": m.get("model_hint", "auto"),
+                       "split_date": m.get("manual_split_date")}
+    return list(merged.values())
+
+
+def analyze_symbol(entry):
+    symbol = entry["symbol"]
+    print(f"[..] {symbol}")
+    df = get_daily_candles(symbol)
+    if df is None or len(df) < 15:
+        print(f"[!!] {symbol}: لا توجد بيانات شموع كافية")
+        return None
+
+    fin = get_financials(symbol)
+    news_hits = get_news_flags(symbol)
+    model_hint = entry.get("model_hint", "auto")
+
+    split_date, split_ratio = entry.get("split_date"), None
+    if not split_date or model_hint in ("split", "auto"):
+        d, r = get_latest_reverse_split(symbol)
+        split_date, split_ratio = split_date or d, r
+
+    spike = detect_spike(df)
+
+    results = []
+    if model_hint in ("split", "auto") and split_date:
+        results.append(score_split_model(symbol, df, split_date, split_ratio, fin, news_hits))
+    if model_hint in ("spike", "auto") and spike:
+        results.append(score_spike_model(symbol, df, spike, fin, news_hits))
+
+    if not results:
+        results.append({
+            "tk": symbol, "price": round(float(df["c"].iloc[-1]), 4), "chg": 0, "status": "flag",
+            "model": "split", "conds": [0, 0, 0, 0, 0, 0, 0],
+            "note": "لم يُكتشف تقسيم عكسي حديث ولا صعود حاد — أُدرج للمراقبة الأساسية فقط",
+        })
+    return results
+
+
+def main():
+    symbols = build_symbol_list()
+    if not symbols:
+        print("⚠️  لا توجد رموز للمسح — تأكد من تشغيل discover_splits.py أولاً، أو أضف رموزًا في watchlist.json")
+
+    all_results = []
+    for entry in symbols:
+        try:
+            res = analyze_symbol(entry)
+            if res:
+                all_results.extend(res)
+        except Exception as e:
+            print(f"[XX] {entry.get('symbol')}: خطأ — {e}", file=sys.stderr)
+
+    output = {"generated_at": datetime.now(timezone.utc).isoformat(), "stocks": all_results}
+    os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
+    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
+        json.dump(output, f, ensure_ascii=False, indent=2)
+    print(f"\n✅ تم كتابة {len(all_results)} نتيجة في {OUTPUT_PATH}")
+
+
+if __name__ == "__main__":
+    main()

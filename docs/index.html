@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A0E14">
+<title>رادار — أسهم التقسيم والهبوط</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0E14;
+    --panel:#12171F;
+    --panel-2:#161C26;
+    --border:#232B37;
+    --border-soft:#1B222C;
+    --txt:#E7EBF1;
+    --txt-dim:#8B94A5;
+    --txt-faint:#5A6376;
+    --gold:#D9A84E;
+    --gold-soft:rgba(217,168,78,.12);
+    --green:#3ECF8E;
+    --green-soft:rgba(62,207,142,.12);
+    --amber:#F0B429;
+    --amber-soft:rgba(240,180,41,.12);
+    --red:#EF6461;
+    --red-soft:rgba(239,100,97,.12);
+    --blue:#6EA8FE;
+    --radius:14px;
+    --font-ui:'IBM Plex Sans Arabic','Cairo',sans-serif;
+    --font-display:'Cairo','IBM Plex Sans Arabic',sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    background:var(--bg);
+    color:var(--txt);
+    font-family:var(--font-ui);
+    font-size:14.5px;
+    line-height:1.75;
+    letter-spacing:0;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    text-rendering:optimizeLegibility;
+    font-feature-settings:"tnum" 1, "case" 1;
+    min-height:100vh;
+    background-image:
+      radial-gradient(ellipse 900px 500px at 85% -10%, rgba(217,168,78,.07), transparent),
+      radial-gradient(ellipse 700px 500px at 0% 100%, rgba(110,168,254,.05), transparent);
+    background-attachment:fixed;
+  }
+  h1,h2,h3,.display{font-family:var(--font-display); font-weight:800; letter-spacing:0;}
+  ::selection{background:var(--gold-soft);}
+  .app{display:flex; min-height:100vh;}
+
+  /* ===== SIDEBAR ===== */
+  .sidebar{
+    width:250px; flex:none;
+    background:linear-gradient(180deg,#0D1219,#0A0E14);
+    border-left:1px solid var(--border-soft);
+    padding:22px 16px;
+    display:flex; flex-direction:column; gap:4px;
+    position:sticky; top:0; height:100vh;
+  }
+  .brand{display:flex; align-items:center; gap:10px; padding:6px 8px 22px;}
+  .brand-mark{
+    width:38px; height:38px; border-radius:10px;
+    background:linear-gradient(135deg,var(--gold),#B9873A);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:900; color:#0A0E14; font-size:18px; flex:none;
+    box-shadow:0 4px 14px rgba(217,168,78,.25);
+  }
+  .brand-txt .t1{font-weight:800; font-size:16.5px; font-family:var(--font-display);}
+  .brand-txt .t2{font-size:11px; color:var(--txt-faint); margin-top:1px;}
+  .nav-label{font-size:11px; color:var(--txt-faint); margin:14px 10px 6px; font-weight:700;}
+  .nav-item{
+    display:flex; align-items:center; gap:11px;
+    padding:10px 12px; border-radius:10px; cursor:pointer;
+    color:var(--txt-dim); font-size:14px; font-weight:500;
+    transition:.15s; position:relative; border:1px solid transparent;
+  }
+  .nav-item:hover{background:var(--panel-2); color:var(--txt);}
+  .nav-item.active{
+    background:var(--panel-2); color:var(--txt); border-color:var(--border);
+  }
+  .nav-item.active::before{
+    content:''; position:absolute; right:-16px; top:8px; bottom:8px; width:3px;
+    background:var(--gold); border-radius:3px;
+  }
+  .nav-ic{width:18px; height:18px; flex:none; opacity:.9;}
+  .nav-count{
+    margin-inline-start:auto; font-size:11px; font-weight:700;
+    background:var(--border-soft); color:var(--txt-dim);
+    padding:2px 7px; border-radius:20px;
+  }
+  .nav-item.active .nav-count{background:var(--gold-soft); color:var(--gold);}
+  .sidebar-foot{
+    margin-top:auto; padding:12px; border-top:1px solid var(--border-soft);
+    font-size:11px; color:var(--txt-faint); line-height:1.7;
+  }
+  .sidebar-close-btn{
+    display:none; margin-inline-start:auto; background:none; border:none;
+    color:var(--txt-dim); cursor:pointer; padding:6px;
+  }
+
+  /* ===== MOBILE TOPBAR + DRAWER (مخفي على الديسكتوب) ===== */
+  .mobile-topbar{display:none;}
+  .hamburger-btn{
+    background:var(--panel-2); border:1px solid var(--border); border-radius:9px;
+    color:var(--txt); padding:8px; display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  .mobile-brand{display:flex; align-items:center; gap:8px; font-weight:800; font-family:var(--font-display); font-size:15px;}
+  .sidebar-overlay{
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,.55);
+    z-index:40; opacity:0; pointer-events:none; transition:opacity .2s;
+  }
+  .sidebar-overlay.open{opacity:1; pointer-events:auto;}
+
+  /* ===== MAIN ===== */
+  .main{flex:1; min-width:0; padding:26px 34px 60px;}
+  .topbar{display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:26px;}
+  .page-title{font-size:24px; font-weight:800; font-family:var(--font-display);}
+  .page-sub{font-size:13px; color:var(--txt-dim); margin-top:4px;}
+  .search{
+    display:flex; align-items:center; gap:9px;
+    background:var(--panel); border:1px solid var(--border);
+    border-radius:10px; padding:10px 14px; width:300px; color:var(--txt-faint); font-size:13px;
+  }
+  .search svg{flex:none; opacity:.6;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--panel-2); border:1px solid var(--border);
+    color:var(--txt); padding:10px 16px; border-radius:10px;
+    font-size:13px; font-weight:600; cursor:pointer; transition:.15s;
+  }
+  .btn:hover{border-color:#37414F;}
+  .btn.gold{background:linear-gradient(135deg,var(--gold),#BE8E3F); color:#0A0E14; border:none;}
+
+  /* ===== STAT CARDS ===== */
+  .stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:26px;}
+  .stat-card{
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+    padding:18px 20px; position:relative; overflow:hidden; cursor:pointer; transition:.15s;
+  }
+  .stat-card:hover{border-color:#333E4C; transform:translateY(-1px);}
+  .stat-card::after{content:''; position:absolute; inset-inline-end:-30px; top:-30px; width:90px; height:90px; border-radius:50%; opacity:.12;}
+  .stat-card.c-gold::after{background:var(--gold);}
+  .stat-card.c-green::after{background:var(--green);}
+  .stat-card.c-amber::after{background:var(--amber);}
+  .stat-card.c-blue::after{background:var(--blue);}
+  .stat-top{display:flex; justify-content:space-between; align-items:flex-start;}
+  .stat-label{font-size:12.5px; color:var(--txt-dim); font-weight:600; max-width:140px;}
+  .stat-dot{width:9px; height:9px; border-radius:50%; margin-top:3px;}
+  .c-gold .stat-dot{background:var(--gold); box-shadow:0 0 10px var(--gold);}
+  .c-green .stat-dot{background:var(--green); box-shadow:0 0 10px var(--green);}
+  .c-amber .stat-dot{background:var(--amber); box-shadow:0 0 10px var(--amber);}
+  .c-blue .stat-dot{background:var(--blue); box-shadow:0 0 10px var(--blue);}
+  .stat-num{font-size:34px; font-weight:800; margin-top:10px; font-family:'IBM Plex Sans Arabic';}
+  .stat-foot{font-size:11.5px; color:var(--txt-faint); margin-top:4px;}
+
+  /* ===== SECTION ===== */
+  .section{margin-bottom:30px;}
+  .section-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+  .section-title{font-size:16.5px; font-weight:800; font-family:var(--font-display); display:flex; align-items:center; gap:9px;}
+  .section-title .pip{width:7px; height:18px; border-radius:3px;}
+  .link-btn{font-size:12.5px; color:var(--txt-dim); cursor:pointer; font-weight:600;}
+  .link-btn:hover{color:var(--gold);}
+
+  /* ===== STOCK LIST ===== */
+  .stock-list{display:flex; flex-direction:column; gap:10px;}
+  .stock-row{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:14px 18px; display:flex; align-items:center; gap:18px; cursor:pointer; transition:.15s;
+  }
+  .stock-row:hover{border-color:#3A4453; background:var(--panel-2);}
+  .ring-wrap{position:relative; width:52px; height:52px; flex:none;}
+  .ring-wrap svg{transform:rotate(-90deg);}
+  .ring-track{fill:none; stroke:var(--border-soft); stroke-width:5;}
+  .ring-val{fill:none; stroke-width:5; stroke-linecap:round;}
+  .ring-txt{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800;}
+
+  .stock-id{width:150px; flex:none;}
+  .stock-tk{font-size:16px; font-weight:800; letter-spacing:.3px;}
+  .stock-nm{font-size:11.5px; color:var(--txt-faint); margin-top:2px;}
+  .model-badge{
+    display:inline-flex; align-items:center; gap:5px; font-size:10px; font-weight:700;
+    padding:3px 8px; border-radius:20px; margin-top:5px; white-space:nowrap;
+  }
+  .model-badge.split{background:rgba(110,168,254,.12); color:var(--blue);}
+  .model-badge.spike{background:rgba(199,120,221,.14); color:#C778DD;}
+  .model-filter{display:flex; gap:8px; margin-bottom:16px;}
+  .mf-chip{
+    font-size:12.5px; padding:8px 15px; border-radius:20px; border:1px solid var(--border);
+    background:var(--panel); color:var(--txt-dim); cursor:pointer; font-weight:600; display:flex; align-items:center; gap:6px;
+  }
+  .mf-chip.on{background:var(--panel-2); border-color:#3A4453; color:var(--txt);}
+  .mf-chip .dt{width:7px; height:7px; border-radius:50%;}
+  .mf-chip[data-model="split"] .dt{background:var(--blue);}
+  .mf-chip[data-model="spike"] .dt{background:#C778DD;}
+  .mf-chip[data-model="all"] .dt{background:var(--gold);}
+  .stock-tags{display:flex; gap:6px; flex-wrap:wrap; flex:1;}
+  .tag{font-size:10.5px; padding:4px 9px; border-radius:20px; font-weight:700; border:1px solid transparent; white-space:nowrap;}
+  .tag.ok{background:var(--green-soft); color:var(--green); border-color:rgba(62,207,142,.25);}
+  .tag.bad{background:var(--red-soft); color:var(--red); border-color:rgba(239,100,97,.25);}
+  .tag.warn{background:var(--amber-soft); color:var(--amber); border-color:rgba(240,180,41,.25);}
+  .stock-price{width:110px; flex:none; text-align:left; direction:ltr;}
+  .price-num{font-size:15.5px; font-weight:700; font-family:'IBM Plex Sans Arabic';}
+  .price-chg{font-size:12px; font-weight:700; margin-top:2px;}
+  .price-chg.up{color:var(--green);} .price-chg.down{color:var(--red);}
+  .stock-status{width:150px; flex:none;}
+  .status-pill{
+    display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:700;
+    padding:6px 12px; border-radius:20px;
+  }
+  .status-pill.ready{background:var(--gold-soft); color:var(--gold);}
+  .status-pill.near{background:var(--green-soft); color:var(--green);}
+  .status-pill.watch{background:var(--amber-soft); color:var(--amber);}
+  .status-pill.flag{background:rgba(110,168,254,.12); color:var(--blue);}
+  .status-pill.excluded{background:var(--red-soft); color:var(--red);}
+  .status-pill .dt{width:6px; height:6px; border-radius:50%; background:currentColor;}
+  .chev{color:var(--txt-faint); flex:none;}
+
+  .empty-hint{
+    padding:12px 18px; border:1px dashed var(--border); border-radius:12px;
+    font-size:12.5px; color:var(--txt-faint); background:rgba(255,255,255,.01);
+  }
+
+  /* ===== VIEW SWITCH ===== */
+  .view{display:none;}
+  .view.active{display:block;}
+
+  /* list page header bar with filters */
+  .filter-bar{display:flex; gap:10px; margin-bottom:18px; flex-wrap:wrap;}
+  .chip{
+    font-size:12.5px; padding:8px 14px; border-radius:20px; border:1px solid var(--border);
+    background:var(--panel); color:var(--txt-dim); cursor:pointer; font-weight:600;
+  }
+  .chip.on{background:var(--gold-soft); color:var(--gold); border-color:rgba(217,168,78,.3);}
+
+  /* ===== HISTORY LOG ===== */
+  .log-wrap{position:relative; padding-inline-start:6px;}
+  .log-item{
+    display:flex; gap:16px; padding-bottom:22px; position:relative;
+  }
+  .log-item::before{
+    content:''; position:absolute; right:9px; top:26px; bottom:-4px; width:1px; background:var(--border);
+  }
+  .log-item:last-child::before{display:none;}
+  .log-dot{
+    width:20px; height:20px; border-radius:50%; flex:none; margin-top:2px;
+    display:flex; align-items:center; justify-content:center; font-size:10px;
+    border:2px solid var(--bg); z-index:1;
+  }
+  .log-dot.ok{background:var(--green);} .log-dot.warn{background:var(--amber);}
+  .log-dot.bad{background:var(--red);} .log-dot.info{background:var(--blue);}
+  .log-card{
+    flex:1; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px 16px;
+  }
+  .log-top{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:5px;}
+  .log-tk{font-weight:800; font-size:14px;}
+  .log-date{font-size:11px; color:var(--txt-faint); font-family:'IBM Plex Sans Arabic';}
+  .log-txt{font-size:13px; color:var(--txt-dim); line-height:1.8;}
+
+  /* ===== DETAIL PAGE ===== */
+  .back-btn{display:flex; align-items:center; gap:7px; color:var(--txt-dim); font-size:13px; font-weight:600; cursor:pointer; margin-bottom:16px; width:fit-content;}
+  .back-btn:hover{color:var(--gold);}
+  .detail-head{
+    background:linear-gradient(135deg,var(--panel),var(--panel-2));
+    border:1px solid var(--border); border-radius:18px; padding:24px 28px; margin-bottom:22px;
+    display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap;
+  }
+  .dh-left{display:flex; align-items:center; gap:18px;}
+  .dh-badge{
+    width:64px; height:64px; border-radius:16px; background:var(--gold-soft); color:var(--gold);
+    display:flex; align-items:center; justify-content:center; font-weight:900; font-size:20px; flex:none;
+  }
+  .dh-tk{font-size:26px; font-weight:900; letter-spacing:.5px;}
+  .dh-nm{font-size:13px; color:var(--txt-dim); margin-top:3px;}
+  .dh-right{text-align:left; direction:ltr;}
+  .dh-price{font-size:28px; font-weight:800; font-family:'IBM Plex Sans Arabic';}
+  .dh-chg{font-size:14px; font-weight:700; margin-top:2px;}
+
+  .grid-cards{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:22px;}
+  .responsive-grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+  .responsive-grid-4{display:grid; grid-template-columns:repeat(var(--rg4-cols,4),1fr); gap:10px;}
+  .mini-card{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:15px 17px;}
+  .mini-label{font-size:11.5px; color:var(--txt-faint); font-weight:600; margin-bottom:7px;}
+  .mini-val{font-size:18px; font-weight:800; font-family:'IBM Plex Sans Arabic';}
+  .mini-val.small{font-size:14px;}
+  .mini-sub{font-size:11px; color:var(--txt-dim); margin-top:3px;}
+
+  .two-col{display:grid; grid-template-columns:1.3fr 1fr; gap:18px; align-items:start;}
+  .panel-box{background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:20px 22px; margin-bottom:18px;}
+  .panel-h{font-size:15px; font-weight:800; font-family:var(--font-display); margin-bottom:16px; display:flex; align-items:center; gap:8px;}
+  .panel-h .pip{width:6px; height:16px; border-radius:3px; background:var(--gold);}
+
+  .tech-row{display:flex; justify-content:space-between; align-items:center; padding:11px 0; border-bottom:1px solid var(--border-soft); font-size:13.5px;}
+  .tech-row:last-child{border-bottom:none;}
+  .tech-name{color:var(--txt-dim); font-weight:500;}
+  .tech-val{font-weight:700; font-family:'IBM Plex Sans Arabic'; display:flex; align-items:center; gap:8px;}
+  .badge-sm{font-size:10.5px; padding:3px 9px; border-radius:20px; font-weight:700;}
+  .badge-sm.bull{background:var(--green-soft); color:var(--green);}
+  .badge-sm.bear{background:var(--red-soft); color:var(--red);}
+  .badge-sm.neu{background:var(--amber-soft); color:var(--amber);}
+
+  .cond-list{display:flex; flex-direction:column; gap:10px;}
+  .cond-item{display:flex; align-items:center; gap:11px; font-size:13px; padding:9px 12px; border-radius:9px; background:var(--panel-2);}
+  .cond-ic{width:20px; height:20px; border-radius:50%; flex:none; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:900;}
+  .cond-ic.y{background:var(--green-soft); color:var(--green);}
+  .cond-ic.n{background:var(--red-soft); color:var(--red);}
+  .cond-txt{color:var(--txt-dim); flex:1;}
+  .cond-item.y .cond-txt{color:var(--txt);}
+
+  .analysis-txt{font-size:13.5px; line-height:2; color:var(--txt-dim);}
+  .analysis-txt b{color:var(--txt); font-weight:700;}
+  .verdict{
+    display:flex; align-items:center; gap:12px; padding:14px 18px; border-radius:12px; margin-top:16px;
+  }
+  .verdict.ready{background:var(--gold-soft); border:1px solid rgba(217,168,78,.3);}
+  .verdict.near{background:var(--green-soft); border:1px solid rgba(62,207,142,.3);}
+  .verdict.watch{background:var(--amber-soft); border:1px solid rgba(240,180,41,.3);}
+  .verdict.excluded{background:var(--red-soft); border:1px solid rgba(239,100,97,.3);}
+  .verdict-ic{font-size:22px;}
+  .verdict-t{font-weight:800; font-size:13.5px;}
+  .verdict-s{font-size:12px; color:var(--txt-dim); margin-top:2px;}
+
+  @media(max-width:1100px){
+    .stat-grid{grid-template-columns:repeat(2,1fr);}
+    .two-col{grid-template-columns:1fr;}
+    .grid-cards{grid-template-columns:repeat(2,1fr);}
+  }
+
+  /* ===================== الجوال / الشاشات الضيقة ===================== */
+  @media(max-width:860px){
+    html, body{overflow-x:hidden; width:100%;}
+    .mobile-topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      position:sticky; top:0; z-index:30; padding:10px 14px;
+      background:rgba(10,14,20,.92); backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--border-soft);
+    }
+    .sidebar-overlay{display:block;}
+    .app{flex-direction:column;}
+    .sidebar{
+      position:fixed; top:0; bottom:0; inset-inline-end:0; z-index:50;
+      width:82vw; max-width:300px; height:100vh;
+      transform:translateX(100%); transition:transform .25s ease;
+      box-shadow:-8px 0 30px rgba(0,0,0,.4);
+    }
+    html[dir="rtl"] .sidebar{transform:translateX(100%);}
+    .sidebar.open{transform:translateX(0);}
+    .sidebar-close-btn{display:flex;}
+    .main{padding:16px 14px 50px;}
+    .topbar{flex-direction:column; align-items:stretch; gap:12px;}
+    .topbar > div:last-child{display:flex; flex-wrap:wrap;}
+    .search{width:100%;}
+    .page-title{font-size:20px;}
+    .stat-grid{grid-template-columns:repeat(2,1fr); gap:10px;}
+    .stat-card{padding:14px 14px;}
+    .stat-num{font-size:26px;}
+    .grid-cards{grid-template-columns:repeat(2,1fr); gap:10px;}
+    .responsive-grid-3, .responsive-grid-4{grid-template-columns:1fr;}
+    .mini-card{padding:12px 13px;}
+    .two-col{grid-template-columns:1fr; gap:14px;}
+    .panel-box{padding:16px 15px;}
+
+    /* صفوف الأسهم: من صف أفقي جامد إلى بطاقة مرنة سطرين */
+    .stock-row{
+      flex-wrap:wrap; gap:10px 12px; padding:13px 14px;
+    }
+    .ring-wrap{width:42px; height:42px;}
+    .ring-wrap svg{width:42px; height:42px;}
+    .ring-txt{font-size:10.5px;}
+    .stock-id{width:auto; flex:1 1 auto; min-width:100px;}
+    .stock-tags{display:none;}                 /* التفاصيل الكاملة داخل صفحة السهم */
+    .stock-price{width:auto; order:3; text-align:start;}
+    .stock-status{width:auto; order:4; flex:1 1 100%;}
+    .chev{display:none;}
+
+    .detail-head{padding:18px 16px; gap:14px;}
+    .dh-left{gap:12px;}
+    .dh-badge{width:52px; height:52px; font-size:16px;}
+    .dh-tk{font-size:21px;}
+    .dh-price{font-size:22px;}
+    .dh-right{text-align:start;}
+
+    /* أي صف بطاقات بعرض أدنى ثابت (نموذج الدخول، فحوصات الافتتاح...) يلتف بشكل سليم */
+    [style*="min-width:110px"], [style*="min-width:140px"],
+    [style*="min-width:150px"], [style*="min-width:180px"],
+    [style*="min-width:220px"]{
+      min-width:100% !important;
+    }
+    .filter-bar, .model-filter{flex-wrap:wrap;}
+  }
+
+  @media(max-width:420px){
+    .stat-grid{grid-template-columns:1fr;}
+    .grid-cards{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="mobile-topbar">
+  <button class="hamburger-btn" onclick="toggleSidebar()" aria-label="القائمة">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <div class="mobile-brand">
+    <div class="brand-mark" style="width:30px;height:30px;font-size:14px;">ر</div>
+    <span>رادار</span>
+  </div>
+  <span style="width:22px;"></span>
+</div>
+<div class="sidebar-overlay" onclick="closeSidebar()"></div>
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <div class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">ر</div>
+      <div class="brand-txt">
+        <div class="t1">رادار</div>
+        <div class="t2">أسهم التقسيم والهبوط</div>
+      </div>
+      <button class="sidebar-close-btn" onclick="closeSidebar()" aria-label="إغلاق">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <div class="nav-item active" data-view="dashboard">
+      <svg class="nav-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+      <span>نظرة عامة</span>
+    </div>
+
+    <div class="nav-label">التصنيفات</div>
+    <div class="nav-item" data-view="ready">
+      <svg class="nav-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2.6 6.9 7.4.5-5.7 4.8 1.9 7.3L12 17.6 5.8 21.5l1.9-7.3-5.7-4.8 7.4-.5z"/></svg>
+      <span>جاهزة فنياً</span><span class="nav-count" id="cnt-ready">0</span>
+    </div>
+    <div class="nav-item" data-view="near">
+      <svg class="nav-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      <span>شبه جاهزة</span><span class="nav-count" id="cnt-near">0</span>
+    </div>
+    <div class="nav-item" data-view="watch">
+      <svg class="nav-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+      <span>قائمة المتابعة</span><span class="nav-count" id="cnt-watch">0</span>
+    </div>
+    <div class="nav-item" data-view="flagged">
+      <svg class="nav-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21V4a1 1 0 011-1h8l6 6v3"/><path d="M13 3v6h6"/><circle cx="17.5" cy="17.5" r="3.5"/><path d="M19.8 19.8L22 22"/></svg>
+      <span>الأسهم المرصودة</span><span class="nav-count" id="cnt-flag">0</span>
+    </div>
+
+    <div class="nav-label">الدراسة والتحليل</div>
+    <div class="nav-item" data-view="log">
+      <svg class="nav-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22a10 10 0 100-20 10 10 0 000 20z"/><path d="M12 6v6l4 2"/></svg>
+      <span>السجل التاريخي</span>
+    </div>
+    <div class="nav-item" data-view="dashboard" onclick="showView('dashboard')">
+      <svg class="nav-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>
+      <span>مقارنة الأداء</span>
+    </div>
+
+    <div class="sidebar-foot">
+      <span id="last-scan-stamp">بانتظار أول عملية مسح</span>
+    </div>
+  </div>
+
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+
+    <!-- ===================== DASHBOARD VIEW ===================== -->
+    <div class="view active" id="view-dashboard">
+      <div class="topbar">
+        <div>
+          <div class="page-title">نظرة عامة</div>
+          <div class="page-sub">يغطي نموذجين: 🔁 التقسيم العكسي و 📉 الموجة الثانية بعد صعود حاد — لا توجد بيانات بعد، بانتظار ربط مصدر الأسعار وتشغيل الماسح</div>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <div class="search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+            <span>ابحث عن سهم بالرمز...</span>
+          </div>
+          <div class="btn gold">↻ تحديث الآن</div>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card c-gold" onclick="showView('ready')">
+          <div class="stat-top"><span class="stat-label">جاهزة فنياً<br>إشارة دخول</span><span class="stat-dot"></span></div>
+          <div class="stat-num" id="s-ready">0</div>
+          <div class="stat-foot">حققت كل الشروط الحرجة</div>
+        </div>
+        <div class="stat-card c-green" onclick="showView('near')">
+          <div class="stat-top"><span class="stat-label">شبه جاهزة<br>ناقصها شرط واحد</span><span class="stat-dot"></span></div>
+          <div class="stat-num" id="s-near">0</div>
+          <div class="stat-foot">راقب الشرط الناقص عن قرب</div>
+        </div>
+        <div class="stat-card c-amber" onclick="showView('watch')">
+          <div class="stat-top"><span class="stat-label">قائمة المتابعة<br>تحقق جزئي</span><span class="stat-dot"></span></div>
+          <div class="stat-num" id="s-watch">0</div>
+          <div class="stat-foot">أقل من نصف الشروط محققة</div>
+        </div>
+        <div class="stat-card c-blue" onclick="showView('flagged')">
+          <div class="stat-top"><span class="stat-label">الأسهم المرصودة<br>من النظام</span><span class="stat-dot"></span></div>
+          <div class="stat-num" id="s-flag">0</div>
+          <div class="stat-foot">دخلت الفلتر الأول، بانتظار التقييم</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title"><span class="pip" style="background:var(--gold)"></span>جاهزة فنياً — إشارة دخول قائمة</div>
+          <div class="link-btn" onclick="showView('ready')">عرض الكل ←</div>
+        </div>
+        <div class="stock-list" id="list-ready-preview"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title"><span class="pip" style="background:var(--green)"></span>شبه جاهزة — قريبة من الإشارة</div>
+          <div class="link-btn" onclick="showView('near')">عرض الكل ←</div>
+        </div>
+        <div class="stock-list" id="list-near-preview"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title"><span class="pip" style="background:var(--blue)"></span>أحدث ما رصده الماسح</div>
+          <div class="link-btn" onclick="showView('flagged')">عرض الكل ←</div>
+        </div>
+        <div class="stock-list" id="list-flag-preview"></div>
+      </div>
+    </div>
+
+    <!-- ===================== READY VIEW ===================== -->
+    <div class="view" id="view-ready">
+      <div class="topbar">
+        <div>
+          <div class="page-title">جاهزة فنياً 🏆</div>
+          <div class="page-sub">أسهم أعطت إشارة دخول — استوفت شروط النظام الحرجة، من أي من النموذجين</div>
+        </div>
+      </div>
+      <div class="model-filter" data-target="ready">
+        <div class="mf-chip on" data-model="all"><span class="dt"></span>كل النماذج</div>
+        <div class="mf-chip" data-model="split"><span class="dt"></span>🔁 التقسيم العكسي</div>
+        <div class="mf-chip" data-model="spike"><span class="dt"></span>📉 الموجة الثانية</div>
+      </div>
+      <div class="stock-list" id="list-ready-full"></div>
+    </div>
+
+    <!-- ===================== NEAR-READY VIEW ===================== -->
+    <div class="view" id="view-near">
+      <div class="topbar">
+        <div>
+          <div class="page-title">شبه جاهزة ⏳</div>
+          <div class="page-sub">استوفت أغلب الشروط، لكن ناقصها شرط واحد حرج — إذا تحقق الشرط الناقص تنتقل تلقائيًا إلى «جاهزة فنياً»</div>
+        </div>
+      </div>
+      <div class="model-filter" data-target="near">
+        <div class="mf-chip on" data-model="all"><span class="dt"></span>كل النماذج</div>
+        <div class="mf-chip" data-model="split"><span class="dt"></span>🔁 التقسيم العكسي</div>
+        <div class="mf-chip" data-model="spike"><span class="dt"></span>📉 الموجة الثانية</div>
+      </div>
+      <div class="stock-list" id="list-near-full"></div>
+    </div>
+
+    <!-- ===================== WATCHLIST VIEW ===================== -->
+    <div class="view" id="view-watch">
+      <div class="topbar">
+        <div>
+          <div class="page-title">قائمة المتابعة 👁</div>
+          <div class="page-sub">أسهم مرصودة تحقق جزء من الشروط فقط، تحتاج جلسات إضافية لتأكيد الدعم أو تحسّن الشورت</div>
+        </div>
+      </div>
+      <div class="model-filter" data-target="watch">
+        <div class="mf-chip on" data-model="all"><span class="dt"></span>كل النماذج</div>
+        <div class="mf-chip" data-model="split"><span class="dt"></span>🔁 التقسيم العكسي</div>
+        <div class="mf-chip" data-model="spike"><span class="dt"></span>📉 الموجة الثانية</div>
+      </div>
+      <div class="stock-list" id="list-watch-full"></div>
+    </div>
+
+    <!-- ===================== FLAGGED VIEW ===================== -->
+    <div class="view" id="view-flagged">
+      <div class="topbar">
+        <div>
+          <div class="page-title">الأسهم المرصودة من النظام 📡</div>
+          <div class="page-sub">كل سهم اجتاز الفلتر الأول من الماسح يظهر هنا فورًا — سواء دخل عن طريق فلتر التقسيم العكسي أو فلتر رصد الموجة الثانية بعد الصعود الحاد</div>
+        </div>
+      </div>
+      <div class="model-filter" data-target="flag">
+        <div class="mf-chip on" data-model="all"><span class="dt"></span>كل النماذج</div>
+        <div class="mf-chip" data-model="split"><span class="dt"></span>🔁 التقسيم العكسي</div>
+        <div class="mf-chip" data-model="spike"><span class="dt"></span>📉 الموجة الثانية</div>
+      </div>
+      <div class="stock-list" id="list-flag-full"></div>
+
+      <div class="section" style="margin-top:30px;">
+        <div class="section-head">
+          <div class="section-title"><span class="pip" style="background:var(--red)"></span>⛔ مستبعدة تلقائيًا — تجاوزت صعود الافتتاح 20٪</div>
+        </div>
+        <div class="page-sub" style="margin-bottom:14px;">حسب قاعدة الدليل: السهم الذي يصعد أكثر من 20٪ عند أول افتتاح بعد التقسيم لا يخضع لسيناريو الهبوط المتوقع، فيُستبعد من نموذج التقسيم العكسي من الأساس.</div>
+        <div class="stock-list" id="list-excluded"></div>
+      </div>
+    </div>
+
+    <!-- ===================== HISTORY LOG VIEW ===================== -->
+    <div class="view" id="view-log">
+      <div class="topbar">
+        <div>
+          <div class="page-title">السجل التاريخي 🕘</div>
+          <div class="page-sub">أرشيف زمني لأحداث كل سهم — ثبات دعوم، تغيّر شورت، استبعاد، وتغيّر تصنيف. لدراسة سلوك كل سهم بالتفصيل (نمط حركة المضارب) افتح صفحة السهم من أي قائمة</div>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <div class="chip on">الكل</div>
+        <div class="chip">تغيّر تصنيف</div>
+        <div class="chip">كسر دعم</div>
+        <div class="chip">شمعة ساقطة</div>
+        <div class="chip">أخبار</div>
+      </div>
+      <div class="log-wrap" id="log-list"></div>
+    </div>
+
+    <!-- ===================== DETAIL VIEW ===================== -->
+    <div class="view" id="view-detail"></div>
+
+  </div>
+</div>
+
+<script>
+/* ============ MOCK DATA ============
+   شروط النظام السبعة المرجعية:
+   1) تقسيم عكسي حديث ضمن نافذة 20-50 يوم
+   2) RSI ضمن التشبع البيعي 22-27
+   3) شورت آمن نسبةً لقيمة السوقية
+   4) خلو من ضغط القروبات (تذبذب ≤10%)
+   5) دعم محقق (ثبات 5 جلسات بدون كسر)
+   6) خبر خالٍ من السلبيات
+   7) صعود مؤكد على فريم 4 ساعات بعد الإغلاق
+*/
+const COND_LABELS_SPLIT = [
+  "دعم محقق — ثبات 5 جلسات بدون كسر",
+  "خالٍ من الأخبار السلبية (لا طرح أسهم / لا خسائر)",
+  "MACD غير إيجابي بقوة (سلبي / محايد / إيجابي خفيف)",
+  "RSI متشبع تحت 30 (الأمثل 22-27)",
+  "السعر تحت المتوسطات المتحركة وتحت VWAP",
+  "فلوت منخفض (أقل من 4-5 مليون سهم)",
+  "شورت منخفض (أقل من 20 ألف سهم)"
+];
+const COND_LABELS_SPIKE = [
+  "صعود أولي حاد ≥100٪ خلال يوم أو يومين",
+  "الارتداد رجع لمنطقة الدعم/القاع السابق للصعود خلال نافذة 4-20 يوم",
+  "فلوت قليل (Low Float)",
+  "شورت آمن نسبةً للقيمة السوقية (وليس رقمًا مطلقًا)",
+  "RSI ضمن مدى التشبع البيعي وقت الارتداد (تحت 30، الأمثل 22-27)",
+  "الفترة خالية من خبر سلبي يبرر الهبوط",
+  "جفاف الفوليوم أثناء الهبوط (ضغط بيع في تراجع)"
+];
+function getCondLabels(model){ return model==='spike' ? COND_LABELS_SPIKE : COND_LABELS_SPLIT; }
+const COND_LABELS = COND_LABELS_SPLIT; // توافق مع أي كود قديم يشير للمرجع الافتراضي
+
+/* نسبة الشورت للأسهم الهابطة بعد صعود تُقاس نسبةً للقيمة السوقية، وليست رقمًا ثابتًا —
+   حد أساسي 30 ألف دولار يتمدد مع كبر حجم الشركة (تدرج تقريبي حسب حجم السوق) */
+function shortThresholdPct(mcapUSD){
+  if(mcapUSD <= 5_000_000) return 0.5;   // شركات صغيرة جدًا: هامش أوسع قليلاً
+  if(mcapUSD <= 15_000_000) return 0.4;
+  return 0.3;                            // شركات أكبر: هامش أضيق
+}
+function shortCheck(shortUSD, mcapUSD){
+  const pct = (shortUSD / mcapUSD) * 100;
+  const threshold = shortThresholdPct(mcapUSD);
+  return {pct, threshold, ok: pct <= threshold};
+}
+
+let STOCKS = [];
+
+
+const STATUS_META = {
+  ready:{label:"جاهزة فنياً", cls:"ready", color:"var(--gold)"},
+  near:{label:"شبه جاهزة", cls:"near", color:"var(--green)"},
+  watch:{label:"قائمة المتابعة", cls:"watch", color:"var(--amber)"},
+  flag:{label:"مرصود / بانتظار تقييم", cls:"flag", color:"var(--blue)"},
+  excluded:{label:"مستبعد تلقائيًا", cls:"excluded", color:"var(--red)"}
+};
+
+const LOG = [];
+
+
+/* ============ حساب الشمعة الساقطة والأهداف الأربعة (كل هدف 25٪ من المسافة) ============ */
+function parsePrice(v){
+  if(typeof v==='number') return v;
+  if(typeof v==='string'){ const m=v.match(/[\d.]+/); return m?parseFloat(m[0]):null; }
+  return null;
+}
+function computeTargets(s){
+  if(s.model!=='split') return null;
+  const base = parsePrice(s.support);
+  const top = parsePrice(s.droppedCandle);
+  if(base==null || top==null || top<=base) return null;
+  const range = top-base;
+  return [0.25,0.5,0.75,1].map(p=>+(base+range*p).toFixed(3));
+}
+/* المقاومات = رؤوس الشموع الساقطة، كل رأس هدف مستقل. الهدف الأول (أقرب شمعة ساقطة) عادة ٪100 من نقطة الانطلاق.
+   يُطبّق نفس هذا القياس على فريمي اليومي و4 ساعات معًا. */
+function computeResistanceTargets(s){
+  if(s.model!=='split' || !s.droppedCandles || !s.droppedCandles.length) return [];
+  const base = parsePrice(s.support);
+  const sorted = [...s.droppedCandles].sort((a,b)=>a-b);
+  return sorted.map((price,i)=>({
+    price,
+    label: i===0 ? "الشمعة الساقطة الأولى" : `شمعة ساقطة ${i+1}`,
+    pct: base ? Math.round((price-base)/base*100) : null
+  }));
+}
+/* نطاق السعر المسموح للاستراتيجية: 1$ - 5$ — فوق 5$ يُستبعد تلقائيًا مهما كانت باقي الشروط */
+function priceRangeCheck(price){
+  return {ok: price<=5, low: price<1, high: price>5};
+}
+const ENTRY_PHASE_META = {
+  "awaiting-breakout": {label:"بانتظار الاختراق الأول", color:"var(--amber)", icon:"⏸"},
+  "testing-resistance": {label:"يختبر مقاومة أولى الآن", color:"var(--blue)", icon:"🔎"},
+  "retesting-support": {label:"يعيد اختبار الدعم — قيد التكوّن", color:"var(--blue)", icon:"↩️"},
+  "entry-confirmed": {label:"إشارة دخول آمنة مؤكدة", color:"var(--gold)", icon:"🎯"},
+  "invalidated": {label:"فشل الاختبار — كسر الدعم الأول", color:"var(--red)", icon:"✕"},
+  "not-applicable": {label:"غير قابل للتقييم بعد", color:"var(--txt-faint)", icon:"—"}
+};
+
+/* ============ HELPERS ============ */
+function condsMet(s){ return s.conds.reduce((a,b)=>a+b,0); }
+function openRisePct(s){
+  if(s.model==='split' && s.openPrice!=null && s.openHigh!=null){
+    return ((s.openHigh - s.openPrice)/s.openPrice*100);
+  }
+  return null;
+}
+
+function ring(pct, colorVar){
+  const r=21, c=2*Math.PI*r, off=c*(1-pct/100);
+  return `<div class="ring-wrap">
+    <svg width="52" height="52">
+      <circle class="ring-track" cx="26" cy="26" r="${r}"></circle>
+      <circle class="ring-val" cx="26" cy="26" r="${r}" stroke="${colorVar}" stroke-dasharray="${c}" stroke-dashoffset="${off}"></circle>
+    </svg>
+    <div class="ring-txt">${Math.round(pct)}٪</div>
+  </div>`;
+}
+
+const SHORT_TAGS_SPLIT = ["دعم","أخبار","MACD","RSI","MA/VWAP","فلوت","شورت"];
+const SHORT_TAGS_SPIKE = ["صعود+100٪","ارتداد للدعم","فلوت","شورت/سوقية","RSI","أخبار","جفاف فوليوم"];
+const MODEL_META = {
+  split:{label:"🔁 تقسيم عكسي", cls:"split"},
+  spike:{label:"📉 موجة ثانية", cls:"spike"}
+};
+
+function stockRow(s){
+  const meta = STATUS_META[s.status];
+  const mmeta = MODEL_META[s.model];
+  const labels = getCondLabels(s.model);
+  const shortTags = s.model==='spike' ? SHORT_TAGS_SPIKE : SHORT_TAGS_SPLIT;
+  const met = condsMet(s);
+  const pct = (met/7)*100;
+  const tagsHtml = labels.map((l,i)=>`<span class="tag ${s.conds[i]?'ok':'bad'}">${shortTags[i]}</span>`).join("");
+  const chgCls = s.chg>=0?'up':'down';
+  const chgSign = s.chg>=0?'+':'';
+  return `<div class="stock-row" data-model="${s.model}" onclick="openDetail('${s.tk}')">
+    ${ring(pct, meta.color)}
+    <div class="stock-id">
+      <div class="stock-tk">${s.tk}</div>
+      <div class="stock-nm">${s.nm}</div>
+      <span class="model-badge ${mmeta.cls}">${mmeta.label}</span>
+    </div>
+    <div class="stock-tags">${tagsHtml}</div>
+    <div class="stock-price">
+      <div class="price-num">$${s.price.toFixed(2)}</div>
+      <div class="price-chg ${chgCls}">${chgSign}${s.chg}٪</div>
+    </div>
+    <div class="stock-status">
+      <span class="status-pill ${meta.cls}"><span class="dt"></span>${meta.label} · ${met}/7</span>
+      ${s.entryPhase==='entry-confirmed' ? '<div style="margin-top:6px;"><span class="status-pill ready">🎯 دخول مؤكد</span></div>' : ''}
+    </div>
+    <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+  </div>`;
+}
+
+const modelFilterState = {ready:'all', near:'all', watch:'all', flag:'all'};
+
+function byStatus(status, modelFilter){
+  return STOCKS.filter(s=>s.status===status && (modelFilter==='all' || s.model===modelFilter));
+}
+
+function renderLists(){
+  // العدّادات الإجمالية دائمًا تعكس كل النماذج مجتمعة
+  const groups = {ready:[], near:[], watch:[], flag:[]};
+  STOCKS.forEach(s=>groups[s.status].push(s));
+
+  document.getElementById('cnt-ready').textContent = groups.ready.length;
+  document.getElementById('cnt-near').textContent = groups.near.length;
+  document.getElementById('cnt-watch').textContent = groups.watch.length;
+  document.getElementById('cnt-flag').textContent = groups.flag.length;
+  document.getElementById('s-ready').textContent = groups.ready.length;
+  document.getElementById('s-near').textContent = groups.near.length;
+  document.getElementById('s-watch').textContent = groups.watch.length;
+  document.getElementById('s-flag').textContent = groups.flag.length;
+
+  ['ready','near','watch','flag'].forEach(status=>{
+    const filtered = byStatus(status, modelFilterState[status]);
+    const emptyTxt = {
+      ready:"لا توجد أسهم جاهزة فنيًا ضمن هذا النموذج حاليًا",
+      near:"لا توجد أسهم شبه جاهزة ضمن هذا النموذج حاليًا",
+      watch:"قائمة المتابعة فارغة ضمن هذا النموذج",
+      flag:"لا توجد أسهم مرصودة ضمن هذا النموذج"
+    }[status];
+    document.getElementById(`list-${status}-full`).innerHTML = filtered.map(stockRow).join('') || emptyMsg(emptyTxt);
+  });
+
+  document.getElementById('list-ready-preview').innerHTML = groups.ready.slice(0,3).map(stockRow).join('') || emptyMsg("لا توجد أسهم جاهزة فنيًا حاليًا");
+  document.getElementById('list-near-preview').innerHTML = groups.near.slice(0,3).map(stockRow).join('') || emptyMsg("لا توجد أسهم شبه جاهزة حاليًا");
+  document.getElementById('list-flag-preview').innerHTML = groups.flag.slice(0,3).map(stockRow).join('') || emptyMsg("لا توجد أسهم مرصودة جديدة");
+
+  const excludedList = STOCKS.filter(s=>s.status==='excluded');
+  const excEl = document.getElementById('list-excluded');
+  if(excEl) excEl.innerHTML = excludedList.map(stockRow).join('') || emptyMsg("لا توجد أسهم مستبعدة حاليًا");
+}
+function emptyMsg(t){ return `<div class="empty-hint">${t}</div>`; }
+
+document.querySelectorAll('.model-filter').forEach(bar=>{
+  const target = bar.dataset.target;
+  bar.querySelectorAll('.mf-chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      bar.querySelectorAll('.mf-chip').forEach(c=>c.classList.remove('on'));
+      chip.classList.add('on');
+      modelFilterState[target] = chip.dataset.model;
+      renderLists();
+    });
+  });
+});
+
+function renderLog(){
+  const iconMap = {ok:"✓", warn:"!", bad:"✕", info:"•"};
+  document.getElementById('log-list').innerHTML = LOG.map(l=>`
+    <div class="log-item">
+      <div class="log-dot ${l.type}">${iconMap[l.type]}</div>
+      <div class="log-card">
+        <div class="log-top"><span class="log-tk">${l.tk}</span><span class="log-date">${l.date}</span></div>
+        <div class="log-txt">${l.txt}</div>
+      </div>
+    </div>`).join('');
+}
+
+/* ============ VIEW SWITCHING ============ */
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const target = document.querySelector(`.nav-item[data-view="${id}"]`);
+  if(target) target.classList.add('active');
+  closeSidebar();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+document.querySelectorAll('.nav-item[data-view]').forEach(el=>{
+  el.addEventListener('click', ()=>showView(el.dataset.view));
+});
+
+/* ============ القائمة الجانبية على الجوال (درج منزلق) ============ */
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.querySelector('.sidebar-overlay').classList.toggle('open');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.querySelector('.sidebar-overlay').classList.remove('open');
+}
+
+/* ============ DETAIL PAGE ============ */
+function openDetail(tk){
+  const s = STOCKS.find(x=>x.tk===tk);
+  if(!s) return;
+  const meta = STATUS_META[s.status];
+  const mmeta = MODEL_META[s.model];
+  const labels = getCondLabels(s.model);
+  const met = condsMet(s);
+  const pct = Math.round((met/7)*100);
+  const chgCls = s.chg>=0?'up':'down';
+  const chgSign = s.chg>=0?'+':'';
+
+  const orPct = openRisePct(s);
+  const orExceeds = orPct!=null && orPct>20;
+  const priceCheck = priceRangeCheck(s.price);
+  const phaseMeta = ENTRY_PHASE_META[s.entryPhase] || ENTRY_PHASE_META["not-applicable"];
+  const supportBase = parsePrice(s.support);
+
+  let entryModelHtml = '';
+  if(s.model==='split'){
+    if(s.entryPhase==='entry-confirmed' && s.entryModel){
+      const em = s.entryModel;
+      entryModelHtml = `
+      <div class="panel-box" style="border-color:rgba(217,168,78,.35); background:linear-gradient(135deg, var(--panel), rgba(217,168,78,.05)); margin-bottom:22px;">
+        <div class="panel-h"><span class="pip" style="background:var(--gold)"></span>🎯 نموذج الدخول الآمن — إشارة مؤكدة</div>
+        <div style="margin-bottom:16px;"><span class="status-pill ready"><span class="dt"></span>${phaseMeta.icon} ${phaseMeta.label}</span></div>
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px;">
+          <div class="mini-card" style="flex:1; min-width:110px;"><div class="mini-label">الدعم الأول</div><div class="mini-val small">$${em.support1.toFixed(2)}</div></div>
+          <div style="color:var(--txt-faint);">→</div>
+          <div class="mini-card" style="flex:1; min-width:110px;"><div class="mini-label">اختراق / مقاومة</div><div class="mini-val small">$${em.breakoutHigh.toFixed(2)} (+${em.breakoutPct}٪)</div></div>
+          <div style="color:var(--txt-faint);">→</div>
+          <div class="mini-card" style="flex:1; min-width:150px;"><div class="mini-label">إعادة اختبار (قاع مزدوج)</div><div class="mini-val small" style="color:var(--green);">$${em.retestLow.toFixed(2)} — ثابت ${em.retestSessions} جلسات</div></div>
+        </div>
+        <div class="responsive-grid-3">
+          <div class="mini-card"><div class="mini-label">منطقة الدخول التدريجي</div><div class="mini-val" style="color:var(--gold);">$${em.entryLow.toFixed(2)} – $${em.entryHigh.toFixed(2)}</div><div class="mini-sub">دفعات كل 5 سنت، وسطي ${em.entryMid.toFixed(2)}$</div></div>
+          <div class="mini-card"><div class="mini-label">وقف الخسارة</div><div class="mini-val" style="color:var(--red);">$${em.stopLoss.toFixed(2)}</div><div class="mini-sub">تحت الدعم الأول مباشرة</div></div>
+          <div class="mini-card"><div class="mini-label">الهدف الأول</div><div class="mini-val" style="color:var(--green);">$${em.target.toFixed(2)}</div><div class="mini-sub">قرابة ٪100 من نقطة الدخول</div></div>
+        </div>
+      </div>`;
+    } else if(s.entryPhase==='awaiting-breakout' && supportBase){
+      const zoneHigh = (supportBase*1.20).toFixed(2);
+      entryModelHtml = `
+      <div class="panel-box" style="margin-bottom:22px;">
+        <div class="panel-h"><span class="pip" style="background:${phaseMeta.color}"></span>نموذج الدخول الآمن</div>
+        <div style="margin-bottom:12px;"><span class="status-pill watch"><span class="dt"></span>${phaseMeta.icon} ${phaseMeta.label}</span></div>
+        <div class="analysis-txt">السهم لا يزال عند الدعم (${s.support.split('—')[0].trim()}) ولم يبدأ الاختراق بعد — <b>لا يوجد دخول حاليًا</b>. القاعدة: يُنتظر صعود ~20٪ لاختبار مقاومة قريبة (نطاق متوقع حول $${zoneHigh})، ثم يُراقب رجوعه ليعيد اختبار نفس منطقة الدعم (قاع مزدوج) بدون كسرها، ويثبت 2-3 جلسات فقط — لأن المستوى مؤكد مسبقًا لا يحتاج تأكيدًا كاملاً من جديد. عندها يصبح الدخول آمنًا في منطقة قريبة فوق الدعم مباشرة.</div>
+      </div>`;
+    } else if(s.entryPhase==='invalidated' && supportBase){
+      entryModelHtml = `
+      <div class="panel-box" style="margin-bottom:22px; border-color:rgba(239,100,97,.35);">
+        <div class="panel-h"><span class="pip" style="background:var(--red)"></span>نموذج الدخول الآمن</div>
+        <div style="margin-bottom:12px;"><span class="status-pill excluded"><span class="dt"></span>${phaseMeta.icon} ${phaseMeta.label}</span></div>
+        <div class="analysis-txt">كسر السهم مستوى الدعم الأصلي أثناء إعادة الاختبار بدل الثبات عليه — النموذج فشل ويُعاد السهم لمرحلة المراقبة الأساسية بانتظار تكوّن دعم جديد.</div>
+      </div>`;
+    } else {
+      entryModelHtml = `
+      <div class="panel-box" style="margin-bottom:22px;">
+        <div class="panel-h"><span class="pip" style="background:${phaseMeta.color}"></span>نموذج الدخول الآمن</div>
+        <span class="status-pill flag"><span class="dt"></span>${phaseMeta.icon} ${phaseMeta.label}</span>
+        <div class="analysis-txt" style="margin-top:10px;">${s.status==='excluded' ? 'السهم مستبعد من النموذج — لا يُبنى له نموذج دخول.' : (supportBase ? 'الشروط الأساسية غير مكتملة بعد لتفعيل مراقبة نموذج الدخول.' : 'لا يوجد دعم مؤكد بعد لبناء نموذج الدخول — يُنتظر تكوّن دعم أول واضح.')}</div>
+      </div>`;
+    }
+  }
+
+  const openCheckHtml = s.model==='spike' ? `
+    <div class="panel-box" style="margin-bottom:22px;">
+      <div class="panel-h"><span class="pip"></span>حركة الصعود الأولى (قبل الارتداد)</div>
+      <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap;">
+        <div class="mini-card" style="flex:1; min-width:140px;"><div class="mini-label">السعر قبل الصعود</div><div class="mini-val">$${s.openPrice.toFixed(2)}</div></div>
+        <div style="font-size:20px; color:var(--txt-faint);">←</div>
+        <div class="mini-card" style="flex:1; min-width:140px;"><div class="mini-label">قمة الموجة الأولى</div><div class="mini-val">${s.peakPrice}</div></div>
+        <div class="mini-card" style="flex:1; min-width:140px;"><div class="mini-label">نسبة الصعود</div><div class="mini-val" style="color:var(--green);">${s.spikePct}</div></div>
+      </div>
+      <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-top:12px; padding-top:12px; border-top:1px solid var(--border-soft);">
+        <div class="mini-card" style="flex:1; min-width:140px;"><div class="mini-label">السعر الحالي</div><div class="mini-val">$${s.price.toFixed(2)}</div></div>
+        <div class="mini-card" style="flex:1; min-width:220px;">
+          <div class="mini-label">نطاق السعر المسموح للاستراتيجية (1$ – 5$)</div>
+          <div class="mini-val small" style="color:${priceCheck.ok?'var(--green)':'var(--red)'};">${priceCheck.ok? '✓ ضمن النطاق' : (priceCheck.high? '✕ مستبعد — أعلى من 5$' : '⚠ أقل من 1$')}</div>
+        </div>
+      </div>
+    </div>` : `
+    <div class="panel-box" style="margin-bottom:22px; ${orExceeds?'border-color:rgba(239,100,97,.4);':''}">
+      <div class="panel-h"><span class="pip" style="background:${orExceeds?'var(--red)':'var(--green)'}"></span>فحص سعر الافتتاح بعد التقسيم (القاعدة: لا يتجاوز 20٪)</div>
+      <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap;">
+        <div class="mini-card" style="flex:1; min-width:140px;"><div class="mini-label">سعر الافتتاح</div><div class="mini-val">$${s.openPrice.toFixed(2)}</div></div>
+        <div style="font-size:20px; color:var(--txt-faint);">←</div>
+        <div class="mini-card" style="flex:1; min-width:140px;"><div class="mini-label">أعلى سعر أول جلسة</div><div class="mini-val">$${s.openHigh.toFixed(2)}</div></div>
+        <div class="mini-card" style="flex:1; min-width:140px;"><div class="mini-label">نسبة صعود الافتتاح</div><div class="mini-val" style="color:${orExceeds?'var(--red)':'var(--green)'};">${orPct.toFixed(1)}٪</div></div>
+        <div class="mini-card" style="flex:1; min-width:180px;">
+          <div class="mini-label">نتيجة الفحص</div>
+          <div class="mini-val small" style="color:${orExceeds?'var(--red)':'var(--green)'};">${orExceeds? '✕ مستبعد (تجاوز 20٪)' : '✓ مطابق — ضمن السيناريو'}</div>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-top:12px; padding-top:12px; border-top:1px solid var(--border-soft);">
+        <div class="mini-card" style="flex:1; min-width:140px;"><div class="mini-label">السعر الحالي</div><div class="mini-val">$${s.price.toFixed(2)}</div></div>
+        <div class="mini-card" style="flex:1; min-width:220px;">
+          <div class="mini-label">نطاق السعر المسموح للاستراتيجية (1$ – 5$)</div>
+          <div class="mini-val small" style="color:${priceCheck.ok?'var(--green)':'var(--red)'};">${priceCheck.ok? '✓ ضمن النطاق' : (priceCheck.high? '✕ مستبعد — أعلى من 5$' : '⚠ أقل من 1$')}</div>
+        </div>
+      </div>
+    </div>`;
+
+  const shortInfo = s.model==='spike' ? shortCheck(s.shortUSD, s.mcapUSD) : null;
+  const resistanceTargets = computeResistanceTargets(s);
+
+  const fundamentalsHtml = s.model==='spike' ? `
+    <div class="grid-cards">
+      <div class="mini-card"><div class="mini-label">تاريخ الصعود الحاد / القمة</div><div class="mini-val small">${s.spikeDate} → ${s.peakDate}</div><div class="mini-sub">نسبة الصعود ${s.spikePct}</div></div>
+      <div class="mini-card"><div class="mini-label">قمة الموجة الأولى</div><div class="mini-val">${s.peakPrice}</div><div class="mini-sub">الفلوت ${s.float} · القيمة السوقية ${s.mcap}</div></div>
+      <div class="mini-card"><div class="mini-label">مدة الارتداد</div><div class="mini-val">${s.pullbackDays} يوم</div><div class="mini-sub">النافذة المقبولة 4-20 يوم</div></div>
+      <div class="mini-card"><div class="mini-label">قاع الارتداد</div><div class="mini-val small">${s.pullbackLow}</div><div class="mini-sub">${s.supportMatch}</div></div>
+    </div>` : `
+    <div class="grid-cards">
+      <div class="mini-card"><div class="mini-label">تاريخ التقسيم العكسي</div><div class="mini-val small">${s.split}</div><div class="mini-sub">نسبة التقسيم ${s.ratio}</div></div>
+      <div class="mini-card"><div class="mini-label">الفلوت المتداول</div><div class="mini-val">${s.float}</div><div class="mini-sub">القيمة السوقية ${s.mcap}</div></div>
+      <div class="mini-card"><div class="mini-label">نسبة الشورت</div><div class="mini-val small">${s.short}</div><div class="mini-sub">الحد الآمن: أقل من 20 ألف سهم</div></div>
+      <div class="mini-card"><div class="mini-label">السيولة اليومية</div><div class="mini-val small">${s.dailyVolume}</div><div class="mini-sub">مؤشر ركود — لا يتجاوز 300K/يوم (معلومة توضيحية)</div></div>
+    </div>`;
+
+  const targetsHtml = (s.model==='split' && resistanceTargets.length) ? `
+    <div class="panel-box">
+      <div class="panel-h"><span class="pip"></span>المقاومات (رؤوس الشموع الساقطة) والأهداف</div>
+      <div class="tech-row"><span class="tech-name">نقطة البداية (الدعم الحالي)</span><span class="tech-val">${s.support}</span></div>
+      <div class="analysis-txt" style="margin:6px 0 14px;">كل رأس شمعة ساقطة سابقة يُعتبر مقاومة وهدفًا مستقلاً — الشمعة الساقطة الأولى هي الهدف الأقرب وعادة ما تمثل قرابة ٪100 من نقطة الانطلاق. القياس مطبّق على فريمي اليومي و4 ساعات معًا.</div>
+      <div class="responsive-grid-4" style="--rg4-cols:${Math.min(resistanceTargets.length,4)};">
+        ${resistanceTargets.map((t,i)=>`
+          <div class="mini-card">
+            <div class="mini-label">هدف ${i+1} — ${t.label}</div>
+            <div class="mini-val small">$${t.price.toFixed(2)}</div>
+            <div class="mini-sub">${t.pct!=null? (t.pct>=0?'+':'')+t.pct+'٪ من الدعم' : ''}</div>
+          </div>`).join('')}
+      </div>
+    </div>` : '';
+
+  const macdLabelMap = {
+    "إيجابي":'<span class="badge-sm bear">إيجابي قوي — غير مرغوب لهذا النموذج ▲</span>',
+    "إيجابي خفيف":'<span class="badge-sm bull">إيجابي خفيف — مقبول</span>',
+    "محايد":'<span class="badge-sm bull">محايد — مقبول</span>',
+    "سلبي":'<span class="badge-sm bull">سلبي — مقبول ▼</span>',
+    "—":'<span class="badge-sm neu">غير متوفر بعد</span>'
+  };
+  const macdBadge = macdLabelMap[s.macd] || `<span class="badge-sm neu">${s.macd}</span>`;
+
+  const rsiZone = s.rsi<=27 ? '<span class="badge-sm bull">تشبع بيعي مثالي</span>'
+                : s.rsi>=70 ? '<span class="badge-sm bear">تشبع شرائي</span>'
+                : '<span class="badge-sm neu">ضمن المدى الطبيعي</span>';
+
+  const condsHtml = labels.map((l,i)=>`
+    <div class="cond-item ${s.conds[i]?'y':'n'}">
+      <span class="cond-ic ${s.conds[i]?'y':'n'}">${s.conds[i]?'✓':'✕'}</span>
+      <span class="cond-txt">${l}</span>
+    </div>`).join('');
+
+  const EXCLUSION_REASON_TEXT = {
+    "open-rise":"صعود الافتتاح تجاوز 20٪ — السهم لا يخضع لسيناريو الهبوط المتوقع المعتمد في نموذج التقسيم العكسي.",
+    "price-range":"السعر الحالي خارج النطاق المسموح للاستراتيجية (1$ – 5$) — يُستبعد بغض النظر عن استيفاء باقي الشروط."
+  };
+  const verdictText = s.status==='ready'
+    ? (s.entryPhase==='entry-confirmed'
+        ? {t:'إشارة دخول آمنة مؤكدة 🎯', s:'اكتمل نموذج الاختراق وإعادة الاختبار — راجع منطقة الدخول ووقف الخسارة في البطاقة أعلاه قبل التنفيذ.'}
+        : {t:'جاهز فنيًا — بانتظار الاختراق', s:'الشروط السبعة الأساسية مكتملة، لكن لم يبدأ الاختراق بعد. هذا ليس إشارة دخول فورية؛ راقب أول اختراق للمقاومة ثم إعادة اختبار الدعم.'})
+    : s.status==='near'
+    ? {t:'قريب من الإشارة', s:'شرط واحد لم يتحقق بعد — يُنصح بالمراقبة اليومية لحين اكتماله.'}
+    : s.status==='watch'
+    ? {t:'تحت المراقبة', s:'أقل من نصف الشروط محققة — لا يُعتبر مرشحًا للدخول حاليًا.'}
+    : s.status==='excluded'
+    ? {t:'مستبعد من هذا النموذج', s: EXCLUSION_REASON_TEXT[s.exclusionReason] || 'استُبعد تلقائيًا حسب قواعد النموذج.'}
+    : {t:'بانتظار التقييم الكامل', s:'رُصد حديثًا من الماسح، البيانات التاريخية غير كافية بعد لقرار نهائي.'};
+
+  const html = `
+    <div class="back-btn" onclick="showView('${lastListView(s.status)}')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>
+      رجوع للقائمة
+    </div>
+
+    <div class="detail-head">
+      <div class="dh-left">
+        <div class="dh-badge">${s.tk.slice(0,2)}</div>
+        <div>
+          <div class="dh-tk">${s.tk}</div>
+          <div class="dh-nm">${s.nm}</div>
+          <div style="margin-top:8px; display:flex; gap:8px; align-items:center;">
+            <span class="status-pill ${meta.cls}"><span class="dt"></span>${meta.label} · ${met}/7 شروط</span>
+            <span class="model-badge ${mmeta.cls}">${mmeta.label}</span>
+          </div>
+        </div>
+      </div>
+      <div class="dh-right">
+        <div class="dh-price">$${s.price.toFixed(2)}</div>
+        <div class="dh-chg ${chgCls}">${chgSign}${s.chg}٪ اليوم</div>
+      </div>
+    </div>
+
+    ${entryModelHtml}
+    ${openCheckHtml}
+    ${fundamentalsHtml}
+    ${targetsHtml}
+
+    <div class="two-col">
+      <div>
+        <div class="panel-box">
+          <div class="panel-h"><span class="pip"></span>التحليل الفني الشامل</div>
+          <div class="tech-row"><span class="tech-name">MACD</span><span class="tech-val">${macdBadge}</span></div>
+          <div class="tech-row"><span class="tech-name">RSI (يومي)</span><span class="tech-val">${s.rsi} ${rsiZone}</span></div>
+          <div class="tech-row"><span class="tech-name">المتوسط المتحرك 20</span><span class="tech-val">${s.ma20}</span></div>
+          <div class="tech-row"><span class="tech-name">المتوسط المتحرك 50</span><span class="tech-val">${s.ma50}</span></div>
+          <div class="tech-row"><span class="tech-name">المتوسط المتحرك 200</span><span class="tech-val">${s.ma200}</span></div>
+          <div class="tech-row"><span class="tech-name">خط VWAP</span><span class="tech-val">${s.vwap}</span></div>
+          <div class="tech-row"><span class="tech-name">أقرب مقاومة</span><span class="tech-val">${s.resistance}</span></div>
+          <div class="tech-row"><span class="tech-name">${s.model==='spike'?'مطابقة منطقة الدعم':'الدعم المحقق'}</span><span class="tech-val">${s.model==='spike'?s.supportMatch:s.support}</span></div>
+          ${shortInfo ? `<div class="tech-row"><span class="tech-name">الشورت نسبة للقيمة السوقية</span><span class="tech-val" style="color:${shortInfo.ok?'var(--green)':'var(--red)'};">${shortInfo.pct.toFixed(2)}٪ (الحد ${shortInfo.threshold}٪) ${shortInfo.ok?'✓':'✕'}</span></div>` : ''}
+        </div>
+
+        <div class="panel-box">
+          <div class="panel-h"><span class="pip"></span>سلوك السهم والمضارب</div>
+          <div class="analysis-txt">${s.behavior}</div>
+        </div>
+
+        <div class="panel-box">
+          <div class="panel-h"><span class="pip"></span>التحليل الشامل</div>
+          <div class="analysis-txt">${s.analysis}</div>
+          <div class="verdict ${meta.cls==='ready'?'ready':meta.cls==='near'?'near':meta.cls==='excluded'?'excluded':'watch'}">
+            <div class="verdict-ic">${s.status==='ready'?(s.entryPhase==='entry-confirmed'?'🎯':'⏸'):s.status==='near'?'⏳':s.status==='excluded'?'⛔':'👁'}</div>
+            <div><div class="verdict-t">${verdictText.t}</div><div class="verdict-s">${verdictText.s}</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="panel-box">
+          <div class="panel-h"><span class="pip"></span>شروط النظام (${met}/7)</div>
+          <div class="cond-list">${condsHtml}</div>
+        </div>
+
+        <div class="panel-box">
+          <div class="panel-h"><span class="pip"></span>سجل الأحداث الزمني</div>
+          <div class="log-wrap">
+            ${LOG.filter(l=>l.tk===s.tk).map(l=>`
+              <div class="log-item">
+                <div class="log-dot ${l.type}">${{ok:"✓",warn:"!",bad:"✕",info:"•"}[l.type]}</div>
+                <div class="log-card">
+                  <div class="log-top"><span class="log-date">${l.date}</span></div>
+                  <div class="log-txt">${l.txt}</div>
+                </div>
+              </div>`).join('') || '<div class="empty-hint">لا توجد أحداث مسجلة بعد لهذا السهم</div>'}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('view-detail').innerHTML = html;
+  showView('detail');
+}
+function lastListView(status){
+  return {ready:'ready', near:'near', watch:'watch', flag:'flagged', excluded:'flagged'}[status] || 'dashboard';
+}
+
+/* ============ تحويل بيانات الماسح (data.json) لصيغة العرض ============ */
+function fmtShares(n){
+  if(n==null) return 'غير متاح';
+  if(n>=1e6) return (n/1e6).toFixed(1)+'M';
+  if(n>=1e3) return Math.round(n/1e3)+'K';
+  return String(Math.round(n));
+}
+function fmtMoney(n){
+  if(n==null) return '—';
+  if(n>=1e6) return '$'+(n/1e6).toFixed(1)+'M';
+  if(n>=1e3) return '$'+(n/1e3).toFixed(0)+'K';
+  return '$'+n.toFixed(0);
+}
+function fmtSharesCount(n){
+  if(n==null) return 'غير متاح (يحتاج مصدر آخر)';
+  return n.toLocaleString('en-US')+' سهم';
+}
+function fmtVolume(n){
+  if(n==null) return '—';
+  if(n>=1e6) return (n/1e6).toFixed(2)+'M سهم/يوم';
+  if(n>=1e3) return Math.round(n/1e3)+'K سهم/يوم';
+  return n+' سهم/يوم';
+}
+function buildAnalysisText(raw, labels){
+  if(raw.exclusionReason==='open-rise') return 'مستبعد تلقائيًا: صعود سعر الافتتاح أول جلسة بعد التقسيم تجاوز 20٪ — خارج سيناريو هذا النموذج.';
+  if(raw.exclusionReason==='price-range') return 'مستبعد تلقائيًا: السعر الحالي خارج النطاق المسموح للاستراتيجية (1$ – 5$).';
+  const met = (raw.conds||[]).reduce((a,b)=>a+b,0);
+  const metLabels = labels.filter((l,i)=>raw.conds[i]);
+  const unmetLabels = labels.filter((l,i)=>!raw.conds[i]);
+  let txt = `استوفى السهم ${met} من 7 شروط تلقائيًا. `;
+  if(metLabels.length) txt += `محقق: ${metLabels.join('، ')}. `;
+  if(unmetLabels.length) txt += `غير محقق بعد: ${unmetLabels.join('، ')}.`;
+  if(raw.shortUnknown) txt += ' ملاحظة: بيانات الشورت غير متاحة تلقائيًا من المصدر الحالي — راجعها يدويًا قبل اتخاذ قرار.';
+  return txt;
+}
+function normalizeStock(raw){
+  const model = raw.model;
+  const labels = getCondLabels(model);
+  const base = {
+    tk: raw.tk, nm: raw.nm || raw.tk, price: raw.price, chg: raw.chg||0,
+    status: raw.status, model, conds: raw.conds || [0,0,0,0,0,0,0],
+    exclusionReason: raw.exclusionReason || null,
+    macd: raw.macd || '—', rsi: raw.rsi,
+    ma20: raw.ma20, ma50: raw.ma50, ma200: raw.ma200, vwap: raw.vwap,
+  };
+  if(model==='split'){
+    const supportStr = raw.support!=null
+      ? `${raw.support.toFixed(3)}$ — ${(raw.supportHoldSessions||0)>=5?'مؤكد':'قيد التكوّن'} (${raw.supportHoldSessions||0} جلسات)`
+      : 'لم يتشكل بعد';
+    const dropped = raw.droppedCandles || [];
+    return Object.assign(base, {
+      split: raw.split || '—', ratio: raw.ratio || '—',
+      float: fmtShares(raw.floatShares), floatShares: raw.floatShares,
+      short: fmtSharesCount(raw.shortShares), shortShares: raw.shortShares,
+      mcap: fmtMoney(raw.mcapUSD),
+      openPrice: raw.openPrice, openHigh: raw.openHigh,
+      support: supportStr,
+      droppedCandle: dropped.length? `${dropped[0].toFixed(2)}$` : '—',
+      droppedCandles: dropped,
+      dailyVolume: fmtVolume(raw.dailyVolume),
+      entryPhase: raw.entryPhase || 'not-applicable',
+      entryModel: raw.entryModel || null,
+      resistance: dropped.length ? `${dropped[0].toFixed(2)}$` : (raw.entryModel ? `${raw.entryModel.breakoutHigh}$` : '—'),
+      behavior: raw.shortUnknown
+        ? 'بيانات الشورت غير متاحة تلقائيًا من المصدر الحالي — يُنصح بمراجعة يدوية سريعة لهذا الشرط قبل الاعتماد الكامل على التصنيف.'
+        : 'يحتاج تراكم مزيد من البيانات التاريخية لبناء ملف سلوكي دقيق لهذا السهم.',
+      analysis: buildAnalysisText(raw, labels),
+    });
+  } else {
+    return Object.assign(base, {
+      spikeDate: raw.spikeDate || '—', peakDate: raw.peakDate || '—',
+      openPrice: raw.openPrice, peakPrice: `${raw.peakPrice}$`, spikePct: raw.spikePct,
+      pullbackDays: raw.pullbackDays, pullbackLow: `${raw.pullbackLow}$`,
+      supportMatch: raw.supportMatch || '—',
+      float: fmtShares(raw.floatShares), mcap: fmtMoney(raw.mcapUSD),
+      shortUSD: (raw.shortShares!=null && raw.price!=null) ? raw.shortShares*raw.price : null,
+      mcapUSD: raw.mcapUSD,
+      resistance: `${raw.peakPrice}$`,
+      behavior: 'يحتاج تراكم مزيد من البيانات التاريخية لبناء ملف سلوكي دقيق لهذا السهم.',
+      analysis: buildAnalysisText(raw, labels),
+    });
+  }
+}
+async function loadData(){
+  try{
+    const res = await fetch('./data.json', {cache:'no-store'});
+    const data = await res.json();
+    STOCKS = (data.stocks||[]).filter(s=>s && s.tk).map(normalizeStock);
+    const stamp = document.getElementById('last-scan-stamp');
+    if(stamp) stamp.textContent = data.generated_at ? ('آخر مسح: '+new Date(data.generated_at).toLocaleString('ar-EG')) : 'بانتظار أول عملية مسح';
+  }catch(e){
+    console.error('تعذر تحميل data.json', e);
+    const stamp = document.getElementById('last-scan-stamp');
+    if(stamp) stamp.textContent = 'تعذر تحميل بيانات المسح (data.json)';
+  }
+  renderLists();
+  renderLog();
+}
+
+/* ============ INIT ============ */
+loadData();
+</script>
+</body>
+</html>
