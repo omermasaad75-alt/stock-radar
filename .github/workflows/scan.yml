@@ -1,0 +1,46 @@
+name: Stock Scanner
+
+on:
+  schedule:
+    # مسح كل ساعة يغطي كل جلسات التداول: Pre-market + Market + Afterhours
+    # (بتوقيت UTC، ومحسوبة بهامش يغطي فرق التوقيت الصيفي/الشتوي الأمريكي بدون تعديل موسمي):
+    #   - من 08:00 حتى 23:00 UTC نفس اليوم (تقريبًا 4 صباحًا حتى 7 مساءً بتوقيت شرق أمريكا)
+    - cron: "0 8-23 * * 1-5"
+    #   - من 00:00 حتى 01:00 UTC اليوم التالي (تكملة الأفتر ماركت حتى ~8-9 مساءً بتوقيت شرق أمريكا،
+    #     واللي أغلب صعودات الاستراتيجية بتحصل فيه بعد الإغلاق)
+    - cron: "0 0-1 * * 2-6"
+  workflow_dispatch: {}   # زر تشغيل يدوي من تبويب Actions في GitHub
+
+permissions:
+  contents: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Discover reverse-split candidates (BusinessQuant)
+        env:
+          BUSINESSQUANT_API_KEY: ${{ secrets.BUSINESSQUANT_API_KEY }}
+        run: python scripts/discover_splits.py
+
+      - name: Run scanner (yfinance)
+        run: python scripts/scanner.py
+
+      - name: Commit and push updated data
+        run: |
+          git config user.name "stock-scanner-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/data.json reverse_split_candidates.json
+          git diff --staged --quiet || git commit -m "تحديث بيانات المسح التلقائي [skip ci]"
+          git push
