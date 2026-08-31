@@ -1,0 +1,33 @@
+تثبيت نسخة إصلاح Stock Radar
+=============================
+
+1) استبدل:
+   scripts/scanner.py
+   بالملف الموجود هنا.
+
+2) استبدل:
+   watchlist.json
+   بالملف الموجود هنا.
+   تم حذف EXAMPLE نهائياً.
+
+3) انسخ docs/candles.js إلى docs/candles.js في المستودع.
+
+4) في نهاية docs/index.html، مباشرة قبل </body>، أضف:
+   <script src="./candles.js"></script>
+
+5) شغّل:
+   python scripts/scanner.py
+
+6) تأكد أن docs/data.json أصبح يحتوي:
+   candles
+   candleCount
+   candleStart
+   candleEnd
+   dataStatus
+   dataError
+
+7) شغّل GitHub Action أو ارفع الملفات إلى GitHub.
+
+ملاحظة:
+- لا تستبدل index.html بالكامل؛ النسخة الحالية فيها الداشبورد والتصميم الموجود.
+- الإضافة candles.js ترسم الشموع داخل صفحة تفاصيل السهم بدون تغيير استراتيجية الفلترة.
