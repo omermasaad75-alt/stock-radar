@@ -729,7 +729,7 @@ const ENTRY_PHASE_META = {
 };
 
 /* ============ HELPERS ============ */
-function condsMet(s){ return s.conds.reduce((a,b)=>a+b,0); }
+function condsMet(s){ return (Array.isArray(s.conds)?s.conds:[]).reduce((a,b)=>a+(Number(b)?1:0),0); }
 function openRisePct(s){
   if(s.model==='split' && s.openPrice!=null && s.openHigh!=null){
     return ((s.openHigh - s.openPrice)/s.openPrice*100);
@@ -756,7 +756,7 @@ const MODEL_META = {
 };
 
 function stockRow(s){
-  const meta = STATUS_META[s.status];
+  const meta = STATUS_META[safeStatus(s.status)] || STATUS_META.flag;
   const mmeta = MODEL_META[s.model];
   const labels = getCondLabels(s.model);
   const shortTags = s.model==='spike' ? SHORT_TAGS_SPIKE : SHORT_TAGS_SPLIT;
@@ -788,13 +788,25 @@ function stockRow(s){
 const modelFilterState = {ready:'all', near:'all', watch:'all', flag:'all'};
 
 function byStatus(status, modelFilter){
-  return STOCKS.filter(s=>s.status===status && (modelFilter==='all' || s.model===modelFilter));
+  return STOCKS.filter(s=>safeStatus(s.status)===status && (modelFilter==='all' || s.model===modelFilter));
+}
+
+function safeStatus(status){
+  const v = String(status || '').toLowerCase().trim();
+  if (v==='ready' || v==='near' || v==='watch' || v==='flag' || v==='excluded') return v;
+  return 'flag';
 }
 
 function renderLists(){
-  // العدّادات الإجمالية دائمًا تعكس كل النماذج مجتمعة
-  const groups = {ready:[], near:[], watch:[], flag:[]};
-  STOCKS.forEach(s=>groups[s.status].push(s));
+  // العدّادات الإجمالية دائمًا تعكس كل النماذج مجتمعة.
+  // مهم: لا نفترض أن كل status موجود كمفتاح؛ لأن excluded/حالات البيانات قد تصل من scanner.
+  const groups = {ready:[], near:[], watch:[], flag:[], excluded:[]};
+  STOCKS.forEach(s=>{
+    if(!s || !s.tk) return;
+    const st = safeStatus(s.status);
+    s.status = st;
+    groups[st].push(s);
+  });
 
   document.getElementById('cnt-ready').textContent = groups.ready.length;
   document.getElementById('cnt-near').textContent = groups.near.length;
@@ -813,16 +825,19 @@ function renderLists(){
       watch:"قائمة المتابعة فارغة ضمن هذا النموذج",
       flag:"لا توجد أسهم مرصودة ضمن هذا النموذج"
     }[status];
-    document.getElementById(`list-${status}-full`).innerHTML = filtered.map(stockRow).join('') || emptyMsg(emptyTxt);
+    const el = document.getElementById(`list-${status}-full`);
+    if(el) el.innerHTML = filtered.map(stockRow).join('') || emptyMsg(emptyTxt);
   });
 
-  document.getElementById('list-ready-preview').innerHTML = groups.ready.slice(0,3).map(stockRow).join('') || emptyMsg("لا توجد أسهم جاهزة فنيًا حاليًا");
-  document.getElementById('list-near-preview').innerHTML = groups.near.slice(0,3).map(stockRow).join('') || emptyMsg("لا توجد أسهم شبه جاهزة حاليًا");
-  document.getElementById('list-flag-preview').innerHTML = groups.flag.slice(0,3).map(stockRow).join('') || emptyMsg("لا توجد أسهم مرصودة جديدة");
+  const readyPreview = document.getElementById('list-ready-preview');
+  const nearPreview = document.getElementById('list-near-preview');
+  const flagPreview = document.getElementById('list-flag-preview');
+  if(readyPreview) readyPreview.innerHTML = groups.ready.slice(0,3).map(stockRow).join('') || emptyMsg("لا توجد أسهم جاهزة فنيًا حاليًا");
+  if(nearPreview) nearPreview.innerHTML = groups.near.slice(0,3).map(stockRow).join('') || emptyMsg("لا توجد أسهم شبه جاهزة حاليًا");
+  if(flagPreview) flagPreview.innerHTML = groups.flag.slice(0,3).map(stockRow).join('') || emptyMsg("لا توجد أسهم مرصودة جديدة");
 
-  const excludedList = STOCKS.filter(s=>s.status==='excluded');
   const excEl = document.getElementById('list-excluded');
-  if(excEl) excEl.innerHTML = excludedList.map(stockRow).join('') || emptyMsg("لا توجد أسهم مستبعدة حاليًا");
+  if(excEl) excEl.innerHTML = groups.excluded.map(stockRow).join('') || emptyMsg("لا توجد أسهم مستبعدة حاليًا");
 }
 function emptyMsg(t){ return `<div class="empty-hint">${t}</div>`; }
 
@@ -878,7 +893,7 @@ function closeSidebar(){
 function openDetail(tk){
   const s = STOCKS.find(x=>x.tk===tk);
   if(!s) return;
-  const meta = STATUS_META[s.status];
+  const meta = STATUS_META[safeStatus(s.status)] || STATUS_META.flag;
   const mmeta = MODEL_META[s.model];
   const labels = getCondLabels(s.model);
   const met = condsMet(s);
@@ -1171,7 +1186,7 @@ function normalizeStock(raw){
   const labels = getCondLabels(model);
   const base = {
     tk: raw.tk, nm: raw.nm || raw.tk, price: raw.price, chg: raw.chg||0,
-    status: raw.status, model, conds: raw.conds || [0,0,0,0,0,0,0],
+    status: safeStatus(raw.status), model, conds: Array.isArray(raw.conds) ? raw.conds : [0,0,0,0,0,0,0],
     exclusionReason: raw.exclusionReason || null,
     macd: raw.macd || '—', rsi: raw.rsi,
     ma20: raw.ma20, ma50: raw.ma50, ma200: raw.ma200, vwap: raw.vwap,
