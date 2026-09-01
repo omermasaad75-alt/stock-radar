@@ -188,3 +188,16 @@
   if(view) new MutationObserver(()=>setTimeout(attach,30)).observe(view,{subtree:true,childList:true,attributes:true});
   window.addEventListener("resize",()=>{ const p=document.querySelector("#sr-candle-panel"); if(p){const tk=p.closest(".view")?.querySelector(".dh-tk")?.textContent?.trim(); const raw=RAW.find(x=>x.tk===tk); if(raw) draw(p,raw,120);} });
 })();
+
+/* Dashboard crash recovery: the original dashboard groups by status without a fallback.
+   Run the safe renderer after data.json finishes loading. */
+(function(){
+  function recover(){
+    try{
+      if(window.StockRadarDashboardFix && window.StockRadarDashboardFix.run){
+        window.StockRadarDashboardFix.run();
+      }
+    }catch(e){ console.error('Dashboard recovery:',e); }
+  }
+  [0,80,200,500,1200].forEach(ms=>setTimeout(recover,ms));
+})();
