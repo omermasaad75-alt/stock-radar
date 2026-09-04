@@ -332,8 +332,11 @@ def score_split_model(symbol, df, split_date, split_ratio, fin, news_hits):
             pass
     if open_price and open_high and (open_high - open_price) / open_price * 100 > OPEN_DAY_RISE_MAX_PCT:
         excluded_reason = "open-rise"
+    # السعر خارج 1$–5$ = مستبعد تلقائياً، وليس "مرصوداً" أو "شبه جاهز".
+    # لا يسمح هذا الشرط بدخول السهم في أي تصنيف فرصة.
     if not (PRICE_MIN <= price <= PRICE_MAX):
         excluded_reason = excluded_reason or "price-range"
+
     cond_support = support_hold >= SUPPORT_HOLD_SESSIONS
     cond_news = len(news_hits) == 0
     cond_macd = macd_state in ("سلبي", "محايد", "إيجابي خفيف")
@@ -353,8 +356,10 @@ def score_split_model(symbol, df, split_date, split_ratio, fin, news_hits):
     elif met >= 5: status = "near"
     elif met >= 3: status = "watch"
     else: status = "flag"
+    # إشارة الدخول المؤكدة لا تُمنح إلا للسهم المصنف "جاهز فنياً".
+    # السهم شبه الجاهز يبقى مراقبة/انتظار فقط مهما كانت حالة نموذج الدخول.
     entry_phase, entry_model = ("not-applicable", None)
-    if status in ("ready", "near") and support is not None:
+    if status == "ready" and support is not None:
         entry_phase, entry_model = detect_entry_phase(df, support, support_hold)
     return {
         "tk": symbol, "price": round(price, 4), "chg": chg, "status": status, "model": "split",
@@ -455,11 +460,15 @@ def analyze_symbol(entry):
     if len(df) < MIN_CANDLES:
         print(f"[!!] {symbol}: لا توجد بيانات شموع كافية ({len(df)} < {MIN_CANDLES})")
         meta = candle_meta(df)
+        _price = round(float(df["c"].iloc[-1]), 4)
+        _status = "excluded" if not (PRICE_MIN <= _price <= PRICE_MAX) else "flag"
+        _reason = "price-range" if _status == "excluded" else None
         return [{
-            "tk": symbol, "price": round(float(df["c"].iloc[-1]), 4),
-            "chg": 0, "status": "flag", "model": "split",
+            "tk": symbol, "price": _price,
+            "chg": 0, "status": _status, "model": "split",
             "conds": [0,0,0,0,0,0,0], "dataStatus": "insufficient",
             "dataError": f"عدد الشموع {len(df)} أقل من الحد الأدنى {MIN_CANDLES}.",
+            "exclusionReason": _reason,
             **meta,
         }]
 
