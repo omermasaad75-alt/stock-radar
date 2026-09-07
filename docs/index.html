@@ -3,7 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0A0E14">
+<meta name="theme-color" content="#0A0E14" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#0F1720" media="(prefers-color-scheme: light)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="رادار">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icon.svg">
 <title>رادار — أسهم التقسيم والهبوط</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -399,6 +407,64 @@
     .stat-grid{grid-template-columns:1fr;}
     .grid-cards{grid-template-columns:1fr;}
   }
+
+  /* ===== Mobile-first visual refresh ===== */
+  :root{--bg:#071018;--panel:#0f1b25;--panel-2:#142432;--border:#203342;--border-soft:#172936;--gold:#f3b84b;--green:#34d399;--blue:#65b7ff;--red:#fb7185;--shadow:0 12px 32px rgba(0,0,0,.18);}
+  body{background-color:var(--bg);background-image:radial-gradient(ellipse 700px 420px at 100% -10%,rgba(243,184,75,.11),transparent),radial-gradient(ellipse 600px 420px at 0 100%,rgba(101,183,255,.07),transparent);}
+  .sidebar{background:linear-gradient(180deg,#0b1721,#071018);}
+  .brand-mark{border-radius:12px;background:linear-gradient(135deg,#ffd166,#db9632);}
+  .btn,.hamburger-btn{min-height:44px;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;}
+  .btn:active,.hamburger-btn:active,.nav-item:active,.chip:active,.mf-chip:active{transform:scale(.97);}
+  .btn.gold{box-shadow:0 8px 20px rgba(243,184,75,.16);}
+  .stat-card,.stock-row,.panel-box,.mini-card{box-shadow:var(--shadow);}
+  .stat-card{border-color:rgba(101,183,255,.12);}
+  .stock-row{border-color:rgba(101,183,255,.11);}
+  .stock-row:hover{box-shadow:0 14px 34px rgba(0,0,0,.26);}
+  .mobile-install{display:none;align-items:center;gap:7px;background:rgba(243,184,75,.13);border:1px solid rgba(243,184,75,.34);color:var(--gold);border-radius:11px;padding:9px 12px;font:700 12px var(--font-ui);cursor:pointer;}
+  .mobile-install.show{display:inline-flex;}
+  .bottom-nav{display:none;}
+  @media(max-width:860px){
+    body{padding-bottom:76px;}
+    .mobile-topbar{padding:10px 14px;min-height:62px;background:rgba(7,16,24,.88);border-bottom-color:rgba(101,183,255,.14);}
+    .mobile-brand{font-size:16px;}
+    .main{padding:16px 12px 28px;}
+    .topbar{margin-bottom:18px;gap:10px;}
+    .page-title{font-size:22px;line-height:1.35;}
+    .page-sub{font-size:12px;line-height:1.75;color:#9aabba;}
+    .topbar > div:last-child{gap:8px;}
+    .search{min-height:46px;border-radius:12px;padding:10px 13px;}
+    .btn.gold{flex:1;justify-content:center;min-height:46px;}
+    .stat-grid{gap:9px;margin-bottom:22px;}
+    .stat-card{min-height:130px;padding:13px 12px;border-radius:15px;}
+    .stat-label{font-size:11.5px;line-height:1.55;}
+    .stat-num{font-size:30px;margin-top:8px;}
+    .stat-foot{font-size:10.5px;line-height:1.5;}
+    .section{margin-bottom:24px;}
+    .section-head{margin-bottom:10px;}
+    .section-title{font-size:15px;gap:7px;}
+    .link-btn{font-size:11.5px;padding:6px 0;}
+    .stock-list{gap:9px;}
+    .stock-row{padding:12px;border-radius:15px;gap:10px;}
+    .stock-tk{font-size:17px;}
+    .stock-nm{font-size:10.5px;}
+    .stock-price{font-size:12px;}
+    .price-num{font-size:15px;}
+    .status-pill{font-size:11px;padding:6px 10px;max-width:100%;}
+    .status-pill .dt{flex:none;}
+    .stock-status{overflow:hidden;}
+    .filter-bar,.model-filter{gap:7px;overflow-x:auto;flex-wrap:nowrap;padding-bottom:3px;scrollbar-width:none;}
+    .filter-bar::-webkit-scrollbar,.model-filter::-webkit-scrollbar{display:none;}
+    .chip,.mf-chip{white-space:nowrap;min-height:40px;padding:8px 12px;}
+    .bottom-nav{position:fixed;display:flex;align-items:stretch;justify-content:space-around;inset:auto 10px 10px;z-index:35;height:62px;background:rgba(15,27,37,.94);backdrop-filter:blur(18px);border:1px solid rgba(101,183,255,.16);border-radius:18px;box-shadow:0 16px 38px rgba(0,0,0,.38);padding:5px;direction:rtl;}
+    .bottom-nav button{flex:1;border:0;background:transparent;color:#8294a4;border-radius:13px;font:600 10px var(--font-ui);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;}
+    .bottom-nav button.active{background:rgba(243,184,75,.14);color:var(--gold);}
+    .bottom-nav svg{width:19px;height:19px;}
+    .mobile-install{margin-inline-start:auto;}
+    .detail-head{border-radius:16px;}
+  }
+  @media(max-width:420px){.stat-card{min-height:122px}.stat-foot{display:none}.mobile-install{padding:8px 9px;font-size:11px}.mobile-install span{display:none;}}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;}}
+
 </style>
 </head>
 <body>
@@ -410,7 +476,7 @@
     <div class="brand-mark" style="width:30px;height:30px;font-size:14px;">ر</div>
     <span>رادار</span>
   </div>
-  <span style="width:22px;"></span>
+  <button class="mobile-install" id="install-app" type="button" aria-label="تثبيت التطبيق">＋ <span>تثبيت</span></button>
 </div>
 <div class="sidebar-overlay" onclick="closeSidebar()"></div>
 <div class="app">
@@ -1248,6 +1314,23 @@ async function loadData(){
 /* ============ INIT ============ */
 loadData();
 </script>
+<nav class="bottom-nav" aria-label="التنقل السريع">
+  <button class="active" data-bottom-view="dashboard" onclick="showView('dashboard')"><span>⌂</span><span>الرئيسية</span></button>
+  <button data-bottom-view="ready" onclick="showView('ready')"><span>★</span><span>جاهزة</span></button>
+  <button data-bottom-view="watch" onclick="showView('watch')"><span>◉</span><span>المتابعة</span></button>
+  <button data-bottom-view="log" onclick="showView('log')"><span>◷</span><span>السجل</span></button>
+</nav>
 <script src="./candles.js"></script>
+
+<script>
+(function(){
+  if ('serviceWorker' in navigator) window.addEventListener('load', function(){ navigator.serviceWorker.register('./sw.js').catch(function(){}); });
+  let deferredPrompt;
+  const install = document.getElementById('install-app');
+  window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferredPrompt=e; if(install) install.classList.add('show'); });
+  if(install) install.addEventListener('click', async function(){ if(!deferredPrompt) return; deferredPrompt.prompt(); deferredPrompt=null; install.classList.remove('show'); });
+  document.querySelectorAll('[data-bottom-view]').forEach(function(btn){ btn.addEventListener('click', function(){ document.querySelectorAll('[data-bottom-view]').forEach(function(b){b.classList.toggle('active', b===btn);}); }); });
+})();
+</script>
 </body>
 </html>
