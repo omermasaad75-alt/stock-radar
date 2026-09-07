@@ -566,7 +566,7 @@
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
             <span>ابحث عن سهم بالرمز...</span>
           </div>
-          <div class="btn gold">↻ تحديث الآن</div>
+          <button class="btn gold" id="refresh-data-btn" type="button" onclick="refreshData()">↻ تحديث الآن</button>
         </div>
       </div>
 
@@ -1313,13 +1313,31 @@ function normalizeStock(raw){
     });
   }
 }
-async function loadData(){
+async function refreshData(){
+  const btn = document.getElementById('refresh-data-btn');
+  if(btn && btn.dataset.loading === '1') return;
+  if(btn){
+    btn.dataset.loading = '1';
+    btn.disabled = true;
+    btn.textContent = '↻ جارٍ التحديث...';
+  }
+  try {
+    await loadData(true);
+    if(btn) btn.textContent = '✓ تم التحديث';
+    setTimeout(() => { if(btn){ btn.textContent = '↻ تحديث الآن'; btn.disabled = false; btn.dataset.loading = '0'; } }, 1800);
+  } catch(e) {
+    if(btn){ btn.textContent = '⚠ تعذر التحديث'; btn.disabled = false; btn.dataset.loading = '0'; }
+  }
+}
+async function loadData(forceRefresh=false){
   try{
-    const res = await fetch('./data.json', {cache:'no-store'});
+    const url = './data.json' + (forceRefresh ? ('?refresh=' + Date.now()) : '');
+    const res = await fetch(url, {cache:'no-store'});
+    if(!res.ok) throw new Error('HTTP '+res.status);
     const data = await res.json();
     STOCKS = (data.stocks||[]).filter(s=>s && s.tk).map(normalizeStock);
     const stamp = document.getElementById('last-scan-stamp');
-    if(stamp) stamp.textContent = data.generated_at ? ('آخر مسح: '+new Date(data.generated_at).toLocaleString('ar-EG')) : 'بانتظار أول عملية مسح';
+    if(stamp) stamp.textContent = data.generated_at ? ('آخر مسح: '+new Date(data.generated_at).toLocaleString('ar-EG')) : ('آخر تحديث للبيانات: '+new Date().toLocaleTimeString('ar-EG'));
   }catch(e){
     console.error('تعذر تحميل data.json', e);
     const stamp = document.getElementById('last-scan-stamp');
