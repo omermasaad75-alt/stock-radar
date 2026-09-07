@@ -465,6 +465,24 @@
   @media(max-width:420px){.stat-card{min-height:122px}.stat-foot{display:none}.mobile-install{padding:8px 9px;font-size:11px}.mobile-install span{display:none;}}
   @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;}}
 
+
+  /* Final mobile containment: use bottom navigation instead of an overlapping drawer. */
+  @media(max-width:860px){
+    html,body{width:100%;max-width:100%;overflow-x:hidden;}
+    .app,.main,.view{width:100%;max-width:100%;min-width:0;}
+    .main{overflow:hidden;}
+    .mobile-topbar{justify-content:center;}
+    .mobile-topbar .hamburger-btn{display:none;}
+    .mobile-topbar .mobile-brand{margin:0 auto;}
+    .sidebar,.sidebar-overlay{display:none!important;}
+    .topbar,.topbar>div,.section,.section-head,.stock-list{max-width:100%;min-width:0;}
+    .page-sub{max-width:100%;overflow-wrap:anywhere;}
+    .stat-grid{width:100%;}
+    .stock-row{width:100%;min-width:0;}
+    .stock-id{min-width:0;}
+    .stock-status{min-width:0;}
+  }
+
 </style>
 </head>
 <body>
