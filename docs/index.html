@@ -216,6 +216,7 @@
   .stock-price{width:110px; flex:none; text-align:left; direction:ltr;}
   .price-num{font-size:15.5px; font-weight:700; font-family:'IBM Plex Sans Arabic';}
   .price-chg{font-size:12px; font-weight:700; margin-top:2px;}
+  .price-age{font-size:11px; font-weight:700; color:var(--gold); margin-top:5px; direction:rtl; text-align:left; white-space:nowrap;}
   .price-chg.up{color:var(--green);} .price-chg.down{color:var(--red);}
   .stock-status{width:150px; flex:none;}
   .status-pill{
@@ -698,12 +699,12 @@
           <div class="page-sub">أرشيف زمني لأحداث كل سهم — ثبات دعوم، تغيّر شورت، استبعاد، وتغيّر تصنيف. لدراسة سلوك كل سهم بالتفصيل (نمط حركة المضارب) افتح صفحة السهم من أي قائمة</div>
         </div>
       </div>
-      <div class="filter-bar">
-        <div class="chip on">الكل</div>
-        <div class="chip">تغيّر تصنيف</div>
-        <div class="chip">كسر دعم</div>
-        <div class="chip">شمعة ساقطة</div>
-        <div class="chip">أخبار</div>
+      <div class="filter-bar" id="log-filters">
+        <div class="chip on" data-log-filter="all">الكل</div>
+        <div class="chip" data-log-filter="status">تغيّر تصنيف</div>
+        <div class="chip" data-log-filter="support">الدعم / الكسر</div>
+        <div class="chip" data-log-filter="candle">شمعة ساقطة</div>
+        <div class="chip" data-log-filter="news">أخبار</div>
       </div>
       <div class="log-wrap" id="log-list"></div>
     </div>
@@ -770,7 +771,9 @@ const STATUS_META = {
   excluded:{label:"مستبعد تلقائيًا", cls:"excluded", color:"var(--red)"}
 };
 
-const LOG = [];
+let LOG = [];
+let activeLogFilter = 'all';
+let DATA_GENERATED_AT = null;
 
 
 /* ============ حساب الشمعة الساقطة والأهداف الأربعة (كل هدف 25٪ من المسافة) ============ */
@@ -860,6 +863,7 @@ function stockRow(s){
     <div class="stock-price">
       <div class="price-num">$${s.price.toFixed(2)}</div>
       <div class="price-chg ${chgCls}">${chgSign}${s.chg}٪</div>
+      ${s.model==='split' ? `<div class="price-age">${s.ageDaysText}</div>` : ''}
     </div>
     <div class="stock-status">
       <span class="status-pill ${meta.cls}"><span class="dt"></span>${meta.label} · ${met}/7</span>
@@ -939,15 +943,39 @@ document.querySelectorAll('.model-filter').forEach(bar=>{
 
 function renderLog(){
   const iconMap = {ok:"✓", warn:"!", bad:"✕", info:"•"};
-  document.getElementById('log-list').innerHTML = LOG.map(l=>`
+  const visible = LOG.filter(l=>activeLogFilter==='all' || l.kind===activeLogFilter);
+  document.getElementById('log-list').innerHTML = visible.map(l=>`
     <div class="log-item">
       <div class="log-dot ${l.type}">${iconMap[l.type]}</div>
       <div class="log-card">
         <div class="log-top"><span class="log-tk">${l.tk}</span><span class="log-date">${l.date}</span></div>
         <div class="log-txt">${l.txt}</div>
       </div>
-    </div>`).join('');
+    </div>`).join('') || emptyMsg('لا توجد أحداث ضمن هذا التصنيف في آخر مسح');
 }
+function buildHistoryLog(){
+  const events = [];
+  const scanDate = new Date(DATA_GENERATED_AT || Date.now());
+  const scanLabel = new Intl.DateTimeFormat('ar-EG',{timeZone:'Asia/Riyadh',day:'2-digit',month:'2-digit',year:'numeric'}).format(scanDate);
+  STOCKS.forEach(s=>{
+    if(s.model==='split' && s.split && s.split!=='—') events.push({kind:'status',type:'info',tk:s.tk,date:s.split,txt:`تم رصد تقسيم عكسي بنسبة ${s.ratio}. عمر السهم الحالي ${s.ageDaysText}.`});
+    if(s.support && s.support!=='لم يتشكل بعد') {
+      const supportValue = parsePrice(s.support);
+      const broken = supportValue!=null && s.price!=null && s.price < supportValue;
+      events.push({kind:'support',type:broken?'bad':'ok',tk:s.tk,date:scanLabel,txt:broken ? `كسر السهم الدعم ${supportValue.toFixed(3)}$. السعر الحالي ${s.price.toFixed(2)}$ — يحتاج مراجعة.` : `الدعم الحالي: ${s.support}. السعر ما زال فوقه، راقب الثبات أو أي كسر أسفل الدعم.`});
+    }
+    if(s.droppedCandles && s.droppedCandles.length) events.push({kind:'candle',type:'warn',tk:s.tk,date:scanLabel,txt:`رُصدت ${s.droppedCandles.length} شمعة ساقطة؛ أقرب مقاومة ${s.droppedCandle}.`});
+    if(s.newsFlags && s.newsFlags.length) events.push({kind:'news',type:'info',tk:s.tk,date:scanLabel,txt:`تنبيه أخبار مرتبط بالسهم: ${s.newsFlags.map(n=>typeof n==='object' ? (n.title || n.headline || n.type || 'تنبيه خبري') : n).join('، ')}.`});
+    events.push({kind:'status',type:s.status==='ready'?'ok':s.status==='excluded'?'bad':'warn',tk:s.tk,date:scanLabel,txt:`التصنيف الحالي: ${STATUS_META[s.status]?.label||s.status}. ${s.analysis}`});
+  });
+  LOG = events;
+}
+document.querySelectorAll('#log-filters [data-log-filter]').forEach(chip=>chip.addEventListener('click',()=>{
+  document.querySelectorAll('#log-filters .chip').forEach(c=>c.classList.remove('on'));
+  chip.classList.add('on');
+  activeLogFilter = chip.dataset.logFilter;
+  renderLog();
+}));
 
 /* ============ VIEW SWITCHING ============ */
 function showView(id){
@@ -1265,14 +1293,17 @@ function buildAnalysisText(raw, labels){
   if(raw.shortUnknown) txt += ' ملاحظة: بيانات الشورت غير متاحة تلقائيًا من المصدر الحالي — راجعها يدويًا قبل اتخاذ قرار.';
   return txt;
 }
-function normalizeStock(raw){
+function normalizeStock(raw, asOfDate){
   const model = raw.model;
+  const splitAgeDays = (raw.split && raw.split !== '—' && asOfDate) ? Math.max(0, Math.floor((asOfDate - new Date(raw.split+'T00:00:00')) / 86400000)) : null;
+  const ageDays = raw.ageDays != null ? raw.ageDays : splitAgeDays;
+  const ageDaysText = ageDays == null ? 'غير متاح' : `${ageDays} يوم`;
   const labels = getCondLabels(model);
   const base = {
     tk: raw.tk, nm: raw.nm || raw.tk, price: raw.price, chg: raw.chg||0,
     status: safeStatus(raw.status), model, conds: Array.isArray(raw.conds) ? raw.conds : [0,0,0,0,0,0,0],
     exclusionReason: raw.exclusionReason || null,
-    macd: raw.macd || '—', rsi: raw.rsi,
+    macd: raw.macd || '—', rsi: raw.rsi, newsFlags: Array.isArray(raw.newsFlags) ? raw.newsFlags : (raw.newsFlags ? [String(raw.newsFlags)] : []),
     ma20: raw.ma20, ma50: raw.ma50, ma200: raw.ma200, vwap: raw.vwap,
   };
   if(model==='split'){
@@ -1281,7 +1312,7 @@ function normalizeStock(raw){
       : 'لم يتشكل بعد';
     const dropped = raw.droppedCandles || [];
     return Object.assign(base, {
-      split: raw.split || '—', ratio: raw.ratio || '—',
+      split: raw.split || '—', ratio: raw.ratio || '—', ageDays, ageDaysText,
       float: fmtShares(raw.floatShares), floatShares: raw.floatShares,
       short: fmtSharesCount(raw.shortShares), shortShares: raw.shortShares,
       mcap: fmtMoney(raw.mcapUSD),
@@ -1335,9 +1366,17 @@ async function loadData(forceRefresh=false){
     const res = await fetch(url, {cache:'no-store'});
     if(!res.ok) throw new Error('HTTP '+res.status);
     const data = await res.json();
-    STOCKS = (data.stocks||[]).filter(s=>s && s.tk).map(normalizeStock);
+    DATA_GENERATED_AT = data.generated_at || null;
+    const asOfDate = data.generated_at ? new Date(data.generated_at) : new Date();
+    STOCKS = (data.stocks||[]).filter(s=>s && s.tk).map(s=>normalizeStock(s, asOfDate));
+    buildHistoryLog();
     const stamp = document.getElementById('last-scan-stamp');
-    if(stamp) stamp.textContent = data.generated_at ? ('آخر مسح: '+new Date(data.generated_at).toLocaleString('ar-EG')) : ('آخر تحديث للبيانات: '+new Date().toLocaleTimeString('ar-EG'));
+    if(stamp){
+      const stampDate = data.generated_at ? new Date(data.generated_at) : new Date();
+      const datePart = new Intl.DateTimeFormat('ar-EG',{timeZone:'Asia/Riyadh',day:'2-digit',month:'2-digit',year:'numeric'}).format(stampDate);
+      const timePart = new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Riyadh',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(stampDate);
+      stamp.textContent = `آخر تحديث: ${timePart} — ${datePart}`;
+    }
   }catch(e){
     console.error('تعذر تحميل data.json', e);
     const stamp = document.getElementById('last-scan-stamp');
