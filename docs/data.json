@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-09T15:15:28.802842+00:00",
+  "generated_at": "2026-09-09T16:16:57.618294+00:00",
   "scanner_version": "2.1-candles-fixed",
   "candle_policy": {
     "interval": "1d",
@@ -9,8 +9,8 @@
   "stocks": [
     {
       "tk": "CURX",
-      "price": 4.65,
-      "chg": -7.74,
+      "price": 4.3926,
+      "chg": -12.85,
       "status": "near",
       "model": "split",
       "conds": [
@@ -28,7 +28,7 @@
       "floatShares": 505632,
       "shortShares": 1218,
       "shortUnknown": false,
-      "mcapUSD": 7292321,
+      "mcapUSD": 6888655,
       "openPrice": 5.769999980926514,
       "openHigh": 6.0,
       "support": 3.76,
@@ -37,15 +37,15 @@
         5.96,
         6.0
       ],
-      "dailyVolume": 18925,
+      "dailyVolume": 25983,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 35.8,
-      "ma20": 4.668,
-      "ma50": 4.3968,
-      "ma200": 6.7973,
-      "vwap": 5.1164,
+      "rsi": 32.7,
+      "ma20": 4.6551,
+      "ma50": 4.3917,
+      "ma200": 6.796,
+      "vwap": 5.1087,
       "newsFlags": [],
       "candles": [
         {
@@ -2044,9 +2044,9 @@
           "time": "2026-09-09",
           "open": 5.26,
           "high": 5.26,
-          "low": 4.4501,
-          "close": 4.65,
-          "volume": 18925
+          "low": 4.3926,
+          "close": 4.3926,
+          "volume": 25983
         }
       ],
       "candleCount": 250,
@@ -2085,7 +2085,7 @@
         1.66,
         3.05
       ],
-      "dailyVolume": 67893,
+      "dailyVolume": 99366,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -2093,7 +2093,7 @@
       "ma20": 2.3198,
       "ma50": 24.9623,
       "ma200": 971.8204,
-      "vwap": 2.581,
+      "vwap": 2.5797,
       "newsFlags": [],
       "candles": [
         {
@@ -4092,9 +4092,9 @@
           "time": "2026-09-09",
           "open": 1.47,
           "high": 1.48,
-          "low": 1.401,
+          "low": 1.4,
           "close": 1.415,
-          "volume": 67893
+          "volume": 99366
         }
       ],
       "candleCount": 250,
@@ -4105,8 +4105,8 @@
     },
     {
       "tk": "GLMD",
-      "price": 4.38,
-      "chg": 14.51,
+      "price": 4.16,
+      "chg": 8.76,
       "status": "near",
       "model": "split",
       "conds": [
@@ -4114,7 +4114,7 @@
         1,
         1,
         0,
-        0,
+        1,
         1,
         1
       ],
@@ -4124,7 +4124,7 @@
       "floatShares": 974737,
       "shortShares": 4656,
       "shortUnknown": false,
-      "mcapUSD": 4678865,
+      "mcapUSD": 4443853,
       "openPrice": 5.380000114440918,
       "openHigh": 5.449999809265137,
       "support": 3.679,
@@ -4133,15 +4133,15 @@
         4.816,
         4.968
       ],
-      "dailyVolume": 208622,
+      "dailyVolume": 223165,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 42.0,
-      "ma20": 4.2228,
-      "ma50": 4.3763,
-      "ma200": 5.3176,
-      "vwap": 4.3857,
+      "rsi": 36.3,
+      "ma20": 4.2118,
+      "ma50": 4.3719,
+      "ma200": 5.3165,
+      "vwap": 4.3656,
       "newsFlags": [],
       "candles": [
         {
@@ -6141,8 +6141,8 @@
           "open": 3.91,
           "high": 4.4198,
           "low": 3.82,
-          "close": 4.38,
-          "volume": 208622
+          "close": 4.16,
+          "volume": 223165
         }
       ],
       "candleCount": 250,
@@ -6153,8 +6153,8 @@
     },
     {
       "tk": "NRDY",
-      "price": 8.755,
-      "chg": -2.4,
+      "price": 8.65,
+      "chg": -3.57,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -6172,24 +6172,24 @@
       "floatShares": 4383494,
       "shortShares": 337721,
       "shortUnknown": false,
-      "mcapUSD": 632377280,
+      "mcapUSD": 624793088,
       "openPrice": 9.149999618530273,
       "openHigh": 11.024999618530273,
-      "support": 8.755,
+      "support": 8.56,
       "supportHoldSessions": 30,
       "droppedCandles": [
         10.59,
         11.025
       ],
-      "dailyVolume": 11197,
+      "dailyVolume": 23560,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 25.3,
-      "ma20": 10.0505,
-      "ma50": 11.7632,
-      "ma200": 13.8561,
-      "vwap": 10.2578,
+      "rsi": 24.4,
+      "ma20": 10.0452,
+      "ma50": 11.7611,
+      "ma200": 13.8555,
+      "vwap": 10.2292,
       "newsFlags": [],
       "candles": [
         {
@@ -8188,9 +8188,9 @@
           "time": "2026-09-09",
           "open": 8.83,
           "high": 8.94,
-          "low": 8.755,
-          "close": 8.755,
-          "volume": 11197
+          "low": 8.56,
+          "close": 8.65,
+          "volume": 23560
         }
       ],
       "candleCount": 250,
@@ -8201,8 +8201,8 @@
     },
     {
       "tk": "CXAI",
-      "price": 3.04,
-      "chg": -3.18,
+      "price": 3.065,
+      "chg": -2.39,
       "status": "near",
       "model": "split",
       "conds": [
@@ -8220,7 +8220,7 @@
       "floatShares": 2220769,
       "shortShares": 144110,
       "shortUnknown": false,
-      "mcapUSD": 7105714,
+      "mcapUSD": 7164149,
       "openPrice": 4.349999904632568,
       "openHigh": 4.880000114440918,
       "support": 3.0,
@@ -8229,15 +8229,15 @@
         3.79,
         4.14
       ],
-      "dailyVolume": 71615,
+      "dailyVolume": 75736,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 11.4,
-      "ma20": 4.3335,
-      "ma50": 6.0284,
-      "ma200": 10.9183,
-      "vwap": 4.4886,
+      "rsi": 11.6,
+      "ma20": 4.3348,
+      "ma50": 6.0289,
+      "ma200": 10.9185,
+      "vwap": 4.488,
       "newsFlags": [],
       "candles": [
         {
@@ -10237,8 +10237,8 @@
           "open": 3.11,
           "high": 3.16,
           "low": 3.0,
-          "close": 3.04,
-          "volume": 71615
+          "close": 3.065,
+          "volume": 75736
         }
       ],
       "candleCount": 250,
@@ -10249,8 +10249,8 @@
     },
     {
       "tk": "RCON",
-      "price": 1.45,
-      "chg": 2.11,
+      "price": 1.4,
+      "chg": -1.41,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -10268,7 +10268,7 @@
       "floatShares": 317842,
       "shortShares": 5946,
       "shortUnknown": false,
-      "mcapUSD": 657048,
+      "mcapUSD": 634391,
       "openPrice": 4.25,
       "openHigh": 6.420000076293945,
       "support": 1.36,
@@ -10277,15 +10277,15 @@
         1.59,
         6.42
       ],
-      "dailyVolume": 51851,
+      "dailyVolume": 83853,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 3.8,
-      "ma20": 2.8065,
-      "ma50": 43.8426,
-      "ma200": 169.8606,
-      "vwap": 2.8976,
+      "rsi": 2.5,
+      "ma20": 2.804,
+      "ma50": 43.8416,
+      "ma200": 169.8604,
+      "vwap": 2.8962,
       "newsFlags": [],
       "candles": [
         {
@@ -12284,9 +12284,9 @@
           "time": "2026-09-09",
           "open": 1.42,
           "high": 1.495,
-          "low": 1.4101,
-          "close": 1.45,
-          "volume": 51851
+          "low": 1.4,
+          "close": 1.4,
+          "volume": 83853
         }
       ],
       "candleCount": 250,
@@ -12297,8 +12297,8 @@
     },
     {
       "tk": "PFSA",
-      "price": 2.452,
-      "chg": -14.86,
+      "price": 2.47,
+      "chg": -14.24,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -12316,24 +12316,24 @@
       "floatShares": 518167,
       "shortShares": 10879,
       "shortUnknown": false,
-      "mcapUSD": 1485240,
+      "mcapUSD": 1496143,
       "openPrice": 4.079999923706055,
       "openHigh": 6.769999980926514,
-      "support": 2.452,
+      "support": 2.42,
       "supportHoldSessions": 30,
       "droppedCandles": [
         28.32,
         39.0
       ],
-      "dailyVolume": 85800,
+      "dailyVolume": 103907,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 5.9,
-      "ma20": 5.505,
-      "ma50": 6.3897,
-      "ma200": 270.6634,
-      "vwap": 18.6133,
+      "rsi": 6.0,
+      "ma20": 5.5059,
+      "ma50": 6.3901,
+      "ma200": 270.6635,
+      "vwap": 18.6089,
       "newsFlags": [
         {
           "headline": "Profusa vies for potential G3 Vision Labs acquisition",
@@ -14337,9 +14337,9 @@
           "time": "2026-09-09",
           "open": 2.8676,
           "high": 2.8676,
-          "low": 2.452,
-          "close": 2.452,
-          "volume": 85800
+          "low": 2.42,
+          "close": 2.47,
+          "volume": 103907
         }
       ],
       "candleCount": 250,
@@ -14350,8 +14350,8 @@
     },
     {
       "tk": "YYAI",
-      "price": 0.7975,
-      "chg": -4.95,
+      "price": 0.7996,
+      "chg": -4.7,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -14369,7 +14369,7 @@
       "floatShares": 52477,
       "shortShares": 67777,
       "shortUnknown": false,
-      "mcapUSD": 42010,
+      "mcapUSD": 42121,
       "openPrice": 1.4199999570846558,
       "openHigh": 1.4299999475479126,
       "support": 0.76,
@@ -14378,15 +14378,15 @@
         1.57,
         1.72
       ],
-      "dailyVolume": 157437,
+      "dailyVolume": 174895,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
       "rsi": 12.7,
-      "ma20": 1.0394,
+      "ma20": 1.0395,
       "ma50": 62.5382,
-      "ma200": 519.6505,
-      "vwap": 1.284,
+      "ma200": 519.6506,
+      "vwap": 1.2838,
       "newsFlags": [],
       "candles": [
         {
@@ -16386,8 +16386,8 @@
           "open": 0.825,
           "high": 0.8344,
           "low": 0.78,
-          "close": 0.7975,
-          "volume": 157437
+          "close": 0.7996,
+          "volume": 174895
         }
       ],
       "candleCount": 250,
@@ -16426,7 +16426,7 @@
         14.59,
         15.471
       ],
-      "dailyVolume": 388931,
+      "dailyVolume": 493004,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
@@ -16434,7 +16434,7 @@
       "ma20": 12.947,
       "ma50": 16.1282,
       "ma200": 22.8866,
-      "vwap": 12.9136,
+      "vwap": 12.9085,
       "newsFlags": [
         {
           "headline": "3 Cash-Burning Stocks We Find Risky",
@@ -18448,7 +18448,7 @@
           "high": 11.62,
           "low": 11.08,
           "close": 11.1,
-          "volume": 388931
+          "volume": 493004
         }
       ],
       "candleCount": 250,
@@ -18459,8 +18459,8 @@
     },
     {
       "tk": "HAO",
-      "price": 3.5,
-      "chg": 2.64,
+      "price": 3.45,
+      "chg": 1.17,
       "status": "watch",
       "model": "split",
       "conds": [
@@ -18478,7 +18478,7 @@
       "floatShares": 19864,
       "shortShares": 11372,
       "shortUnknown": false,
-      "mcapUSD": 1281441,
+      "mcapUSD": 1263134,
       "openPrice": 3.559999942779541,
       "openHigh": 4.170000076293945,
       "support": 2.7,
@@ -18487,15 +18487,15 @@
         3.68,
         5.47
       ],
-      "dailyVolume": 17878,
+      "dailyVolume": 18337,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 42.9,
-      "ma20": 3.4502,
-      "ma50": 6.1293,
-      "ma200": 1691.302,
-      "vwap": 4.0462,
+      "rsi": 41.7,
+      "ma20": 3.4477,
+      "ma50": 6.1283,
+      "ma200": 1691.3018,
+      "vwap": 4.0461,
       "newsFlags": [
         {
           "headline": "Registered Direct Offering Raises Dilution Questions for Haoxi Health Technology",
@@ -20500,8 +20500,8 @@
           "open": 3.4,
           "high": 3.5896,
           "low": 3.4,
-          "close": 3.5,
-          "volume": 17878
+          "close": 3.45,
+          "volume": 18337
         }
       ],
       "candleCount": 250,
@@ -20760,8 +20760,8 @@
     },
     {
       "tk": "BRNX",
-      "price": 2.3701,
-      "chg": 3.05,
+      "price": 2.4,
+      "chg": 4.35,
       "status": "near",
       "model": "split",
       "conds": [
@@ -20779,7 +20779,7 @@
       "floatShares": 23843,
       "shortShares": 248534,
       "shortUnknown": false,
-      "mcapUSD": 1708576,
+      "mcapUSD": 1730131,
       "openPrice": 3.0999999046325684,
       "openHigh": 3.6700000762939453,
       "support": 2.064,
@@ -20788,15 +20788,15 @@
         6.42,
         7.14
       ],
-      "dailyVolume": 515877,
+      "dailyVolume": 548461,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 46.4,
-      "ma20": 3.5026,
-      "ma50": 3.8788,
-      "ma200": 50.4377,
-      "vwap": 4.0124,
+      "rsi": 46.6,
+      "ma20": 3.5041,
+      "ma50": 3.8794,
+      "ma200": 50.4378,
+      "vwap": 4.0114,
       "newsFlags": [],
       "candles": [
         {
@@ -22796,8 +22796,8 @@
           "open": 2.42,
           "high": 2.5141,
           "low": 2.3501,
-          "close": 2.3701,
-          "volume": 515877
+          "close": 2.4,
+          "volume": 548461
         }
       ],
       "candleCount": 250,
@@ -22808,8 +22808,8 @@
     },
     {
       "tk": "KIDZ",
-      "price": 3.43,
-      "chg": -7.05,
+      "price": 3.48,
+      "chg": -5.69,
       "status": "near",
       "model": "split",
       "conds": [
@@ -22827,24 +22827,24 @@
       "floatShares": 859379,
       "shortShares": 24751,
       "shortUnknown": false,
-      "mcapUSD": 2952122,
+      "mcapUSD": 2995156,
       "openPrice": 4.28000020980835,
       "openHigh": 4.400000095367432,
-      "support": 3.35,
+      "support": 3.31,
       "supportHoldSessions": 30,
       "droppedCandles": [
         5.01,
         11.34
       ],
-      "dailyVolume": 21286,
+      "dailyVolume": 43200,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 31.5,
-      "ma20": 4.2855,
-      "ma50": 6.9261,
-      "ma200": 646.17,
-      "vwap": 4.4138,
+      "rsi": 31.9,
+      "ma20": 4.288,
+      "ma50": 6.9271,
+      "ma200": 646.1702,
+      "vwap": 4.4102,
       "newsFlags": [],
       "candles": [
         {
@@ -24843,9 +24843,9 @@
           "time": "2026-09-09",
           "open": 3.69,
           "high": 3.69,
-          "low": 3.4,
-          "close": 3.43,
-          "volume": 21286
+          "low": 3.31,
+          "close": 3.48,
+          "volume": 43200
         }
       ],
       "candleCount": 250,
@@ -24884,7 +24884,7 @@
         6.75,
         10.21
       ],
-      "dailyVolume": 2329,
+      "dailyVolume": 2481,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
@@ -24892,7 +24892,7 @@
       "ma20": 7.4303,
       "ma50": 7.7671,
       "ma200": 10.6629,
-      "vwap": 7.255,
+      "vwap": 7.2547,
       "newsFlags": [],
       "candles": [
         {
@@ -26893,7 +26893,7 @@
           "high": 6.4,
           "low": 6.36,
           "close": 6.36,
-          "volume": 2329
+          "volume": 2481
         }
       ],
       "candleCount": 250,
@@ -26904,8 +26904,8 @@
     },
     {
       "tk": "MYSZ",
-      "price": 2.045,
-      "chg": -4.44,
+      "price": 2.01,
+      "chg": -6.07,
       "status": "ready",
       "model": "split",
       "conds": [
@@ -26923,7 +26923,7 @@
       "floatShares": 638653,
       "shortShares": 9992,
       "shortUnknown": false,
-      "mcapUSD": 9853146,
+      "mcapUSD": 9684510,
       "openPrice": 3.3399999141693115,
       "openHigh": 3.759999990463257,
       "support": 2.0,
@@ -26932,17 +26932,17 @@
         2.68,
         2.73
       ],
-      "dailyVolume": 19616,
+      "dailyVolume": 21037,
       "entryPhase": "retesting-support",
       "entryModel": {
         "breakoutHigh": 3.544
       },
       "macd": "سلبي",
-      "rsi": 30.0,
-      "ma20": 2.5695,
-      "ma50": 3.0582,
-      "ma200": 4.78,
-      "vwap": 3.31,
+      "rsi": 29.0,
+      "ma20": 2.5678,
+      "ma50": 3.0575,
+      "ma200": 4.7798,
+      "vwap": 3.3099,
       "newsFlags": [],
       "candles": [
         {
@@ -28942,8 +28942,8 @@
           "open": 2.1414,
           "high": 2.1414,
           "low": 2.0,
-          "close": 2.045,
-          "volume": 19616
+          "close": 2.01,
+          "volume": 21037
         }
       ],
       "candleCount": 250,
@@ -28954,8 +28954,8 @@
     },
     {
       "tk": "SMXT",
-      "price": 2.35,
-      "chg": -2.49,
+      "price": 2.27,
+      "chg": -5.81,
       "status": "near",
       "model": "split",
       "conds": [
@@ -28973,24 +28973,24 @@
       "floatShares": 3490505,
       "shortShares": 58628,
       "shortUnknown": false,
-      "mcapUSD": 11144205,
+      "mcapUSD": 10764828,
       "openPrice": 4.21999979019165,
       "openHigh": 4.900000095367432,
-      "support": 2.33,
+      "support": 2.23,
       "supportHoldSessions": 30,
       "droppedCandles": [
         4.8,
         4.9
       ],
-      "dailyVolume": 5261,
+      "dailyVolume": 12919,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 17.1,
-      "ma20": 3.2878,
-      "ma50": 3.8682,
-      "ma200": 7.2396,
-      "vwap": 3.5019,
+      "rsi": 16.6,
+      "ma20": 3.2838,
+      "ma50": 3.8666,
+      "ma200": 7.2392,
+      "vwap": 3.4792,
       "newsFlags": [],
       "candles": [
         {
@@ -30988,10 +30988,10 @@
         {
           "time": "2026-09-09",
           "open": 2.39,
-          "high": 2.39,
-          "low": 2.33,
-          "close": 2.35,
-          "volume": 5261
+          "high": 2.41,
+          "low": 2.23,
+          "close": 2.27,
+          "volume": 12919
         }
       ],
       "candleCount": 250,
@@ -31002,8 +31002,8 @@
     },
     {
       "tk": "MSGY",
-      "price": 1.8406,
-      "chg": -0.51,
+      "price": 1.83,
+      "chg": -1.08,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -31021,24 +31021,24 @@
       "floatShares": 807132,
       "shortShares": 120845,
       "shortUnknown": false,
-      "mcapUSD": 3901381,
+      "mcapUSD": 3878913,
       "openPrice": 2.75,
       "openHigh": 5.880000114440918,
-      "support": 1.775,
+      "support": 1.73,
       "supportHoldSessions": 30,
       "droppedCandles": [
         2.6,
         3.944
       ],
-      "dailyVolume": 7646,
+      "dailyVolume": 24199,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 13.0,
-      "ma20": 2.227,
-      "ma50": 2.7533,
-      "ma200": 8.5822,
-      "vwap": 2.6124,
+      "rsi": 12.8,
+      "ma20": 2.2265,
+      "ma50": 2.7531,
+      "ma200": 8.5821,
+      "vwap": 2.6088,
       "newsFlags": [],
       "candles": [
         {
@@ -33037,9 +33037,9 @@
           "time": "2026-09-09",
           "open": 1.8824,
           "high": 1.8999,
-          "low": 1.8406,
-          "close": 1.8406,
-          "volume": 7646
+          "low": 1.73,
+          "close": 1.83,
+          "volume": 24199
         }
       ],
       "candleCount": 250,
@@ -33050,8 +33050,8 @@
     },
     {
       "tk": "AEHL",
-      "price": 7.55,
-      "chg": -6.09,
+      "price": 7.65,
+      "chg": -4.85,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -33069,7 +33069,7 @@
       "floatShares": 196957,
       "shortShares": 10234,
       "shortUnknown": false,
-      "mcapUSD": 8565679,
+      "mcapUSD": 8679132,
       "openPrice": 5.110000133514404,
       "openHigh": 8.920000076293945,
       "support": 2.98,
@@ -33078,15 +33078,15 @@
         8.48,
         8.92
       ],
-      "dailyVolume": 34898,
+      "dailyVolume": 44949,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 58.0,
-      "ma20": 5.9275,
-      "ma50": 8.9932,
-      "ma200": 62.5499,
-      "vwap": 6.7894,
+      "rsi": 58.5,
+      "ma20": 5.9325,
+      "ma50": 8.9952,
+      "ma200": 62.5504,
+      "vwap": 6.7895,
       "newsFlags": [],
       "candles": [
         {
@@ -35086,8 +35086,8 @@
           "open": 7.82,
           "high": 8.25,
           "low": 7.52,
-          "close": 7.55,
-          "volume": 34898
+          "close": 7.65,
+          "volume": 44949
         }
       ],
       "candleCount": 250,
@@ -35098,8 +35098,8 @@
     },
     {
       "tk": "ELPW",
-      "price": 2.91,
-      "chg": 0.0,
+      "price": 2.845,
+      "chg": -2.23,
       "status": "near",
       "model": "split",
       "conds": [
@@ -35117,7 +35117,7 @@
       "floatShares": 31626,
       "shortShares": 38048,
       "shortUnknown": false,
-      "mcapUSD": 2712379,
+      "mcapUSD": 2651793,
       "openPrice": 4.630000114440918,
       "openHigh": 4.979000091552734,
       "support": 2.8,
@@ -35126,15 +35126,15 @@
         3.82,
         4.21
       ],
-      "dailyVolume": 31559,
+      "dailyVolume": 33463,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 22.1,
-      "ma20": 3.7333,
-      "ma50": 11.1453,
-      "ma200": 2538.96,
-      "vwap": 3.9435,
+      "rsi": 21.5,
+      "ma20": 3.73,
+      "ma50": 11.144,
+      "ma200": 2538.9597,
+      "vwap": 3.9424,
       "newsFlags": [],
       "candles": [
         {
@@ -37133,9 +37133,9 @@
           "time": "2026-09-09",
           "open": 2.86,
           "high": 3.015,
-          "low": 2.86,
-          "close": 2.91,
-          "volume": 31559
+          "low": 2.845,
+          "close": 2.845,
+          "volume": 33463
         }
       ],
       "candleCount": 250,
@@ -37146,8 +37146,8 @@
     },
     {
       "tk": "NXTT",
-      "price": 4.98,
-      "chg": -1.78,
+      "price": 4.92,
+      "chg": -2.96,
       "status": "near",
       "model": "split",
       "conds": [
@@ -37165,7 +37165,7 @@
       "floatShares": 1451663,
       "shortShares": 21133,
       "shortUnknown": false,
-      "mcapUSD": 7335351,
+      "mcapUSD": 7246973,
       "openPrice": 6.010000228881836,
       "openHigh": 6.940000057220459,
       "support": 4.76,
@@ -37174,15 +37174,15 @@
         6.15,
         7.51
       ],
-      "dailyVolume": 18788,
+      "dailyVolume": 20450,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 36.5,
-      "ma20": 6.2362,
-      "ma50": 45.6619,
-      "ma200": 286.398,
-      "vwap": 8.4404,
+      "rsi": 36.1,
+      "ma20": 6.2332,
+      "ma50": 45.6607,
+      "ma200": 286.3977,
+      "vwap": 8.4395,
       "newsFlags": [],
       "candles": [
         {
@@ -39182,8 +39182,8 @@
           "open": 5.07,
           "high": 5.095,
           "low": 4.8541,
-          "close": 4.98,
-          "volume": 18788
+          "close": 4.92,
+          "volume": 20450
         }
       ],
       "candleCount": 250,
@@ -39194,9 +39194,9 @@
     },
     {
       "tk": "ONFO",
-      "price": 1.0606,
-      "chg": -1.8,
-      "status": "near",
+      "price": 0.995,
+      "chg": -7.87,
+      "status": "excluded",
       "model": "split",
       "conds": [
         1,
@@ -39207,30 +39207,30 @@
         1,
         0
       ],
-      "exclusionReason": null,
+      "exclusionReason": "price-range",
       "split": "2026-08-10",
       "ratio": "1:50",
       "floatShares": 2422495,
       "shortShares": 102843,
       "shortUnknown": false,
-      "mcapUSD": 901510,
+      "mcapUSD": 845750,
       "openPrice": 2.2699999809265137,
       "openHigh": 2.490000009536743,
-      "support": 1.05,
+      "support": 0.99,
       "supportHoldSessions": 30,
       "droppedCandles": [
         1.52,
         2.61
       ],
-      "dailyVolume": 26510,
+      "dailyVolume": 111592,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 9.3,
-      "ma20": 1.6205,
-      "ma50": 5.4034,
-      "ma200": 28.0921,
-      "vwap": 3.4599,
+      "rsi": 9.0,
+      "ma20": 1.6172,
+      "ma50": 5.4021,
+      "ma200": 28.0918,
+      "vwap": 3.4579,
       "newsFlags": [],
       "candles": [
         {
@@ -41229,9 +41229,9 @@
           "time": "2026-09-09",
           "open": 1.0899,
           "high": 1.0899,
-          "low": 1.06,
-          "close": 1.0606,
-          "volume": 26510
+          "low": 0.99,
+          "close": 0.995,
+          "volume": 111592
         }
       ],
       "candleCount": 250,
@@ -41242,8 +41242,8 @@
     },
     {
       "tk": "SXTC",
-      "price": 2.2791,
-      "chg": 1.75,
+      "price": 2.2685,
+      "chg": 1.27,
       "status": "near",
       "model": "split",
       "conds": [
@@ -41261,7 +41261,7 @@
       "floatShares": 401683,
       "shortShares": 26461,
       "shortUnknown": false,
-      "mcapUSD": 1216984,
+      "mcapUSD": 1211324,
       "openPrice": 3.7799999713897705,
       "openHigh": 4.230000019073486,
       "support": 2.06,
@@ -41270,15 +41270,15 @@
         5.55,
         10.4
       ],
-      "dailyVolume": 15655,
+      "dailyVolume": 22430,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 16.3,
-      "ma20": 3.2835,
-      "ma50": 65.8874,
+      "rsi": 16.1,
+      "ma20": 3.2829,
+      "ma50": 65.8872,
       "ma200": 3132.6962,
-      "vwap": 4.4611,
+      "vwap": 4.4607,
       "newsFlags": [],
       "candles": [
         {
@@ -43277,9 +43277,9 @@
           "time": "2026-09-09",
           "open": 2.3,
           "high": 2.3863,
-          "low": 2.27,
-          "close": 2.2791,
-          "volume": 15655
+          "low": 2.26,
+          "close": 2.2685,
+          "volume": 22430
         }
       ],
       "candleCount": 250,
@@ -43318,7 +43318,7 @@
         2.9,
         3.2
       ],
-      "dailyVolume": 4509,
+      "dailyVolume": 4581,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
@@ -43326,7 +43326,7 @@
       "ma20": 2.1923,
       "ma50": 2.3835,
       "ma200": 36.5515,
-      "vwap": 2.2741,
+      "vwap": 2.274,
       "newsFlags": [],
       "candles": [
         {
@@ -45327,7 +45327,7 @@
           "high": 1.8,
           "low": 1.6868,
           "close": 1.72,
-          "volume": 4509
+          "volume": 4581
         }
       ],
       "candleCount": 250,
@@ -45338,8 +45338,8 @@
     },
     {
       "tk": "TNON",
-      "price": 3.46,
-      "chg": 2.98,
+      "price": 3.395,
+      "chg": 1.04,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -45357,7 +45357,7 @@
       "floatShares": 620847,
       "shortShares": 8042,
       "shortUnknown": false,
-      "mcapUSD": 2307982,
+      "mcapUSD": 2264624,
       "openPrice": 5.099999904632568,
       "openHigh": 7.150000095367432,
       "support": 3.179,
@@ -45366,15 +45366,15 @@
         17.84,
         22.4
       ],
-      "dailyVolume": 10099865,
+      "dailyVolume": 10271629,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 1.2,
-      "ma20": 5.3715,
-      "ma50": 6.598,
-      "ma200": 23.3645,
-      "vwap": 9.7289,
+      "rsi": 0.4,
+      "ma20": 5.3682,
+      "ma50": 6.5967,
+      "ma200": 23.3642,
+      "vwap": 9.7133,
       "newsFlags": [],
       "candles": [
         {
@@ -47374,8 +47374,8 @@
           "open": 3.44,
           "high": 3.67,
           "low": 3.25,
-          "close": 3.46,
-          "volume": 10099865
+          "close": 3.395,
+          "volume": 10271629
         }
       ],
       "candleCount": 250,
@@ -47386,8 +47386,8 @@
     },
     {
       "tk": "IPW",
-      "price": 1.6649,
-      "chg": -6.99,
+      "price": 1.68,
+      "chg": -6.15,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -47405,7 +47405,7 @@
       "floatShares": 65069,
       "shortShares": 19354,
       "shortUnknown": false,
-      "mcapUSD": 349840,
+      "mcapUSD": 353013,
       "openPrice": 3.549999952316284,
       "openHigh": 4.340000152587891,
       "support": 1.53,
@@ -47414,15 +47414,15 @@
         2.1,
         3.33
       ],
-      "dailyVolume": 57225,
+      "dailyVolume": 63400,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
       "rsi": 7.6,
-      "ma20": 2.4155,
-      "ma50": 6.399,
-      "ma200": 200.9923,
-      "vwap": 2.9044,
+      "ma20": 2.4163,
+      "ma50": 6.3993,
+      "ma200": 200.9924,
+      "vwap": 2.9028,
       "newsFlags": [],
       "candles": [
         {
@@ -49422,8 +49422,8 @@
           "open": 1.78,
           "high": 1.78,
           "low": 1.53,
-          "close": 1.6649,
-          "volume": 57225
+          "close": 1.68,
+          "volume": 63400
         }
       ],
       "candleCount": 250,
@@ -49434,8 +49434,8 @@
     },
     {
       "tk": "JUNS",
-      "price": 3.0,
-      "chg": -2.6,
+      "price": 2.9657,
+      "chg": -3.71,
       "status": "near",
       "model": "split",
       "conds": [
@@ -49453,7 +49453,7 @@
       "floatShares": 550231,
       "shortShares": 29679,
       "shortUnknown": false,
-      "mcapUSD": 3955563,
+      "mcapUSD": 3910337,
       "openPrice": 5.300000190734863,
       "openHigh": 5.630000114440918,
       "support": 2.88,
@@ -49462,15 +49462,15 @@
         3.609,
         8.25
       ],
-      "dailyVolume": 4353,
+      "dailyVolume": 7132,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 31.2,
-      "ma20": 4.5055,
-      "ma50": 8.4119,
-      "ma200": 35.4349,
-      "vwap": 7.517,
+      "rsi": 31.0,
+      "ma20": 4.5038,
+      "ma50": 8.4112,
+      "ma200": 35.4347,
+      "vwap": 7.5167,
       "newsFlags": [],
       "candles": [
         {
@@ -51469,9 +51469,9 @@
           "time": "2026-09-09",
           "open": 3.095,
           "high": 3.2377,
-          "low": 3.0,
-          "close": 3.0,
-          "volume": 4353
+          "low": 2.9657,
+          "close": 2.9657,
+          "volume": 7132
         }
       ],
       "candleCount": 250,
@@ -51482,8 +51482,8 @@
     },
     {
       "tk": "BYAH",
-      "price": 2.4022,
-      "chg": -1.55,
+      "price": 2.4501,
+      "chg": 0.41,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -51501,7 +51501,7 @@
       "floatShares": 285847,
       "shortShares": 22643,
       "shortUnknown": false,
-      "mcapUSD": 1911015,
+      "mcapUSD": 1949120,
       "openPrice": 2.696000099182129,
       "openHigh": 6.639999866485596,
       "support": 2.37,
@@ -51510,15 +51510,15 @@
         2.97,
         3.1
       ],
-      "dailyVolume": 7211,
+      "dailyVolume": 9120,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 27.2,
-      "ma20": 2.8301,
-      "ma50": 3.5524,
-      "ma200": 25.4977,
-      "vwap": 3.0046,
+      "rsi": 28.7,
+      "ma20": 2.8325,
+      "ma50": 3.5533,
+      "ma200": 25.4979,
+      "vwap": 3.0038,
       "newsFlags": [],
       "candles": [
         {
@@ -53517,9 +53517,9 @@
           "time": "2026-09-09",
           "open": 2.4401,
           "high": 2.58,
-          "low": 2.4022,
-          "close": 2.4022,
-          "volume": 7211
+          "low": 2.4001,
+          "close": 2.4501,
+          "volume": 9120
         }
       ],
       "candleCount": 250,
@@ -53558,7 +53558,7 @@
         25.85,
         28.9
       ],
-      "dailyVolume": 33839,
+      "dailyVolume": 34245,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -53566,7 +53566,7 @@
       "ma20": 13.1485,
       "ma50": 12.7952,
       "ma200": 17.4782,
-      "vwap": 16.6523,
+      "vwap": 16.6528,
       "newsFlags": [],
       "candles": [
         {
@@ -55567,7 +55567,7 @@
           "high": 19.049999,
           "low": 17.549999,
           "close": 18.26,
-          "volume": 33839
+          "volume": 34245
         }
       ],
       "candleCount": 250,
@@ -55578,8 +55578,8 @@
     },
     {
       "tk": "SUGP",
-      "price": 0.6411,
-      "chg": -1.37,
+      "price": 0.647,
+      "chg": -0.46,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -55597,7 +55597,7 @@
       "floatShares": 435803,
       "shortShares": 93955,
       "shortUnknown": false,
-      "mcapUSD": 3440432,
+      "mcapUSD": 3472094,
       "openPrice": 1.899999976158142,
       "openHigh": 2.700000047683716,
       "support": 0.615,
@@ -55606,15 +55606,15 @@
         2.9,
         4.25
       ],
-      "dailyVolume": 69768,
+      "dailyVolume": 99317,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 3.8,
-      "ma20": 1.3669,
-      "ma50": 2.206,
+      "rsi": 3.9,
+      "ma20": 1.3672,
+      "ma50": 2.2061,
       "ma200": 18.1846,
-      "vwap": 1.9319,
+      "vwap": 1.9315,
       "newsFlags": [],
       "candles": [
         {
@@ -57614,8 +57614,8 @@
           "open": 0.65,
           "high": 0.652,
           "low": 0.64,
-          "close": 0.6411,
-          "volume": 69768
+          "close": 0.647,
+          "volume": 99317
         }
       ],
       "candleCount": 250,
@@ -57626,8 +57626,8 @@
     },
     {
       "tk": "AEMD",
-      "price": 1.7206,
-      "chg": -4.94,
+      "price": 1.71,
+      "chg": -5.52,
       "status": "near",
       "model": "split",
       "conds": [
@@ -57645,7 +57645,7 @@
       "floatShares": 706407,
       "shortShares": 65075,
       "shortUnknown": false,
-      "mcapUSD": 1223580,
+      "mcapUSD": 1216042,
       "openPrice": 3.5799999237060547,
       "openHigh": 3.75,
       "support": 1.67,
@@ -57654,15 +57654,15 @@
         2.06,
         3.29
       ],
-      "dailyVolume": 46496,
+      "dailyVolume": 60597,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 23.2,
-      "ma20": 2.391,
-      "ma50": 2.9214,
-      "ma200": 9.7779,
-      "vwap": 2.5805,
+      "rsi": 23.1,
+      "ma20": 2.3905,
+      "ma50": 2.9212,
+      "ma200": 9.7778,
+      "vwap": 2.5803,
       "newsFlags": [],
       "candles": [
         {
@@ -59661,9 +59661,9 @@
           "time": "2026-09-09",
           "open": 1.77,
           "high": 1.77,
-          "low": 1.7,
-          "close": 1.7206,
-          "volume": 46496
+          "low": 1.695,
+          "close": 1.71,
+          "volume": 60597
         }
       ],
       "candleCount": 250,
@@ -61722,8 +61722,8 @@
     },
     {
       "tk": "LBGJ",
-      "price": 2.1239,
-      "chg": 2.11,
+      "price": 2.1,
+      "chg": 0.96,
       "status": "near",
       "model": "split",
       "conds": [
@@ -61741,7 +61741,7 @@
       "floatShares": 361589,
       "shortShares": 114481,
       "shortUnknown": false,
-      "mcapUSD": 35664,
+      "mcapUSD": 35263,
       "openPrice": 3.740000009536743,
       "openHigh": 4.260000228881836,
       "support": 2.055,
@@ -61750,15 +61750,15 @@
         3.35,
         3.75
       ],
-      "dailyVolume": 6305,
+      "dailyVolume": 6677,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 25.3,
-      "ma20": 2.9257,
-      "ma50": 80.2643,
-      "ma200": 5064.4961,
-      "vwap": 3.2886,
+      "rsi": 24.4,
+      "ma20": 2.9245,
+      "ma50": 80.2638,
+      "ma200": 5064.496,
+      "vwap": 3.2885,
       "newsFlags": [],
       "candles": [
         {
@@ -63758,8 +63758,8 @@
           "open": 2.08,
           "high": 2.1239,
           "low": 2.07,
-          "close": 2.1239,
-          "volume": 6305
+          "close": 2.1,
+          "volume": 6677
         }
       ],
       "candleCount": 250,
@@ -63770,8 +63770,8 @@
     },
     {
       "tk": "LEXX",
-      "price": 8.19,
-      "chg": -12.59,
+      "price": 8.08,
+      "chg": -13.77,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -63789,7 +63789,7 @@
       "floatShares": 1602575,
       "shortShares": 27867,
       "shortUnknown": false,
-      "mcapUSD": 13534122,
+      "mcapUSD": 13352345,
       "openPrice": 5.900000095367432,
       "openHigh": 5.900000095367432,
       "support": 4.21,
@@ -63798,15 +63798,15 @@
         14.37,
         15.15
       ],
-      "dailyVolume": 16881,
+      "dailyVolume": 31124,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 39.7,
-      "ma20": 10.7498,
-      "ma50": 8.909,
-      "ma200": 10.7903,
-      "vwap": 11.0133,
+      "rsi": 39.4,
+      "ma20": 10.7443,
+      "ma50": 8.9068,
+      "ma200": 10.7897,
+      "vwap": 10.9919,
       "newsFlags": [],
       "candles": [
         {
@@ -65805,9 +65805,9 @@
           "time": "2026-09-09",
           "open": 9.44,
           "high": 9.52,
-          "low": 7.92,
-          "close": 8.19,
-          "volume": 16881
+          "low": 7.893,
+          "close": 8.08,
+          "volume": 31124
         }
       ],
       "candleCount": 250,
@@ -65818,8 +65818,8 @@
     },
     {
       "tk": "MVIS",
-      "price": 1.595,
-      "chg": -4.49,
+      "price": 1.585,
+      "chg": -5.09,
       "status": "watch",
       "model": "split",
       "conds": [
@@ -65837,7 +65837,7 @@
       "floatShares": 23407572,
       "shortShares": 4832187,
       "shortUnknown": false,
-      "mcapUSD": 48789220,
+      "mcapUSD": 48483332,
       "openPrice": 4.059999942779541,
       "openHigh": 4.230000019073486,
       "support": 1.54,
@@ -65846,15 +65846,15 @@
         1.93,
         4.9
       ],
-      "dailyVolume": 2450691,
+      "dailyVolume": 2640248,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 37.0,
-      "ma20": 2.0308,
-      "ma50": 3.5233,
+      "rsi": 36.5,
+      "ma20": 2.0303,
+      "ma50": 3.5231,
       "ma200": 8.8218,
-      "vwap": 2.1259,
+      "vwap": 2.1236,
       "newsFlags": [
         {
           "headline": "Why Did APP, CMS, MVIS Stocks Plunge To 52-Week Lows Last Week?",
@@ -67863,8 +67863,8 @@
           "open": 1.63,
           "high": 1.66,
           "low": 1.54,
-          "close": 1.595,
-          "volume": 2450691
+          "close": 1.585,
+          "volume": 2640248
         }
       ],
       "candleCount": 250,
@@ -67894,7 +67894,7 @@
       "floatShares": 1281782,
       "shortShares": 76345,
       "shortUnknown": false,
-      "mcapUSD": 9181017,
+      "mcapUSD": 9324792,
       "openPrice": 4.699999809265137,
       "openHigh": 5.439000129699707,
       "support": 2.652,
@@ -69928,8 +69928,8 @@
     },
     {
       "tk": "SEGG",
-      "price": 3.01,
-      "chg": 0.33,
+      "price": 2.92,
+      "chg": -2.67,
       "status": "watch",
       "model": "split",
       "conds": [
@@ -69947,7 +69947,7 @@
       "floatShares": 2980767,
       "shortShares": 131625,
       "shortUnknown": false,
-      "mcapUSD": 9811056,
+      "mcapUSD": 9517702,
       "openPrice": 3.1500000953674316,
       "openHigh": 3.240000009536743,
       "support": 2.25,
@@ -69956,15 +69956,15 @@
         4.795,
         5.915
       ],
-      "dailyVolume": 6737,
+      "dailyVolume": 11013,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 64.1,
-      "ma20": 2.6412,
-      "ma50": 3.7862,
-      "ma200": 6.9777,
-      "vwap": 2.637,
+      "rsi": 60.7,
+      "ma20": 2.6367,
+      "ma50": 3.7844,
+      "ma200": 6.9772,
+      "vwap": 2.638,
       "newsFlags": [],
       "candles": [
         {
@@ -71963,9 +71963,9 @@
           "time": "2026-09-09",
           "open": 3.02,
           "high": 3.12,
-          "low": 2.951,
-          "close": 3.01,
-          "volume": 6737
+          "low": 2.8603,
+          "close": 2.92,
+          "volume": 11013
         }
       ],
       "candleCount": 250,
@@ -71976,8 +71976,8 @@
     },
     {
       "tk": "TOP",
-      "price": 15.165,
-      "chg": -0.62,
+      "price": 15.01,
+      "chg": -1.64,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -71995,7 +71995,7 @@
       "floatShares": 100878135,
       "shortShares": 140597,
       "shortUnknown": false,
-      "mcapUSD": 1875994112,
+      "mcapUSD": 1856819712,
       "openPrice": 10.010000228881836,
       "openHigh": 11.90999984741211,
       "support": 8.4,
@@ -72003,15 +72003,15 @@
       "droppedCandles": [
         17.419
       ],
-      "dailyVolume": 30548,
+      "dailyVolume": 32313,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 64.1,
-      "ma20": 14.1695,
-      "ma50": 12.0815,
-      "ma200": 6.7589,
-      "vwap": 14.5363,
+      "rsi": 63.0,
+      "ma20": 14.1617,
+      "ma50": 12.0784,
+      "ma200": 6.7581,
+      "vwap": 14.536,
       "newsFlags": [],
       "candles": [
         {
@@ -74011,8 +74011,8 @@
           "open": 15.11,
           "high": 15.3395,
           "low": 14.8105,
-          "close": 15.165,
-          "volume": 30548
+          "close": 15.01,
+          "volume": 32313
         }
       ],
       "candleCount": 250,
@@ -74023,8 +74023,8 @@
     },
     {
       "tk": "WETO",
-      "price": 2.409,
-      "chg": -5.16,
+      "price": 2.45,
+      "chg": -3.54,
       "status": "ready",
       "model": "split",
       "conds": [
@@ -74042,7 +74042,7 @@
       "floatShares": 176268,
       "shortShares": 6089,
       "shortUnknown": false,
-      "mcapUSD": 2596422,
+      "mcapUSD": 2640612,
       "openPrice": 7.199999809265137,
       "openHigh": 7.210000038146973,
       "support": 2.25,
@@ -74051,17 +74051,17 @@
         53.59,
         97.0
       ],
-      "dailyVolume": 951867,
+      "dailyVolume": 1142709,
       "entryPhase": "retesting-support",
       "entryModel": {
         "breakoutHigh": 80.0
       },
       "macd": "سلبي",
       "rsi": 25.5,
-      "ma20": 13.2122,
-      "ma50": 28.2357,
-      "ma200": 59.5494,
-      "vwap": 11.6153,
+      "ma20": 13.2143,
+      "ma50": 28.2365,
+      "ma200": 59.5496,
+      "vwap": 11.6071,
       "newsFlags": [],
       "candles": [
         {
@@ -76061,8 +76061,8 @@
           "open": 2.49,
           "high": 2.5,
           "low": 2.3605,
-          "close": 2.409,
-          "volume": 951867
+          "close": 2.45,
+          "volume": 1142709
         }
       ],
       "candleCount": 250,
@@ -76073,8 +76073,8 @@
     },
     {
       "tk": "CLDI",
-      "price": 1.32,
-      "chg": -2.22,
+      "price": 1.3272,
+      "chg": -1.69,
       "status": "near",
       "model": "split",
       "conds": [
@@ -76092,7 +76092,7 @@
       "floatShares": 2564822,
       "shortShares": 313261,
       "shortUnknown": false,
-      "mcapUSD": 3411123,
+      "mcapUSD": 3429729,
       "openPrice": 1.9299999475479126,
       "openHigh": 1.9299999475479126,
       "support": 1.25,
@@ -76101,15 +76101,15 @@
         1.41,
         1.42
       ],
-      "dailyVolume": 17138,
+      "dailyVolume": 20003,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 42.7,
-      "ma20": 1.3763,
-      "ma50": 1.7025,
+      "rsi": 43.4,
+      "ma20": 1.3766,
+      "ma50": 1.7027,
       "ma200": 8.1684,
-      "vwap": 1.4125,
+      "vwap": 1.4124,
       "newsFlags": [],
       "candles": [
         {
@@ -78109,8 +78109,8 @@
           "open": 1.33,
           "high": 1.3303,
           "low": 1.3007,
-          "close": 1.32,
-          "volume": 17138
+          "close": 1.3272,
+          "volume": 20003
         }
       ],
       "candleCount": 250,
@@ -78121,8 +78121,8 @@
     },
     {
       "tk": "CSAI",
-      "price": 4.55,
-      "chg": -2.36,
+      "price": 4.67,
+      "chg": 0.21,
       "status": "near",
       "model": "split",
       "conds": [
@@ -78140,7 +78140,7 @@
       "floatShares": 832773,
       "shortShares": 33724,
       "shortUnknown": false,
-      "mcapUSD": 3946997,
+      "mcapUSD": 4051094,
       "openPrice": 5.920000076293945,
       "openHigh": 6.179999828338623,
       "support": 3.53,
@@ -78149,15 +78149,15 @@
         5.132,
         5.54
       ],
-      "dailyVolume": 2755,
+      "dailyVolume": 3460,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 33.2,
-      "ma20": 5.1442,
-      "ma50": 7.2316,
-      "ma200": 17.3609,
-      "vwap": 5.2104,
+      "rsi": 35.3,
+      "ma20": 5.1502,
+      "ma50": 7.234,
+      "ma200": 17.3615,
+      "vwap": 5.2101,
       "newsFlags": [],
       "candles": [
         {
@@ -80157,8 +80157,8 @@
           "open": 4.5444,
           "high": 4.75,
           "low": 4.4798,
-          "close": 4.55,
-          "volume": 2755
+          "close": 4.67,
+          "volume": 3460
         }
       ],
       "candleCount": 250,
@@ -80169,8 +80169,8 @@
     },
     {
       "tk": "NEXR",
-      "price": 1.65,
-      "chg": -1.79,
+      "price": 1.68,
+      "chg": 0.0,
       "status": "near",
       "model": "split",
       "conds": [
@@ -80188,7 +80188,7 @@
       "floatShares": 50536,
       "shortShares": 73471,
       "shortUnknown": false,
-      "mcapUSD": 919815,
+      "mcapUSD": 936539,
       "openPrice": 3.6600000858306885,
       "openHigh": 4.21999979019165,
       "support": 1.62,
@@ -80197,15 +80197,15 @@
         2.0,
         2.88
       ],
-      "dailyVolume": 26218,
+      "dailyVolume": 55473,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 24.0,
-      "ma20": 2.2467,
-      "ma50": 3.5743,
-      "ma200": 57.3078,
-      "vwap": 2.3474,
+      "rsi": 24.3,
+      "ma20": 2.2482,
+      "ma50": 3.5749,
+      "ma200": 57.308,
+      "vwap": 2.3449,
       "newsFlags": [],
       "candles": [
         {
@@ -82203,10 +82203,10 @@
         {
           "time": "2026-09-09",
           "open": 1.66,
-          "high": 1.66,
+          "high": 1.71,
           "low": 1.62,
-          "close": 1.65,
-          "volume": 26218
+          "close": 1.68,
+          "volume": 55473
         }
       ],
       "candleCount": 250,
@@ -82217,8 +82217,8 @@
     },
     {
       "tk": "OFAL",
-      "price": 0.71,
-      "chg": -1.39,
+      "price": 0.7063,
+      "chg": -1.9,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -82236,7 +82236,7 @@
       "floatShares": 2728183,
       "shortShares": 667574,
       "shortUnknown": false,
-      "mcapUSD": 1872306,
+      "mcapUSD": 1862549,
       "openPrice": 1.0640000104904175,
       "openHigh": 1.1549999713897705,
       "support": 0.583,
@@ -82245,15 +82245,15 @@
         0.976,
         1.2
       ],
-      "dailyVolume": 323931,
+      "dailyVolume": 359078,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 39.4,
-      "ma20": 0.9051,
+      "rsi": 39.3,
+      "ma20": 0.905,
       "ma50": 1.1166,
-      "ma200": 4.1327,
-      "vwap": 1.4973,
+      "ma200": 4.1326,
+      "vwap": 1.4972,
       "newsFlags": [],
       "candles": [
         {
@@ -84253,8 +84253,8 @@
           "open": 0.69,
           "high": 0.7512,
           "low": 0.69,
-          "close": 0.71,
-          "volume": 323931
+          "close": 0.7063,
+          "volume": 359078
         }
       ],
       "candleCount": 250,
@@ -84265,8 +84265,8 @@
     },
     {
       "tk": "YAAS",
-      "price": 1.53,
-      "chg": -1.29,
+      "price": 1.52,
+      "chg": -1.94,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -84284,7 +84284,7 @@
       "floatShares": 4059508,
       "shortShares": 110589,
       "shortUnknown": false,
-      "mcapUSD": 24043394,
+      "mcapUSD": 23886248,
       "openPrice": 3.0799999237060547,
       "openHigh": 4.980000019073486,
       "support": 0.555,
@@ -84293,13 +84293,13 @@
         3.02,
         3.04
       ],
-      "dailyVolume": 28905,
+      "dailyVolume": 30541,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 10.4,
-      "ma20": 2.3648,
-      "ma50": 1.7165,
+      "rsi": 10.3,
+      "ma20": 2.3643,
+      "ma50": 1.7163,
       "ma200": 1.3387,
       "vwap": 2.4567,
       "newsFlags": [],
@@ -86301,8 +86301,8 @@
           "open": 1.55,
           "high": 1.59,
           "low": 1.5,
-          "close": 1.53,
-          "volume": 28905
+          "close": 1.52,
+          "volume": 30541
         }
       ],
       "candleCount": 250,
@@ -86313,8 +86313,8 @@
     },
     {
       "tk": "AMZE",
-      "price": 0.1754,
-      "chg": -2.56,
+      "price": 0.1756,
+      "chg": -2.44,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -86332,7 +86332,7 @@
       "floatShares": 20505351,
       "shortShares": 467588,
       "shortUnknown": false,
-      "mcapUSD": 1288882,
+      "mcapUSD": 1290352,
       "openPrice": 0.46000000834465027,
       "openHigh": 0.5450000166893005,
       "support": 0.152,
@@ -86341,7 +86341,7 @@
         0.195,
         0.199
       ],
-      "dailyVolume": 1036320,
+      "dailyVolume": 1397223,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -88349,8 +88349,8 @@
           "open": 0.178,
           "high": 0.1836,
           "low": 0.1723,
-          "close": 0.1754,
-          "volume": 1036320
+          "close": 0.1756,
+          "volume": 1397223
         }
       ],
       "candleCount": 250,
@@ -88380,7 +88380,7 @@
       "floatShares": 6346216,
       "shortShares": 464365,
       "shortUnknown": false,
-      "mcapUSD": 1696250,
+      "mcapUSD": 1681019,
       "openPrice": 0.3700000047683716,
       "openHigh": 0.3700000047683716,
       "support": 0.255,
@@ -90481,8 +90481,8 @@
     },
     {
       "tk": "SGLY",
-      "price": 1.87,
-      "chg": 18.35,
+      "price": 1.825,
+      "chg": 15.51,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -90500,7 +90500,7 @@
       "floatShares": 520964,
       "shortShares": 8435,
       "shortUnknown": false,
-      "mcapUSD": 10105084,
+      "mcapUSD": 9861913,
       "openPrice": 3.4200000762939453,
       "openHigh": 4.420000076293945,
       "support": 1.29,
@@ -90509,15 +90509,15 @@
         6.75,
         8.65
       ],
-      "dailyVolume": 497803,
+      "dailyVolume": 825074,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 34.1,
-      "ma20": 2.72,
-      "ma50": 3.889,
-      "ma200": 5.9731,
-      "vwap": 3.8785,
+      "rsi": 33.2,
+      "ma20": 2.7178,
+      "ma50": 3.8881,
+      "ma200": 5.9728,
+      "vwap": 3.8686,
       "newsFlags": [],
       "candles": [
         {
@@ -92517,8 +92517,8 @@
           "open": 1.61,
           "high": 1.8884,
           "low": 1.61,
-          "close": 1.87,
-          "volume": 497803
+          "close": 1.825,
+          "volume": 825074
         }
       ],
       "candleCount": 250,
@@ -92529,8 +92529,8 @@
     },
     {
       "tk": "STKH",
-      "price": 2.3099,
-      "chg": -0.44,
+      "price": 2.26,
+      "chg": -2.59,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -92548,7 +92548,7 @@
       "floatShares": 6948343930,
       "shortShares": 66914,
       "shortUnknown": false,
-      "mcapUSD": 2572371,
+      "mcapUSD": 2516801,
       "openPrice": 1.3200000524520874,
       "openHigh": 1.600000023841858,
       "support": 1.87,
@@ -92557,15 +92557,15 @@
         4.29,
         5.058
       ],
-      "dailyVolume": 11548,
+      "dailyVolume": 13239,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 26.3,
-      "ma20": 3.1245,
-      "ma50": 2.5144,
-      "ma200": 4.7039,
-      "vwap": 4.1382,
+      "rsi": 25.8,
+      "ma20": 3.122,
+      "ma50": 2.5134,
+      "ma200": 4.7036,
+      "vwap": 4.1381,
       "newsFlags": [],
       "candles": [
         {
@@ -94565,8 +94565,8 @@
           "open": 2.27,
           "high": 2.3099,
           "low": 2.221,
-          "close": 2.3099,
-          "volume": 11548
+          "close": 2.26,
+          "volume": 13239
         }
       ],
       "candleCount": 250,
@@ -94661,7 +94661,7 @@
         43.34,
         44.26
       ],
-      "dailyVolume": 17620,
+      "dailyVolume": 18161,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
@@ -94669,7 +94669,7 @@
       "ma20": 36.46,
       "ma50": 36.2258,
       "ma200": 30.9794,
-      "vwap": 36.4451,
+      "vwap": 36.4384,
       "newsFlags": [],
       "candles": [
         {
@@ -96670,7 +96670,7 @@
           "high": 28.049999,
           "low": 26.01,
           "close": 27.41,
-          "volume": 17620
+          "volume": 18161
         }
       ],
       "candleCount": 250,
@@ -96681,8 +96681,8 @@
     },
     {
       "tk": "ZNB",
-      "price": 1.575,
-      "chg": -2.17,
+      "price": 1.57,
+      "chg": -2.48,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -96700,7 +96700,7 @@
       "floatShares": 188313,
       "shortShares": 109291,
       "shortUnknown": false,
-      "mcapUSD": 1527529,
+      "mcapUSD": 1522680,
       "openPrice": 2.1700000762939453,
       "openHigh": 2.8499999046325684,
       "support": 1.55,
@@ -96709,15 +96709,15 @@
         3.05,
         3.14
       ],
-      "dailyVolume": 6465,
+      "dailyVolume": 8478,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 21.0,
-      "ma20": 1.8692,
-      "ma50": 2.6559,
+      "rsi": 20.9,
+      "ma20": 1.869,
+      "ma50": 2.6558,
       "ma200": 178.96,
-      "vwap": 2.396,
+      "vwap": 2.3959,
       "newsFlags": [],
       "candles": [
         {
@@ -98717,8 +98717,8 @@
           "open": 1.59,
           "high": 1.6,
           "low": 1.5606,
-          "close": 1.575,
-          "volume": 6465
+          "close": 1.57,
+          "volume": 8478
         }
       ],
       "candleCount": 250,
@@ -98729,8 +98729,8 @@
     },
     {
       "tk": "APUS",
-      "price": 2.31,
-      "chg": 0.43,
+      "price": 2.22,
+      "chg": -3.48,
       "status": "ready",
       "model": "split",
       "conds": [
@@ -98748,7 +98748,7 @@
       "floatShares": 1509118,
       "shortShares": 14942,
       "shortUnknown": false,
-      "mcapUSD": 3486062,
+      "mcapUSD": 3350242,
       "openPrice": 6.570000171661377,
       "openHigh": 6.869999885559082,
       "support": 2.21,
@@ -98757,17 +98757,17 @@
         4.99,
         5.43
       ],
-      "dailyVolume": 15235,
+      "dailyVolume": 18477,
       "entryPhase": "retesting-support",
       "entryModel": {
         "breakoutHigh": 8.0
       },
       "macd": "سلبي",
-      "rsi": 19.9,
-      "ma20": 3.877,
-      "ma50": 5.4264,
-      "ma200": 13.8229,
-      "vwap": 4.1924,
+      "rsi": 19.3,
+      "ma20": 3.8725,
+      "ma50": 5.4246,
+      "ma200": 13.8224,
+      "vwap": 4.1904,
       "newsFlags": [],
       "candles": [
         {
@@ -100767,8 +100767,8 @@
           "open": 2.3,
           "high": 2.31,
           "low": 2.21,
-          "close": 2.31,
-          "volume": 15235
+          "close": 2.22,
+          "volume": 18477
         }
       ],
       "candleCount": 250,
@@ -100779,8 +100779,8 @@
     },
     {
       "tk": "DBGI",
-      "price": 3.6216,
-      "chg": -1.85,
+      "price": 3.8,
+      "chg": 2.98,
       "status": "near",
       "model": "split",
       "conds": [
@@ -100798,7 +100798,7 @@
       "floatShares": 916295,
       "shortShares": 71030,
       "shortUnknown": false,
-      "mcapUSD": 2081112,
+      "mcapUSD": 2183628,
       "openPrice": 17.469999313354492,
       "openHigh": 19.0,
       "support": 3.14,
@@ -100807,15 +100807,15 @@
         17.88,
         22.64
       ],
-      "dailyVolume": 33655,
+      "dailyVolume": 45691,
       "entryPhase": "not-applicable",
       "entryModel": null,
-      "macd": "سلبي",
-      "rsi": 1.6,
-      "ma20": 8.5066,
-      "ma50": 16.6294,
-      "ma200": 149.488,
-      "vwap": 5.7735,
+      "macd": "إيجابي خفيف",
+      "rsi": 2.9,
+      "ma20": 8.5155,
+      "ma50": 16.633,
+      "ma200": 149.4889,
+      "vwap": 5.7695,
       "newsFlags": [],
       "candles": [
         {
@@ -102813,10 +102813,10 @@
         {
           "time": "2026-09-09",
           "open": 3.71,
-          "high": 3.71,
+          "high": 3.8,
           "low": 3.3001,
-          "close": 3.6216,
-          "volume": 33655
+          "close": 3.8,
+          "volume": 45691
         }
       ],
       "candleCount": 250,
@@ -102827,8 +102827,8 @@
     },
     {
       "tk": "FFAI",
-      "price": 1.8102,
-      "chg": -1.62,
+      "price": 1.8,
+      "chg": -2.17,
       "status": "near",
       "model": "split",
       "conds": [
@@ -102846,7 +102846,7 @@
       "floatShares": 3788681,
       "shortShares": 722784,
       "shortUnknown": false,
-      "mcapUSD": 6978866,
+      "mcapUSD": 6939541,
       "openPrice": 10.25,
       "openHigh": 10.25,
       "support": 1.7,
@@ -102855,15 +102855,15 @@
         5.16,
         9.3
       ],
-      "dailyVolume": 221749,
+      "dailyVolume": 282330,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
       "rsi": 8.7,
-      "ma20": 2.7795,
-      "ma50": 11.1188,
+      "ma20": 2.779,
+      "ma50": 11.1186,
       "ma200": 72.8957,
-      "vwap": 3.0207,
+      "vwap": 3.0174,
       "newsFlags": [],
       "candles": [
         {
@@ -104863,8 +104863,8 @@
           "open": 1.84,
           "high": 1.8898,
           "low": 1.78,
-          "close": 1.8102,
-          "volume": 221749
+          "close": 1.8,
+          "volume": 282330
         }
       ],
       "candleCount": 250,
@@ -104875,8 +104875,8 @@
     },
     {
       "tk": "TRIB",
-      "price": 9.17,
-      "chg": 1.21,
+      "price": 8.92,
+      "chg": -1.55,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -104894,7 +104894,7 @@
       "floatShares": 555434,
       "shortShares": 9275,
       "shortUnknown": false,
-      "mcapUSD": 7456420,
+      "mcapUSD": 7253137,
       "openPrice": 9.850000381469727,
       "openHigh": 9.850000381469727,
       "support": 8.8,
@@ -104903,15 +104903,15 @@
         13.2,
         13.5
       ],
-      "dailyVolume": 4611,
+      "dailyVolume": 6141,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 17.8,
-      "ma20": 10.322,
-      "ma50": 10.8596,
-      "ma200": 19.2194,
-      "vwap": 11.1273,
+      "rsi": 13.8,
+      "ma20": 10.3095,
+      "ma50": 10.8546,
+      "ma200": 19.2182,
+      "vwap": 11.1212,
       "newsFlags": [],
       "candles": [
         {
@@ -106911,8 +106911,8 @@
           "open": 9.4708,
           "high": 9.52,
           "low": 8.86,
-          "close": 9.17,
-          "volume": 4611
+          "close": 8.92,
+          "volume": 6141
         }
       ],
       "candleCount": 250,
@@ -106923,8 +106923,8 @@
     },
     {
       "tk": "MSS",
-      "price": 1.67,
-      "chg": 5.03,
+      "price": 1.788,
+      "chg": 12.45,
       "status": "watch",
       "model": "split",
       "conds": [
@@ -106942,7 +106942,7 @@
       "floatShares": 325423,
       "shortShares": 67084,
       "shortUnknown": false,
-      "mcapUSD": 1453800,
+      "mcapUSD": 1556523,
       "openPrice": 2.640000104904175,
       "openHigh": 2.9200000762939453,
       "support": 1.24,
@@ -106951,15 +106951,15 @@
         2.27,
         3.12
       ],
-      "dailyVolume": 181772,
+      "dailyVolume": 454314,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 42.1,
-      "ma20": 1.5288,
-      "ma50": 2.0167,
-      "ma200": 9.0835,
-      "vwap": 1.9935,
+      "rsi": 47.3,
+      "ma20": 1.5347,
+      "ma50": 2.0191,
+      "ma200": 9.0841,
+      "vwap": 1.993,
       "newsFlags": [],
       "candles": [
         {
@@ -108957,10 +108957,10 @@
         {
           "time": "2026-09-09",
           "open": 1.63,
-          "high": 1.68,
+          "high": 1.82,
           "low": 1.59,
-          "close": 1.67,
-          "volume": 181772
+          "close": 1.788,
+          "volume": 454314
         }
       ],
       "candleCount": 250,
@@ -108971,8 +108971,8 @@
     },
     {
       "tk": "CANG",
-      "price": 2.0,
-      "chg": -6.1,
+      "price": 2.01,
+      "chg": -5.63,
       "status": "watch",
       "model": "split",
       "conds": [
@@ -108990,7 +108990,7 @@
       "floatShares": 39321967,
       "shortShares": 273486,
       "shortUnknown": false,
-      "mcapUSD": 82043936,
+      "mcapUSD": 82454152,
       "openPrice": 1.840000033378601,
       "openHigh": 1.9199999570846558,
       "support": 1.36,
@@ -108999,15 +108999,15 @@
         2.79,
         2.85
       ],
-      "dailyVolume": 57251,
+      "dailyVolume": 78317,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 56.1,
-      "ma20": 2.09,
-      "ma50": 1.9418,
+      "rsi": 56.3,
+      "ma20": 2.0905,
+      "ma50": 1.942,
       "ma200": 6.528,
-      "vwap": 2.153,
+      "vwap": 2.1528,
       "newsFlags": [],
       "candles": [
         {
@@ -111007,8 +111007,8 @@
           "open": 2.1,
           "high": 2.1697,
           "low": 2.0,
-          "close": 2.0,
-          "volume": 57251
+          "close": 2.01,
+          "volume": 78317
         }
       ],
       "candleCount": 250,
@@ -111019,8 +111019,8 @@
     },
     {
       "tk": "XPON",
-      "price": 5.45,
-      "chg": -1.8,
+      "price": 5.42,
+      "chg": -2.34,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -111038,7 +111038,7 @@
       "floatShares": 799979,
       "shortShares": 19931,
       "shortUnknown": false,
-      "mcapUSD": 5194891,
+      "mcapUSD": 5166295,
       "openPrice": 2.7699999809265137,
       "openHigh": 3.75,
       "support": 3.18,
@@ -111047,14 +111047,14 @@
         10.008,
         10.2
       ],
-      "dailyVolume": 12488,
+      "dailyVolume": 17265,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 57.2,
-      "ma20": 5.4259,
-      "ma50": 4.5624,
-      "ma200": 7.792,
+      "rsi": 57.0,
+      "ma20": 5.4244,
+      "ma50": 4.5618,
+      "ma200": 7.7918,
       "vwap": 7.2835,
       "newsFlags": [
         {
@@ -113059,9 +113059,9 @@
           "time": "2026-09-09",
           "open": 5.48,
           "high": 5.7,
-          "low": 5.45,
-          "close": 5.45,
-          "volume": 12488
+          "low": 5.4,
+          "close": 5.42,
+          "volume": 17265
         }
       ],
       "candleCount": 250,
