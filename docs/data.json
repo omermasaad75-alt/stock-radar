@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-15T08:17:48.642201+00:00",
+  "generated_at": "2026-09-15T09:17:42.535392+00:00",
   "scanner_version": "2.1-candles-fixed",
   "candle_policy": {
     "interval": "1d",
@@ -33148,8 +33148,8 @@
     },
     {
       "tk": "GLMD",
-      "price": 3.84,
-      "chg": -4.71,
+      "price": 3.82,
+      "chg": -0.52,
       "status": "near",
       "model": "split",
       "conds": [
@@ -33175,15 +33175,15 @@
       "droppedCandles": [
         5.45
       ],
-      "dailyVolume": 44883,
+      "dailyVolume": 8785,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 80.7,
-      "ma20": 1.4842,
-      "ma50": 0.9621,
-      "ma200": 0.881,
-      "vwap": 0.7251,
+      "rsi": 80.3,
+      "ma20": 1.6465,
+      "ma50": 1.0266,
+      "ma200": 0.8922,
+      "vwap": 0.727,
       "newsFlags": [],
       "candles": [
         {
@@ -34913,11 +34913,19 @@
           "low": 3.655,
           "close": 3.84,
           "volume": 44883
+        },
+        {
+          "time": "2026-09-14",
+          "open": 3.72,
+          "high": 3.89,
+          "low": 3.5027,
+          "close": 3.82,
+          "volume": 8785
         }
       ],
-      "candleCount": 216,
+      "candleCount": 217,
       "candleStart": "2025-09-15",
-      "candleEnd": "2026-09-11",
+      "candleEnd": "2026-09-14",
       "dataStatus": "ready",
       "dataError": null
     },
@@ -88440,8 +88448,8 @@
     },
     {
       "tk": "KWM",
-      "price": 1.35,
-      "chg": 3.05,
+      "price": 1.33,
+      "chg": -1.48,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -88468,15 +88476,15 @@
         3.55,
         8.595
       ],
-      "dailyVolume": 72190,
+      "dailyVolume": 54247,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 63.5,
-      "ma20": 0.6427,
-      "ma50": 0.5506,
-      "ma200": 0.7906,
-      "vwap": 1.4831,
+      "rsi": 63.3,
+      "ma20": 0.701,
+      "ma50": 0.5715,
+      "ma200": 0.7841,
+      "vwap": 1.5614,
       "newsFlags": [],
       "candles": [
         {
@@ -90214,11 +90222,19 @@
           "low": 1.28,
           "close": 1.35,
           "volume": 72190
+        },
+        {
+          "time": "2026-09-14",
+          "open": 1.33,
+          "high": 1.36,
+          "low": 1.28,
+          "close": 1.33,
+          "volume": 54247
         }
       ],
-      "candleCount": 217,
+      "candleCount": 218,
       "candleStart": "2025-09-15",
-      "candleEnd": "2026-09-11",
+      "candleEnd": "2026-09-14",
       "dataStatus": "ready",
       "dataError": null
     },
