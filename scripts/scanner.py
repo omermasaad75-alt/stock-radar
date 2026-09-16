@@ -30,6 +30,10 @@ SUPPORT_HOLD_SESSIONS = 5
 RETEST_HOLD_SESSIONS = 3
 BREAKOUT_PCT = 0.20
 RSI_MAX = 30
+# شرط إضافي بعد تحقق الشروط السبعة: تأكيد تحسّن RSI (خروج من تشبع بيعي)
+# قبل إعطاء إشارة الدخول الفعلية — مش مجرد وصول السعر لمنطقة إعادة الاختبار.
+RSI_RECOVERY_LEVEL = 40
+RSI_RECOVERY_LOOKBACK = 20
 FLOAT_MAX = 5_000_000
 SHORT_SHARES_MAX = 20_000
 PRICE_MIN, PRICE_MAX = 1.0, 5.0
@@ -207,12 +211,24 @@ def anchored_vwap(df, window=20):
     return (typical * recent["v"]).sum() / max(recent["v"].sum(), 1)
 
 def find_support(df, lookback=30, buffer_pct=0.02):
+    """أدنى قاع خلال آخر `lookback` جلسة، وعدد جلسات الثبات فوقه.
+
+    ملاحظة مهمة: عدّاد الثبات (hold) لازم يبدأ من جلسة القاع نفسها وليس من
+    أول الفريم الزمني (30 يوم). النسخة القديمة كانت تفحص كل الـ30 يوم رجوعًا
+    للخلف، فلو السهم كان عمومًا هادئ قرب نفس المستوى قبل تكوّن القاع كمان،
+    كانت النتيجة تطلع 30 جلسة (تضليل)، مع إن ثبات الدعم الفعلي (بعد تكوّنه)
+    كان أياماً قليلة بس (1، 2، 3...). الحل: نحدد أولاً أي جلسة صنعت القاع،
+    ثم نعدّ الثبات فقط من تلك الجلسة إلى اليوم — سقفه الأقصى الطبيعي هو عدد
+    الجلسات منذ تكوّن القاع، مش طول الفريم كله.
+    """
     recent = df.tail(lookback).reset_index(drop=True)
     if recent.empty:
         return None, 0
-    support = float(recent["l"].min())
+    idx_min = int(recent["l"].idxmin())
+    support = float(recent["l"].iloc[idx_min])
+    closes_since_low = recent["c"].iloc[idx_min:].tolist()
     hold = 0
-    for close in reversed(recent["c"].tolist()):
+    for close in reversed(closes_since_low):
         if close >= support * (1 - buffer_pct):
             hold += 1
         else:
@@ -235,7 +251,7 @@ def find_dropped_candles(df, lookback=250, current_price=None, max_levels=2):
         candidates = [c for c in candidates if c > current_price * 0.95]
     return candidates[:max_levels]
 
-def detect_entry_phase(df, support, support_hold):
+def detect_entry_phase(df, support, support_hold, dropped_candles=None):
     if support is None or support_hold < SUPPORT_HOLD_SESSIONS:
         return "awaiting-breakout", None
     breakout_level = support * (1 + BREAKOUT_PCT)
@@ -252,20 +268,44 @@ def detect_entry_phase(df, support, support_hold):
     if min(after_breakout) < support * 0.97:
         return "invalidated", None
     near_support = [c for c in after_breakout if c <= support * 1.06]
-    if len(near_support) >= RETEST_HOLD_SESSIONS:
-        retest_low = min(after_breakout[-RETEST_HOLD_SESSIONS:])
-        entry_low = round(support + 0.05, 3)
-        entry_high = round(support + (breakout_high - support) * 0.4, 3)
-        entry_mid = round((entry_low + entry_high) / 2, 3)
-        target = round(breakout_high, 3)
-        return "entry-confirmed", {
-            "support1": round(support, 3), "breakoutHigh": round(breakout_high, 3),
-            "breakoutPct": round(BREAKOUT_PCT * 100), "retestLow": round(retest_low, 3),
-            "retestSessions": RETEST_HOLD_SESSIONS, "entryLow": entry_low,
-            "entryMid": entry_mid, "entryHigh": entry_high,
-            "stopLoss": round(support, 3), "target": target,
-        }
-    return "retesting-support", {"breakoutHigh": round(breakout_high, 4)}
+    if len(near_support) < RETEST_HOLD_SESSIONS:
+        return "retesting-support", {"breakoutHigh": round(breakout_high, 4)}
+
+    retest_low = min(after_breakout[-RETEST_HOLD_SESSIONS:])
+    entry_low = round(support + 0.05, 3)
+    entry_high = round(support + (breakout_high - support) * 0.4, 3)
+    entry_mid = round((entry_low + entry_high) / 2, 3)
+    base_info = {
+        "support1": round(support, 3), "breakoutHigh": round(breakout_high, 3),
+        "breakoutPct": round(BREAKOUT_PCT * 100), "retestLow": round(retest_low, 3),
+        "retestSessions": RETEST_HOLD_SESSIONS, "entryLow": entry_low,
+        "entryMid": entry_mid, "entryHigh": entry_high,
+        "stopLoss": round(support, 3),
+    }
+
+    # الشرط الإضافي بعد تحقق الشروط السبعة + نموذج الاختراق/إعادة الاختبار:
+    # لازم RSI يكون طلع فعلاً من تشبع بيعي (تحت 30) ووصل فوق 40 الآن — يعني
+    # زخم الشراء رجع فعليًا، مش بس السعر لمس منطقة الدعم تاني.
+    rsi_series = rsi(df["c"])
+    recent_rsi = rsi_series.tail(RSI_RECOVERY_LOOKBACK)
+    was_oversold = bool((recent_rsi < RSI_MAX).any())
+    current_rsi = rsi_series.iloc[-1] if len(rsi_series) else float("nan")
+    rsi_recovered = bool(was_oversold and not pd.isna(current_rsi) and current_rsi >= RSI_RECOVERY_LEVEL)
+    base_info["rsiNow"] = None if pd.isna(current_rsi) else round(float(current_rsi), 1)
+    base_info["rsiRecoveryLevel"] = RSI_RECOVERY_LEVEL
+    base_info["rsiRecovered"] = rsi_recovered
+    if not rsi_recovered:
+        return "awaiting-rsi-recovery", base_info
+
+    # الأهداف = رؤوس الشموع الساقطة (المقاومات) فوق مستوى الاختراق، مرتبة من
+    # الأقرب للأبعد. لو ملقيناش شمعة ساقطة فوق الاختراق، نرجع لهدف الاختراق
+    # نفسه كبديل احتياطي.
+    targets = sorted(set(round(float(c), 3) for c in (dropped_candles or []) if c > breakout_high))
+    if not targets:
+        targets = [round(breakout_high, 3)]
+    base_info["targets"] = targets
+    base_info["target"] = targets[0]
+    return "entry-confirmed", base_info
 
 def detect_spike(df):
     recent = df.tail(SPIKE_WINDOW_DAYS + 5).reset_index(drop=True)
@@ -360,7 +400,7 @@ def score_split_model(symbol, df, split_date, split_ratio, fin, news_hits):
     # السهم شبه الجاهز يبقى مراقبة/انتظار فقط مهما كانت حالة نموذج الدخول.
     entry_phase, entry_model = ("not-applicable", None)
     if status == "ready" and support is not None:
-        entry_phase, entry_model = detect_entry_phase(df, support, support_hold)
+        entry_phase, entry_model = detect_entry_phase(df, support, support_hold, dropped)
     return {
         "tk": symbol, "price": round(price, 4), "chg": chg, "status": status, "model": "split",
         "conds": conds, "exclusionReason": excluded_reason,
@@ -510,7 +550,7 @@ def main():
             all_results.append(error_result(entry.get("symbol"), str(e), "error"))
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "scanner_version": "2.1-candles-fixed",
+        "scanner_version": "2.2-support-rsi-fixed",
         "candle_policy": {"interval": "1d", "max_candles": CANDLE_LOOKBACK, "minimum": MIN_CANDLES},
         "stocks": all_results,
     }
