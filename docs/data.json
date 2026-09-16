@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-16T21:15:49.735535+00:00",
+  "generated_at": "2026-09-16T22:15:22.082935+00:00",
   "scanner_version": "2.2-support-rsi-fixed",
   "candle_policy": {
     "interval": "1d",
@@ -10251,8 +10251,8 @@
     },
     {
       "tk": "BRCC",
-      "price": 9.13,
-      "chg": 1.67,
+      "price": 9.85,
+      "chg": 7.89,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -10274,30 +10274,22 @@
       "openPrice": 9.199999809265137,
       "openHigh": 10.64799976348877,
       "support": 7.713,
-      "supportHoldSessions": 15,
+      "supportHoldSessions": 16,
       "droppedCandles": [
         10.648,
         12.75
       ],
-      "dailyVolume": 104200,
+      "dailyVolume": 128312,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 60.0,
-      "ma20": 8.5695,
-      "ma50": 9.7844,
-      "ma200": 10.4932,
-      "vwap": 8.6903,
+      "rsi": 67.8,
+      "ma20": 8.651,
+      "ma50": 9.7454,
+      "ma200": 10.4785,
+      "vwap": 8.7468,
       "newsFlags": [],
       "candles": [
-        {
-          "time": "2025-09-17",
-          "open": 16.700001,
-          "high": 18.049999,
-          "low": 16.620001,
-          "close": 17.200001,
-          "volume": 77330
-        },
         {
           "time": "2025-09-18",
           "open": 17.5,
@@ -12289,11 +12281,19 @@
           "low": 8.613,
           "close": 9.13,
           "volume": 104200
+        },
+        {
+          "time": "2026-09-16",
+          "open": 9.19,
+          "high": 10.02,
+          "low": 9.19,
+          "close": 9.85,
+          "volume": 128312
         }
       ],
       "candleCount": 250,
-      "candleStart": "2025-09-17",
-      "candleEnd": "2026-09-15",
+      "candleStart": "2025-09-18",
+      "candleEnd": "2026-09-16",
       "dataStatus": "ready",
       "dataError": null
     },
@@ -37263,7 +37263,7 @@
       "floatShares": 11792,
       "shortShares": 93408,
       "shortUnknown": false,
-      "mcapUSD": 1845082,
+      "mcapUSD": 340258,
       "openPrice": 2.7899999618530273,
       "openHigh": 4.900000095367432,
       "support": 1.2098,
@@ -63881,7 +63881,7 @@
       "floatShares": 638653,
       "shortShares": 36410,
       "shortUnknown": false,
-      "mcapUSD": 9491783,
+      "mcapUSD": 1328463,
       "openPrice": 3.3399999141693115,
       "openHigh": 3.759999990463257,
       "support": 1.66,
@@ -76169,7 +76169,7 @@
       "floatShares": 2422495,
       "shortShares": 83860,
       "shortUnknown": false,
-      "mcapUSD": 687225,
+      "mcapUSD": 1983017,
       "openPrice": 2.2699999809265137,
       "openHigh": 2.490000009536743,
       "support": 0.7652,
@@ -98435,7 +98435,7 @@
       "floatShares": 361589,
       "shortShares": 58428,
       "shortUnknown": false,
-      "mcapUSD": 34423,
+      "mcapUSD": 34421,
       "openPrice": 3.740000009536743,
       "openHigh": 4.260000228881836,
       "support": 1.91,
@@ -106645,7 +106645,7 @@
         10.2,
         11.13
       ],
-      "dailyVolume": 145257,
+      "dailyVolume": 146085,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي",
@@ -108659,7 +108659,7 @@
           "high": 6.81,
           "low": 6.12,
           "close": 6.48,
-          "volume": 145257
+          "volume": 146085
         }
       ],
       "candleCount": 250,
