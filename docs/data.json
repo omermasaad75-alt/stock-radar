@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-16T08:16:33.140736+00:00",
-  "scanner_version": "2.1-candles-fixed",
+  "generated_at": "2026-09-16T08:21:15.500313+00:00",
+  "scanner_version": "2.2-support-rsi-fixed",
   "candle_policy": {
     "interval": "1d",
     "max_candles": 250,
@@ -14,7 +14,7 @@
       "status": "excluded",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -32,7 +32,7 @@
       "openPrice": 3.3499999046325684,
       "openHigh": 4.150000095367432,
       "support": 1.55,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         4.15,
         4.2
@@ -2080,7 +2080,7 @@
       "openPrice": 7.059999942779541,
       "openHigh": 7.28000020980835,
       "support": 6.5,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 15,
       "droppedCandles": [
         8.65,
         8.9
@@ -4128,7 +4128,7 @@
       "openPrice": 4.139999866485596,
       "openHigh": 4.599999904632568,
       "support": 2.65,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 5,
       "droppedCandles": [
         4.52,
         4.6
@@ -6176,7 +6176,7 @@
       "openPrice": 3.049999952316284,
       "openHigh": 3.450000047683716,
       "support": 1.81,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 8,
       "droppedCandles": [
         2.27,
         2.48
@@ -8226,7 +8226,7 @@
       "openPrice": 7.559999942779541,
       "openHigh": 12.960000038146973,
       "support": 5.56,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 16,
       "droppedCandles": [
         9.49,
         12.96
@@ -10274,7 +10274,7 @@
       "openPrice": 9.199999809265137,
       "openHigh": 10.64799976348877,
       "support": 7.713,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 15,
       "droppedCandles": [
         10.648,
         12.75
@@ -12322,7 +12322,7 @@
       "openPrice": 3.0999999046325684,
       "openHigh": 3.3350000381469727,
       "support": 2.72,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 10,
       "droppedCandles": [
         3.736,
         3.776
@@ -14352,7 +14352,7 @@
       "status": "near",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -14370,7 +14370,7 @@
       "openPrice": 9.430000305175781,
       "openHigh": 9.559000015258789,
       "support": 2.99,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 2,
       "droppedCandles": [
         11.5,
         12.7
@@ -16418,7 +16418,7 @@
       "openPrice": 5.440000057220459,
       "openHigh": 5.840000152587891,
       "support": 4.24,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 19,
       "droppedCandles": [
         5.6,
         6.1
@@ -18466,7 +18466,7 @@
       "openPrice": 2.259999990463257,
       "openHigh": 2.319999933242798,
       "support": 1.64,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 10,
       "droppedCandles": [
         2.25,
         5.92
@@ -20501,7 +20501,7 @@
       "status": "near",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -20519,7 +20519,7 @@
       "openPrice": 3.3299999237060547,
       "openHigh": 3.6500000953674316,
       "support": 1.65,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         1.896,
         4.13
@@ -22546,10 +22546,10 @@
       "tk": "BTOG",
       "price": 1.435,
       "chg": -13.55,
-      "status": "ready",
+      "status": "near",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -22567,16 +22567,14 @@
       "openPrice": 3.9100000858306885,
       "openHigh": 4.389999866485596,
       "support": 1.4,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         3.44,
         3.75
       ],
       "dailyVolume": 158749,
-      "entryPhase": "retesting-support",
-      "entryModel": {
-        "breakoutHigh": 4.7105
-      },
+      "entryPhase": "not-applicable",
+      "entryModel": null,
       "macd": "سلبي",
       "rsi": 16.8,
       "ma20": 3.0837,
@@ -22908,10 +22906,10 @@
       "tk": "ELAB",
       "price": 4.82,
       "chg": 4.33,
-      "status": "near",
+      "status": "watch",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         0,
@@ -22929,7 +22927,7 @@
       "openPrice": 6.599999904632568,
       "openHigh": 7.289999961853027,
       "support": 4.401,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 3,
       "droppedCandles": [
         5.385,
         9.6
@@ -24959,7 +24957,7 @@
       "status": "near",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -24977,7 +24975,7 @@
       "openPrice": 5.53000020980835,
       "openHigh": 5.875999927520752,
       "support": 3.29,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 2,
       "droppedCandles": [
         3.8,
         4.88
@@ -27004,10 +27002,10 @@
       "tk": "SCNI",
       "price": 1.54,
       "chg": -36.89,
-      "status": "ready",
+      "status": "near",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -27025,16 +27023,14 @@
       "openPrice": 3.200000047683716,
       "openHigh": 3.5799999237060547,
       "support": 1.5,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         3.58,
         3.8
       ],
       "dailyVolume": 1413500,
-      "entryPhase": "retesting-support",
-      "entryModel": {
-        "breakoutHigh": 3.22
-      },
+      "entryPhase": "not-applicable",
+      "entryModel": null,
       "macd": "سلبي",
       "rsi": 27.1,
       "ma20": 2.358,
@@ -29054,10 +29050,10 @@
       "tk": "SGRX",
       "price": 1.78,
       "chg": 5.95,
-      "status": "ready",
+      "status": "near",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -29075,16 +29071,14 @@
       "openPrice": 3.9100000858306885,
       "openHigh": 4.389999866485596,
       "support": 1.4,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 4,
       "droppedCandles": [
         1.89,
         3.44
       ],
       "dailyVolume": 149800,
-      "entryPhase": "retesting-support",
-      "entryModel": {
-        "breakoutHigh": 4.71
-      },
+      "entryPhase": "not-applicable",
+      "entryModel": null,
       "macd": "سلبي",
       "rsi": 17.6,
       "ma20": 2.7212,
@@ -31125,7 +31119,7 @@
       "openPrice": 4.739999771118164,
       "openHigh": 5.449999809265137,
       "support": 2.116,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 6,
       "droppedCandles": [
         5.49,
         6.25
@@ -33173,7 +33167,7 @@
       "openPrice": 5.0,
       "openHigh": 5.0,
       "support": 2.81,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 6,
       "droppedCandles": [
         3.396,
         11.4
@@ -35223,7 +35217,7 @@
       "openPrice": 5.769999980926514,
       "openHigh": 6.0,
       "support": 3.76,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 27,
       "droppedCandles": [
         5.96,
         6.0
@@ -37253,7 +37247,7 @@
       "status": "excluded",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -37271,7 +37265,7 @@
       "openPrice": 2.7899999618530273,
       "openHigh": 4.900000095367432,
       "support": 1.25,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         1.54,
         1.66
@@ -39298,10 +39292,10 @@
       "tk": "EOCN",
       "price": 3.625,
       "chg": -5.1,
-      "status": "near",
+      "status": "watch",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         0,
@@ -39319,7 +39313,7 @@
       "openPrice": 5.380000114440918,
       "openHigh": 5.449999809265137,
       "support": 3.5,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         4.816,
         4.88
@@ -41367,7 +41361,7 @@
       "openPrice": 5.380000114440918,
       "openHigh": 5.450099945068359,
       "support": 0.4578,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 9,
       "droppedCandles": [
         5.45
       ],
@@ -43132,7 +43126,7 @@
       "status": "excluded",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -43150,7 +43144,7 @@
       "openPrice": 9.149999618530273,
       "openHigh": 11.024999618530273,
       "support": 8.55,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 4,
       "droppedCandles": [
         9.5,
         10.59
@@ -45180,7 +45174,7 @@
       "status": "near",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -45198,7 +45192,7 @@
       "openPrice": 4.349999904632568,
       "openHigh": 4.880000114440918,
       "support": 2.52,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         3.79,
         4.14
@@ -47228,7 +47222,7 @@
       "status": "excluded",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -47246,7 +47240,7 @@
       "openPrice": 4.25,
       "openHigh": 6.420000076293945,
       "support": 1.2,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         1.59,
         6.42
@@ -49276,7 +49270,7 @@
       "status": "excluded",
       "model": "split",
       "conds": [
-        1,
+        0,
         0,
         1,
         1,
@@ -49294,7 +49288,7 @@
       "openPrice": 4.079999923706055,
       "openHigh": 6.769999980926514,
       "support": 1.77,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         2.98,
         28.32
@@ -51329,7 +51323,7 @@
       "status": "excluded",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -51347,7 +51341,7 @@
       "openPrice": 1.4199999570846558,
       "openHigh": 1.4299999475479126,
       "support": 0.68,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         0.881,
         1.57
@@ -53377,7 +53371,7 @@
       "status": "excluded",
       "model": "split",
       "conds": [
-        1,
+        0,
         0,
         1,
         1,
@@ -53395,7 +53389,7 @@
       "openPrice": 12.210000038146973,
       "openHigh": 14.34000015258789,
       "support": 9.81,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 2,
       "droppedCandles": [
         14.59,
         15.471
@@ -55452,7 +55446,7 @@
       "openPrice": 3.559999942779541,
       "openHigh": 4.170000076293945,
       "support": 2.61,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 5,
       "droppedCandles": [
         3.63,
         3.68
@@ -57505,7 +57499,7 @@
       "openPrice": 3.0999999046325684,
       "openHigh": 3.6700000762939453,
       "support": 2.0616,
-      "supportHoldSessions": 25,
+      "supportHoldSessions": 11,
       "droppedCandles": [
         3.76,
         3.9
@@ -57753,7 +57747,7 @@
       "openPrice": 3.0999999046325684,
       "openHigh": 3.6700000762939453,
       "support": 2.064,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 28,
       "droppedCandles": [
         3.18,
         6.42
@@ -59783,7 +59777,7 @@
       "status": "near",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -59801,7 +59795,7 @@
       "openPrice": 4.28000020980835,
       "openHigh": 4.400000095367432,
       "support": 2.71,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         5.01,
         11.34
@@ -61849,7 +61843,7 @@
       "openPrice": 9.399999618530273,
       "openHigh": 10.210000038146973,
       "support": 6.01,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 9,
       "droppedCandles": [
         6.75,
         6.8
@@ -63879,7 +63873,7 @@
       "status": "watch",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         0,
@@ -63897,7 +63891,7 @@
       "openPrice": 3.3399999141693115,
       "openHigh": 3.759999990463257,
       "support": 1.66,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 2,
       "droppedCandles": [
         2.68,
         2.73
@@ -65927,7 +65921,7 @@
       "status": "near",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -65945,7 +65939,7 @@
       "openPrice": 4.21999979019165,
       "openHigh": 4.900000095367432,
       "support": 1.82,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 2,
       "droppedCandles": [
         2.5,
         4.8
@@ -67993,7 +67987,7 @@
       "openPrice": 2.75,
       "openHigh": 5.880000114440918,
       "support": 1.73,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 5,
       "droppedCandles": [
         2.6,
         3.944
@@ -70041,7 +70035,7 @@
       "openPrice": 5.110000133514404,
       "openHigh": 8.920000076293945,
       "support": 2.98,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 12,
       "droppedCandles": [
         8.48,
         8.7
@@ -72071,7 +72065,7 @@
       "status": "near",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -72089,7 +72083,7 @@
       "openPrice": 4.630000114440918,
       "openHigh": 4.979000091552734,
       "support": 2.611,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         3.82,
         4.21
@@ -74119,7 +74113,7 @@
       "status": "excluded",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         0,
@@ -74137,7 +74131,7 @@
       "openPrice": 6.010000228881836,
       "openHigh": 6.940000057220459,
       "support": 4.603,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 4,
       "droppedCandles": [
         6.15,
         7.51
@@ -76167,7 +76161,7 @@
       "status": "excluded",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -76185,7 +76179,7 @@
       "openPrice": 2.2699999809265137,
       "openHigh": 2.490000009536743,
       "support": 0.8,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         1.52,
         2.61
@@ -78212,10 +78206,10 @@
       "tk": "SXTC",
       "price": 2.36,
       "chg": -11.28,
-      "status": "ready",
+      "status": "near",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -78233,16 +78227,14 @@
       "openPrice": 3.7799999713897705,
       "openHigh": 4.230000019073486,
       "support": 1.78,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 4,
       "droppedCandles": [
         3.0,
         5.55
       ],
       "dailyVolume": 119600,
-      "entryPhase": "retesting-support",
-      "entryModel": {
-        "breakoutHigh": 214.4
-      },
+      "entryPhase": "not-applicable",
+      "entryModel": null,
       "macd": "إيجابي خفيف",
       "rsi": 27.9,
       "ma20": 3.018,
@@ -80283,7 +80275,7 @@
       "openPrice": 2.309999942779541,
       "openHigh": 4.989999771118164,
       "support": 1.336,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 10,
       "droppedCandles": [
         1.87,
         2.9
@@ -82331,7 +82323,7 @@
       "openPrice": 5.099999904632568,
       "openHigh": 7.150000095367432,
       "support": 2.4,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 5,
       "droppedCandles": [
         10.84,
         17.84
@@ -84379,7 +84371,7 @@
       "openPrice": 3.549999952316284,
       "openHigh": 4.340000152587891,
       "support": 1.53,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 5,
       "droppedCandles": [
         3.33,
         3.75
@@ -86427,7 +86419,7 @@
       "openPrice": 5.300000190734863,
       "openHigh": 5.630000114440918,
       "support": 2.88,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 11,
       "droppedCandles": [
         3.609,
         8.25
@@ -88457,7 +88449,7 @@
       "status": "excluded",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         0,
@@ -88475,7 +88467,7 @@
       "openPrice": 2.696000099182129,
       "openHigh": 6.639999866485596,
       "support": 2.21,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 4,
       "droppedCandles": [
         2.97,
         3.1
@@ -90523,7 +90515,7 @@
       "openPrice": 8.75,
       "openHigh": 13.1899995803833,
       "support": 5.51,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 21,
       "droppedCandles": [
         22.7,
         25.85
@@ -92571,7 +92563,7 @@
       "openPrice": 1.899999976158142,
       "openHigh": 2.700000047683716,
       "support": 0.615,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 9,
       "droppedCandles": [
         2.9,
         4.25
@@ -94601,7 +94593,7 @@
       "status": "near",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -94619,7 +94611,7 @@
       "openPrice": 3.5799999237060547,
       "openHigh": 3.75,
       "support": 1.45,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 2,
       "droppedCandles": [
         2.06,
         3.29
@@ -96667,7 +96659,7 @@
       "openPrice": 2.5,
       "openHigh": 3.549999952316284,
       "support": 0.1123,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 9,
       "droppedCandles": [
         3.55,
         8.595
@@ -98438,10 +98430,10 @@
       "tk": "LBGJ",
       "price": 2.09,
       "chg": -2.34,
-      "status": "near",
+      "status": "watch",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         0,
@@ -98459,7 +98451,7 @@
       "openPrice": 3.740000009536743,
       "openHigh": 4.260000228881836,
       "support": 1.91,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 4,
       "droppedCandles": [
         2.68,
         3.35
@@ -100489,7 +100481,7 @@
       "status": "near",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -100507,7 +100499,7 @@
       "openPrice": 5.900000095367432,
       "openHigh": 5.900000095367432,
       "support": 2.98,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         14.37,
         15.15
@@ -102537,7 +102529,7 @@
       "status": "watch",
       "model": "split",
       "conds": [
-        1,
+        0,
         0,
         1,
         1,
@@ -102555,7 +102547,7 @@
       "openPrice": 4.059999942779541,
       "openHigh": 4.230000019073486,
       "support": 1.5,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 2,
       "droppedCandles": [
         1.7,
         1.93
@@ -104594,7 +104586,7 @@
       "status": "excluded",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         0,
@@ -104612,7 +104604,7 @@
       "openPrice": 2.5,
       "openHigh": 3.549999952316284,
       "support": 1.07,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 4,
       "droppedCandles": [
         1.63,
         3.25
@@ -106660,7 +106652,7 @@
       "openPrice": 4.699999809265137,
       "openHigh": 5.439000129699707,
       "support": 2.652,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 17,
       "droppedCandles": [
         10.2,
         11.13
@@ -108713,7 +108705,7 @@
       "openPrice": 3.1500000953674316,
       "openHigh": 3.240000009536743,
       "support": 2.25,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 21,
       "droppedCandles": [
         3.7,
         4.795
@@ -110761,7 +110753,7 @@
       "openPrice": 10.010000228881836,
       "openHigh": 11.90999984741211,
       "support": 9.33,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 29,
       "droppedCandles": [
         15.99,
         17.419
@@ -112791,7 +112783,7 @@
       "status": "near",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -112809,7 +112801,7 @@
       "openPrice": 7.199999809265137,
       "openHigh": 7.210000038146973,
       "support": 1.86,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         2.8,
         53.59
@@ -114836,10 +114828,10 @@
       "tk": "CLDI",
       "price": 1.17,
       "chg": -4.1,
-      "status": "near",
+      "status": "watch",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         0,
@@ -114857,7 +114849,7 @@
       "openPrice": 1.9299999475479126,
       "openHigh": 1.9299999475479126,
       "support": 1.17,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         1.41,
         1.42
@@ -116887,7 +116879,7 @@
       "status": "near",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -116905,7 +116897,7 @@
       "openPrice": 5.920000076293945,
       "openHigh": 6.179999828338623,
       "support": 3.21,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         5.132,
         5.54
@@ -118935,7 +118927,7 @@
       "status": "near",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -118953,7 +118945,7 @@
       "openPrice": 3.6600000858306885,
       "openHigh": 4.21999979019165,
       "support": 1.43,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         2.0,
         2.88
@@ -120983,7 +120975,7 @@
       "status": "excluded",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -121001,7 +120993,7 @@
       "openPrice": 1.0640000104904175,
       "openHigh": 1.1549999713897705,
       "support": 0.565,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         0.976,
         1.2
@@ -123031,7 +123023,7 @@
       "status": "excluded",
       "model": "split",
       "conds": [
-        1,
+        0,
         1,
         1,
         1,
@@ -123049,7 +123041,7 @@
       "openPrice": 3.0799999237060547,
       "openHigh": 4.980000019073486,
       "support": 1.33,
-      "supportHoldSessions": 30,
+      "supportHoldSessions": 1,
       "droppedCandles": [
         3.02,
         3.04
