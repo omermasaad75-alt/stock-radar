@@ -810,6 +810,7 @@ const ENTRY_PHASE_META = {
   "awaiting-breakout": {label:"بانتظار الاختراق الأول", color:"var(--amber)", icon:"⏸"},
   "testing-resistance": {label:"يختبر مقاومة أولى الآن", color:"var(--blue)", icon:"🔎"},
   "retesting-support": {label:"يعيد اختبار الدعم — قيد التكوّن", color:"var(--blue)", icon:"↩️"},
+  "awaiting-rsi-recovery": {label:"بانتظار تحسّن RSI فوق 40", color:"var(--amber)", icon:"⏳"},
   "entry-confirmed": {label:"إشارة دخول آمنة مؤكدة", color:"var(--gold)", icon:"🎯"},
   "invalidated": {label:"فشل الاختبار — كسر الدعم الأول", color:"var(--red)", icon:"✕"},
   "not-applicable": {label:"غير قابل للتقييم بعد", color:"var(--txt-faint)", icon:"—"}
@@ -1034,10 +1035,32 @@ function openDetail(tk){
           <div style="color:var(--txt-faint);">→</div>
           <div class="mini-card" style="flex:1; min-width:150px;"><div class="mini-label">إعادة اختبار (قاع مزدوج)</div><div class="mini-val small" style="color:var(--green);">$${em.retestLow.toFixed(2)} — ثابت ${em.retestSessions} جلسات</div></div>
         </div>
+        <div style="margin-bottom:14px;"><span class="tag ok">✓ RSI تحسّن من تشبع بيعي إلى ${em.rsiNow!=null?em.rsiNow.toFixed(1):'—'} (فوق ${em.rsiRecoveryLevel||40})</span></div>
         <div class="responsive-grid-3">
           <div class="mini-card"><div class="mini-label">منطقة الدخول التدريجي</div><div class="mini-val" style="color:var(--gold);">$${em.entryLow.toFixed(2)} – $${em.entryHigh.toFixed(2)}</div><div class="mini-sub">دفعات كل 5 سنت، وسطي ${em.entryMid.toFixed(2)}$</div></div>
           <div class="mini-card"><div class="mini-label">وقف الخسارة</div><div class="mini-val" style="color:var(--red);">$${em.stopLoss.toFixed(2)}</div><div class="mini-sub">تحت الدعم الأول مباشرة</div></div>
-          <div class="mini-card"><div class="mini-label">الهدف الأول</div><div class="mini-val" style="color:var(--green);">$${em.target.toFixed(2)}</div><div class="mini-sub">قرابة ٪100 من نقطة الدخول</div></div>
+          <div class="mini-card"><div class="mini-label">الهدف الأول</div><div class="mini-val" style="color:var(--green);">$${em.target.toFixed(2)}</div><div class="mini-sub">أقرب شمعة ساقطة فوق الاختراق</div></div>
+        </div>
+        ${(em.targets && em.targets.length>1) ? `
+        <div class="responsive-grid-4" style="margin-top:12px; --rg4-cols:${Math.min(em.targets.length,4)};">
+          ${em.targets.map((t,i)=>`
+            <div class="mini-card">
+              <div class="mini-label">هدف ${i+1}${i===0?' (الشمعة الساقطة الأولى)':''}</div>
+              <div class="mini-val small" style="color:var(--green);">$${t.toFixed(2)}</div>
+            </div>`).join('')}
+        </div>` : ''}
+      </div>`;
+    } else if(s.entryPhase==='awaiting-rsi-recovery' && s.entryModel){
+      const em = s.entryModel;
+      entryModelHtml = `
+      <div class="panel-box" style="margin-bottom:22px;">
+        <div class="panel-h"><span class="pip" style="background:${phaseMeta.color}"></span>نموذج الدخول الآمن</div>
+        <div style="margin-bottom:12px;"><span class="status-pill watch"><span class="dt"></span>${phaseMeta.icon} ${phaseMeta.label}</span></div>
+        <div class="analysis-txt">اكتمل الاختراق وإعادة اختبار الدعم (قاع مزدوج عند $${em.retestLow.toFixed(2)})، لكن شرط تأكيد الدخول الأخير لسه ناقص: RSI الحالي ${em.rsiNow!=null?em.rsiNow.toFixed(1):'—'}، والمطلوب رجوعه لفوق ${em.rsiRecoveryLevel||40} بعد ما كان تحت 30 — دليل إن زخم الشراء رجع فعليًا قبل الدخول. <b>لا يوجد دخول حاليًا.</b></div>
+        <div class="responsive-grid-3" style="margin-top:12px;">
+          <div class="mini-card"><div class="mini-label">منطقة الدخول المتوقعة</div><div class="mini-val small" style="color:var(--gold);">$${em.entryLow.toFixed(2)} – $${em.entryHigh.toFixed(2)}</div></div>
+          <div class="mini-card"><div class="mini-label">وقف الخسارة المتوقع</div><div class="mini-val small" style="color:var(--red);">$${em.stopLoss.toFixed(2)}</div></div>
+          <div class="mini-card"><div class="mini-label">RSI الحالي</div><div class="mini-val small">${em.rsiNow!=null?em.rsiNow.toFixed(1):'—'}</div></div>
         </div>
       </div>`;
     } else if(s.entryPhase==='awaiting-breakout' && supportBase){

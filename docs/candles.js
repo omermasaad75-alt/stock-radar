@@ -64,10 +64,11 @@
         <div class="sr-candle-tooltip"></div>
       </div>
       <div class="sr-candle-legend">
-        <span><i class="sr-dot" style="background:#3ECF8E"></i>إغلاق أعلى</span>
-        <span><i class="sr-dot" style="background:#EF6461"></i>إغلاق أقل</span>
+        <span><i class="sr-dot" style="background:#3ECF8E"></i>إغلاق أعلى / أهداف</span>
+        <span><i class="sr-dot" style="background:#EF6461"></i>إغلاق أقل / وقف الخسارة</span>
         <span>خط الدعم: ${raw.support != null ? "$"+Number(raw.support).toFixed(3) : "—"}</span>
         <span>المقاومات: ${(raw.droppedCandles||[]).map(x=>"$"+Number(x).toFixed(3)).join(" · ") || "—"}</span>
+        ${raw.entryModel && (raw.entryPhase==="entry-confirmed"||raw.entryPhase==="awaiting-rsi-recovery") ? `<span><i class="sr-dot" style="background:#D9A84E"></i>منطقة الدخول: $${Number(raw.entryModel.entryLow).toFixed(3)} – $${Number(raw.entryModel.entryHigh).toFixed(3)}</span>` : ""}
       </div>
     </div>`;
   }
@@ -134,6 +135,26 @@
     }
     level(raw.support, "#D9A84E", "دعم");
     (raw.droppedCandles||[]).forEach((p,i)=>level(p, "#6EA8FE", "مقاومة "+(i+1)));
+
+    const em = raw.entryModel;
+    const entryActive = em && (raw.entryPhase === "entry-confirmed" || raw.entryPhase === "awaiting-rsi-recovery");
+    if (entryActive) {
+      if (em.entryLow != null && em.entryHigh != null) {
+        const yTop = y(Math.min(em.entryHigh, maxP));
+        const yBot = y(Math.max(em.entryLow, minP));
+        ctx.save();
+        ctx.fillStyle = "rgba(217,168,78,.14)";
+        ctx.fillRect(pad.l, yTop, plotW, Math.max(1, yBot - yTop));
+        ctx.restore();
+        level(em.entryHigh, "#D9A84E", "أعلى الدخول");
+        level(em.entryLow, "#D9A84E", "أدنى الدخول");
+      }
+      if (em.stopLoss != null) level(em.stopLoss, "#EF6461", "وقف الخسارة");
+      if (raw.entryPhase === "entry-confirmed") {
+        (em.targets && em.targets.length ? em.targets : (em.target != null ? [em.target] : []))
+          .forEach((t, i) => level(t, "#3ECF8E", "هدف " + (i + 1)));
+      }
+    }
 
     ctx.fillStyle="#5A6376";ctx.font="10px Arial";
     [0,Math.floor(candles.length/2),candles.length-1].forEach(i=>{
