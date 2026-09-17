@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-17T20:16:30.838939+00:00",
+  "generated_at": "2026-09-17T21:15:24.110152+00:00",
   "scanner_version": "2.2-support-rsi-fixed",
   "candle_policy": {
     "interval": "1d",
@@ -37,7 +37,7 @@
         3.62,
         3.76
       ],
-      "dailyVolume": 335084,
+      "dailyVolume": 349543,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
@@ -45,7 +45,7 @@
       "ma20": 3.8285,
       "ma50": 4.2901,
       "ma200": 11.0479,
-      "vwap": 3.8986,
+      "vwap": 3.8977,
       "newsFlags": [],
       "candles": [
         {
@@ -2046,7 +2046,7 @@
           "high": 3.6,
           "low": 3.18,
           "close": 3.42,
-          "volume": 335084
+          "volume": 349543
         }
       ],
       "candleCount": 250,
@@ -2057,8 +2057,8 @@
     },
     {
       "tk": "IMCC",
-      "price": 1.63,
-      "chg": 0.0,
+      "price": 1.74,
+      "chg": 6.75,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -2080,30 +2080,22 @@
       "openPrice": 3.3499999046325684,
       "openHigh": 4.150000095367432,
       "support": 1.55,
-      "supportHoldSessions": 2,
+      "supportHoldSessions": 3,
       "droppedCandles": [
         4.15,
         4.2
       ],
-      "dailyVolume": 23700,
+      "dailyVolume": 20874,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 23.4,
-      "ma20": 2.64,
-      "ma50": 3.3906,
-      "ma200": 18.375,
-      "vwap": 2.6551,
+      "rsi": 9.3,
+      "ma20": 2.568,
+      "ma50": 3.3324,
+      "ma200": 18.1107,
+      "vwap": 2.6219,
       "newsFlags": [],
       "candles": [
-        {
-          "time": "2025-09-18",
-          "open": 58.799999,
-          "high": 61.169998,
-          "low": 57.0,
-          "close": 59.099998,
-          "volume": 843
-        },
         {
           "time": "2025-09-19",
           "open": 58.200001,
@@ -4095,11 +4087,19 @@
           "low": 1.61,
           "close": 1.63,
           "volume": 23700
+        },
+        {
+          "time": "2026-09-17",
+          "open": 1.6792,
+          "high": 1.7683,
+          "low": 1.6792,
+          "close": 1.74,
+          "volume": 20874
         }
       ],
       "candleCount": 250,
-      "candleStart": "2025-09-18",
-      "candleEnd": "2026-09-16",
+      "candleStart": "2025-09-19",
+      "candleEnd": "2026-09-17",
       "dataStatus": "ready",
       "dataError": null
     },
@@ -4133,7 +4133,7 @@
         7.6,
         8.65
       ],
-      "dailyVolume": 1419324,
+      "dailyVolume": 1429737,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
@@ -4141,7 +4141,7 @@
       "ma20": 6.8325,
       "ma50": 6.8258,
       "ma200": 7.2053,
-      "vwap": 5.099,
+      "vwap": 5.0914,
       "newsFlags": [],
       "candles": [
         {
@@ -6138,11 +6138,11 @@
         },
         {
           "time": "2026-09-17",
-          "open": 3.23,
+          "open": 3.14,
           "high": 3.35,
           "low": 2.7,
           "close": 2.71,
-          "volume": 1419324
+          "volume": 1429737
         }
       ],
       "candleCount": 250,
@@ -6153,15 +6153,15 @@
     },
     {
       "tk": "NVX",
-      "price": 2.97,
-      "chg": -2.62,
-      "status": "near",
+      "price": 3.03,
+      "chg": 2.02,
+      "status": "watch",
       "model": "split",
       "conds": [
         1,
         1,
         1,
-        1,
+        0,
         1,
         0,
         0
@@ -6176,30 +6176,22 @@
       "openPrice": 4.139999866485596,
       "openHigh": 4.599999904632568,
       "support": 2.65,
-      "supportHoldSessions": 6,
+      "supportHoldSessions": 7,
       "droppedCandles": [
         3.36,
         4.52
       ],
-      "dailyVolume": 13500,
+      "dailyVolume": 15300,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
-      "rsi": 26.7,
-      "ma20": 3.3652,
-      "ma50": 3.8709,
-      "ma200": 7.3135,
-      "vwap": 3.3853,
+      "rsi": 35.4,
+      "ma20": 3.3147,
+      "ma50": 3.8423,
+      "ma200": 7.2702,
+      "vwap": 3.3721,
       "newsFlags": [],
       "candles": [
-        {
-          "time": "2025-09-18",
-          "open": 12.8,
-          "high": 13.25,
-          "low": 12.4,
-          "close": 13.2,
-          "volume": 12500
-        },
         {
           "time": "2025-09-19",
           "open": 13.4,
@@ -8191,11 +8183,19 @@
           "low": 2.92,
           "close": 2.97,
           "volume": 13500
+        },
+        {
+          "time": "2026-09-17",
+          "open": 3.05,
+          "high": 3.1296,
+          "low": 3.0,
+          "close": 3.03,
+          "volume": 15300
         }
       ],
       "candleCount": 250,
-      "candleStart": "2025-09-18",
-      "candleEnd": "2026-09-16",
+      "candleStart": "2025-09-19",
+      "candleEnd": "2026-09-17",
       "dataStatus": "ready",
       "dataError": null
     },
@@ -8229,7 +8229,7 @@
         2.27,
         2.48
       ],
-      "dailyVolume": 62724,
+      "dailyVolume": 62759,
       "entryPhase": "retesting-support",
       "entryModel": {
         "breakoutHigh": 7.024
@@ -10236,11 +10236,11 @@
         },
         {
           "time": "2026-09-17",
-          "open": 1.97,
+          "open": 1.985,
           "high": 2.115,
           "low": 1.86,
           "close": 2.02,
-          "volume": 62724
+          "volume": 62759
         }
       ],
       "candleCount": 250,
@@ -10279,7 +10279,7 @@
         9.49,
         12.96
       ],
-      "dailyVolume": 65015,
+      "dailyVolume": 65152,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -10287,7 +10287,7 @@
       "ma20": 7.7645,
       "ma50": 8.0626,
       "ma200": 372.7737,
-      "vwap": 8.8276,
+      "vwap": 8.8275,
       "newsFlags": [],
       "candles": [
         {
@@ -12284,11 +12284,11 @@
         },
         {
           "time": "2026-09-17",
-          "open": 7.25,
+          "open": 7.33,
           "high": 7.8,
           "low": 7.22,
           "close": 7.305,
-          "volume": 65015
+          "volume": 65152
         }
       ],
       "candleCount": 250,
@@ -12327,7 +12327,7 @@
         10.648,
         12.75
       ],
-      "dailyVolume": 100830,
+      "dailyVolume": 101040,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -12335,7 +12335,7 @@
       "ma20": 8.7405,
       "ma50": 9.7032,
       "ma200": 10.4644,
-      "vwap": 8.8083,
+      "vwap": 8.8084,
       "newsFlags": [],
       "candles": [
         {
@@ -14336,7 +14336,7 @@
           "high": 10.3,
           "low": 9.77,
           "close": 9.89,
-          "volume": 100830
+          "volume": 101040
         }
       ],
       "candleCount": 250,
@@ -14375,7 +14375,7 @@
         3.736,
         3.776
       ],
-      "dailyVolume": 73430,
+      "dailyVolume": 73438,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -16384,7 +16384,7 @@
           "high": 3.5,
           "low": 3.25,
           "close": 3.28,
-          "volume": 73430
+          "volume": 73438
         }
       ],
       "candleCount": 250,
@@ -16423,7 +16423,7 @@
         11.5,
         12.7
       ],
-      "dailyVolume": 299230,
+      "dailyVolume": 300226,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
@@ -16431,7 +16431,7 @@
       "ma20": 5.1678,
       "ma50": 8.1011,
       "ma200": 15.4893,
-      "vwap": 6.1511,
+      "vwap": 6.1509,
       "newsFlags": [],
       "candles": [
         {
@@ -18432,7 +18432,7 @@
           "high": 3.1232,
           "low": 2.94,
           "close": 2.98,
-          "volume": 299230
+          "volume": 300226
         }
       ],
       "candleCount": 250,
@@ -20478,7 +20478,7 @@
           "time": "2026-09-17",
           "open": 5.315,
           "high": 5.315,
-          "low": 5.24,
+          "low": 5.31,
           "close": 5.31,
           "volume": 1183
         }
@@ -20519,7 +20519,7 @@
         2.25,
         5.92
       ],
-      "dailyVolume": 94092,
+      "dailyVolume": 94093,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -22533,7 +22533,7 @@
           "high": 1.8,
           "low": 1.5,
           "close": 1.57,
-          "volume": 94092
+          "volume": 94093
         }
       ],
       "candleCount": 250,
@@ -22572,7 +22572,7 @@
         1.896,
         4.13
       ],
-      "dailyVolume": 64953,
+      "dailyVolume": 67781,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -22580,7 +22580,7 @@
       "ma20": 2.1867,
       "ma50": 7.118,
       "ma200": 188.45,
-      "vwap": 3.0572,
+      "vwap": 3.057,
       "newsFlags": [],
       "candles": [
         {
@@ -24577,11 +24577,11 @@
         },
         {
           "time": "2026-09-17",
-          "open": 1.66,
+          "open": 1.6606,
           "high": 1.8,
           "low": 1.65,
           "close": 1.77,
-          "volume": 64953
+          "volume": 67781
         }
       ],
       "candleCount": 250,
@@ -24980,7 +24980,7 @@
         4.9,
         5.385
       ],
-      "dailyVolume": 8236,
+      "dailyVolume": 8267,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -26985,11 +26985,11 @@
         },
         {
           "time": "2026-09-17",
-          "open": 4.76,
+          "open": 4.665,
           "high": 4.7825,
           "low": 4.6,
           "close": 4.72,
-          "volume": 8236
+          "volume": 8267
         }
       ],
       "candleCount": 250,
@@ -27028,7 +27028,7 @@
         3.8,
         4.88
       ],
-      "dailyVolume": 8582,
+      "dailyVolume": 8643,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
@@ -27036,7 +27036,7 @@
       "ma20": 3.9918,
       "ma50": 5.0857,
       "ma200": 16.6687,
-      "vwap": 4.3957,
+      "vwap": 4.3956,
       "newsFlags": [],
       "candles": [
         {
@@ -29035,9 +29035,9 @@
           "time": "2026-09-17",
           "open": 3.35,
           "high": 3.44,
-          "low": 3.3452,
+          "low": 3.35,
           "close": 3.39,
-          "volume": 8582
+          "volume": 8643
         }
       ],
       "candleCount": 250,
@@ -29048,15 +29048,15 @@
     },
     {
       "tk": "SCNI",
-      "price": 1.52,
-      "chg": -1.3,
+      "price": 1.62,
+      "chg": 6.58,
       "status": "near",
       "model": "split",
       "conds": [
         0,
         1,
         1,
-        1,
+        0,
         1,
         1,
         1
@@ -29071,30 +29071,22 @@
       "openPrice": 3.200000047683716,
       "openHigh": 3.5799999237060547,
       "support": 1.43,
-      "supportHoldSessions": 1,
+      "supportHoldSessions": 2,
       "droppedCandles": [
         2.67,
         3.58
       ],
-      "dailyVolume": 388800,
+      "dailyVolume": 402964,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 27.0,
-      "ma20": 2.316,
-      "ma50": 2.4332,
-      "ma200": 5.7308,
-      "vwap": 2.3634,
+      "rsi": 31.3,
+      "ma20": 2.26,
+      "ma50": 2.4116,
+      "ma200": 5.6874,
+      "vwap": 2.356,
       "newsFlags": [],
       "candles": [
-        {
-          "time": "2025-09-18",
-          "open": 15.9,
-          "high": 16.15,
-          "low": 15.6,
-          "close": 15.6,
-          "volume": 8540
-        },
         {
           "time": "2025-09-19",
           "open": 15.8,
@@ -31086,11 +31078,19 @@
           "low": 1.43,
           "close": 1.52,
           "volume": 388800
+        },
+        {
+          "time": "2026-09-17",
+          "open": 1.47,
+          "high": 1.73,
+          "low": 1.447,
+          "close": 1.62,
+          "volume": 402964
         }
       ],
       "candleCount": 250,
-      "candleStart": "2025-09-18",
-      "candleEnd": "2026-09-16",
+      "candleStart": "2025-09-19",
+      "candleEnd": "2026-09-17",
       "dataStatus": "ready",
       "dataError": null
     },
@@ -33174,7 +33174,7 @@
         2.96,
         5.49
       ],
-      "dailyVolume": 193451,
+      "dailyVolume": 193610,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -35183,7 +35183,7 @@
           "high": 2.5,
           "low": 2.2,
           "close": 2.36,
-          "volume": 193451
+          "volume": 193610
         }
       ],
       "candleCount": 250,
@@ -37231,7 +37231,7 @@
           "time": "2026-09-17",
           "open": 3.28,
           "high": 3.28,
-          "low": 3.14,
+          "low": 3.15,
           "close": 3.2344,
           "volume": 1884
         }
@@ -39311,7 +39311,7 @@
       "floatShares": 11792,
       "shortShares": 93408,
       "shortUnknown": false,
-      "mcapUSD": 1979000,
+      "mcapUSD": 364954,
       "openPrice": 2.7899999618530273,
       "openHigh": 4.900000095367432,
       "support": 1.2,
@@ -39320,7 +39320,7 @@
         1.54,
         1.66
       ],
-      "dailyVolume": 451051,
+      "dailyVolume": 468573,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -39328,7 +39328,7 @@
       "ma20": 1.822,
       "ma50": 16.7386,
       "ma200": 699.0004,
-      "vwap": 2.1159,
+      "vwap": 2.1152,
       "newsFlags": [],
       "candles": [
         {
@@ -41329,7 +41329,7 @@
           "high": 1.42,
           "low": 1.24,
           "close": 1.33,
-          "volume": 451051
+          "volume": 468573
         }
       ],
       "candleCount": 250,
@@ -41362,13 +41362,13 @@
       "mcapUSD": null,
       "openPrice": 5.380000114440918,
       "openHigh": 5.449999809265137,
-      "support": 3.2669,
+      "support": 3.3501,
       "supportHoldSessions": 1,
       "droppedCandles": [
         4.816,
         4.88
       ],
-      "dailyVolume": 14173,
+      "dailyVolume": 14179,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
@@ -41376,7 +41376,7 @@
       "ma20": 4.0323,
       "ma50": 4.2702,
       "ma200": 5.2224,
-      "vwap": 4.2328,
+      "vwap": 4.2331,
       "newsFlags": [],
       "candles": [
         {
@@ -43374,10 +43374,10 @@
         {
           "time": "2026-09-17",
           "open": 3.48,
-          "high": 3.92,
-          "low": 3.2669,
+          "high": 3.8932,
+          "low": 3.3501,
           "close": 3.48,
-          "volume": 14173
+          "volume": 14179
         }
       ],
       "candleCount": 250,
@@ -45163,8 +45163,8 @@
     },
     {
       "tk": "NRDY",
-      "price": 8.7,
-      "chg": 1.16,
+      "price": 8.6,
+      "chg": -2.27,
       "status": "excluded",
       "model": "split",
       "conds": [
@@ -45186,22 +45186,30 @@
       "openPrice": 9.149999618530273,
       "openHigh": 11.024999618530273,
       "support": 8.55,
-      "supportHoldSessions": 6,
+      "supportHoldSessions": 5,
       "droppedCandles": [
         9.5,
         10.59
       ],
-      "dailyVolume": 11570,
+      "dailyVolume": 10800,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
-      "rsi": 25.5,
-      "ma20": 9.6095,
-      "ma50": 11.1393,
-      "ma200": 13.6114,
-      "vwap": 9.6267,
+      "rsi": 23.0,
+      "ma20": 9.6795,
+      "ma50": 11.2386,
+      "ma200": 13.6684,
+      "vwap": 9.6963,
       "newsFlags": [],
       "candles": [
+        {
+          "time": "2025-09-18",
+          "open": 19.049999,
+          "high": 20.4,
+          "low": 18.9,
+          "close": 20.4,
+          "volume": 22640
+        },
         {
           "time": "2025-09-19",
           "open": 20.549999,
@@ -47193,19 +47201,11 @@
           "low": 8.6,
           "close": 8.6,
           "volume": 10800
-        },
-        {
-          "time": "2026-09-17",
-          "open": 8.62,
-          "high": 8.87,
-          "low": 8.6,
-          "close": 8.7,
-          "volume": 11570
         }
       ],
       "candleCount": 250,
-      "candleStart": "2025-09-19",
-      "candleEnd": "2026-09-17",
+      "candleStart": "2025-09-18",
+      "candleEnd": "2026-09-16",
       "dataStatus": "ready",
       "dataError": null
     },
@@ -47239,7 +47239,7 @@
         3.79,
         4.14
       ],
-      "dailyVolume": 65419,
+      "dailyVolume": 66147,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -47247,7 +47247,7 @@
       "ma20": 3.346,
       "ma50": 5.3524,
       "ma200": 10.3391,
-      "vwap": 3.5609,
+      "vwap": 3.5607,
       "newsFlags": [],
       "candles": [
         {
@@ -49248,7 +49248,7 @@
           "high": 2.605,
           "low": 2.49,
           "close": 2.53,
-          "volume": 65419
+          "volume": 66147
         }
       ],
       "candleCount": 250,
@@ -49287,7 +49287,7 @@
         1.59,
         6.42
       ],
-      "dailyVolume": 202026,
+      "dailyVolume": 202785,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -51296,7 +51296,7 @@
           "high": 1.33,
           "low": 1.23,
           "close": 1.29,
-          "volume": 202026
+          "volume": 202785
         }
       ],
       "candleCount": 250,
@@ -51335,7 +51335,7 @@
         2.67,
         2.98
       ],
-      "dailyVolume": 138289,
+      "dailyVolume": 138313,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -53349,7 +53349,7 @@
           "high": 1.82,
           "low": 1.58,
           "close": 1.8,
-          "volume": 138289
+          "volume": 138313
         }
       ],
       "candleCount": 250,
@@ -55436,7 +55436,7 @@
         14.59,
         15.471
       ],
-      "dailyVolume": 1441762,
+      "dailyVolume": 1443651,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -55444,7 +55444,7 @@
       "ma20": 12.29,
       "ma50": 14.799,
       "ma200": 22.3841,
-      "vwap": 12.4091,
+      "vwap": 12.409,
       "newsFlags": [
         {
           "headline": "3 Cash-Burning Stocks We Find Risky",
@@ -57450,11 +57450,11 @@
         },
         {
           "time": "2026-09-17",
-          "open": 11.19,
+          "open": 11.21,
           "high": 12.07,
           "low": 11.19,
           "close": 11.7,
-          "volume": 1441762
+          "volume": 1443651
         }
       ],
       "candleCount": 250,
@@ -57493,7 +57493,7 @@
         3.63,
         3.68
       ],
-      "dailyVolume": 19449,
+      "dailyVolume": 19556,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -59507,7 +59507,7 @@
           "high": 2.981,
           "low": 2.84,
           "close": 2.93,
-          "volume": 19449
+          "volume": 19556
         }
       ],
       "candleCount": 250,
@@ -59794,7 +59794,7 @@
         3.18,
         3.2
       ],
-      "dailyVolume": 284867,
+      "dailyVolume": 291142,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
@@ -59802,7 +59802,7 @@
       "ma20": 3.3885,
       "ma50": 3.5442,
       "ma200": 43.4312,
-      "vwap": 3.8729,
+      "vwap": 3.8727,
       "newsFlags": [],
       "candles": [
         {
@@ -61803,7 +61803,7 @@
           "high": 2.72,
           "low": 2.42,
           "close": 2.59,
-          "volume": 284867
+          "volume": 291142
         }
       ],
       "candleCount": 250,
@@ -61842,7 +61842,7 @@
         5.01,
         11.34
       ],
-      "dailyVolume": 40924,
+      "dailyVolume": 40983,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -63851,7 +63851,7 @@
           "high": 3.17,
           "low": 2.9853,
           "close": 3.1,
-          "volume": 40924
+          "volume": 40983
         }
       ],
       "candleCount": 250,
@@ -63890,7 +63890,7 @@
         6.75,
         6.8
       ],
-      "dailyVolume": 3119,
+      "dailyVolume": 3180,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -65895,11 +65895,11 @@
         },
         {
           "time": "2026-09-17",
-          "open": 6.37,
+          "open": 6.4458,
           "high": 6.4458,
           "low": 6.3108,
           "close": 6.34,
-          "volume": 3119
+          "volume": 3180
         }
       ],
       "candleCount": 250,
@@ -65929,7 +65929,7 @@
       "floatShares": 638653,
       "shortShares": 36410,
       "shortUnknown": false,
-      "mcapUSD": 9154511,
+      "mcapUSD": 1281259,
       "openPrice": 3.3399999141693115,
       "openHigh": 3.759999990463257,
       "support": 1.66,
@@ -65938,7 +65938,7 @@
         2.6,
         2.68
       ],
-      "dailyVolume": 167888,
+      "dailyVolume": 170680,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
@@ -65946,7 +65946,7 @@
       "ma20": 2.2665,
       "ma50": 2.8372,
       "ma200": 4.6296,
-      "vwap": 2.2023,
+      "vwap": 2.2022,
       "newsFlags": [],
       "candles": [
         {
@@ -67947,7 +67947,7 @@
           "high": 1.9886,
           "low": 1.7492,
           "close": 1.9,
-          "volume": 167888
+          "volume": 170680
         }
       ],
       "candleCount": 250,
@@ -70034,7 +70034,7 @@
         2.6,
         3.944
       ],
-      "dailyVolume": 16458,
+      "dailyVolume": 17702,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -70042,7 +70042,7 @@
       "ma20": 2.0165,
       "ma50": 2.5374,
       "ma200": 8.0321,
-      "vwap": 2.1344,
+      "vwap": 2.1343,
       "newsFlags": [],
       "candles": [
         {
@@ -72043,7 +72043,7 @@
           "high": 2.07,
           "low": 2.0,
           "close": 2.07,
-          "volume": 16458
+          "volume": 17702
         }
       ],
       "candleCount": 250,
@@ -72082,7 +72082,7 @@
         14.4,
         16.0
       ],
-      "dailyVolume": 5568058,
+      "dailyVolume": 5594670,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي",
@@ -72090,7 +72090,7 @@
       "ma20": 6.796,
       "ma50": 8.0162,
       "ma200": 55.7272,
-      "vwap": 7.3142,
+      "vwap": 7.3158,
       "newsFlags": [],
       "candles": [
         {
@@ -74091,7 +74091,7 @@
           "high": 16.790001,
           "low": 10.1901,
           "close": 12.29,
-          "volume": 5568058
+          "volume": 5594670
         }
       ],
       "candleCount": 250,
@@ -74130,7 +74130,7 @@
         3.82,
         4.21
       ],
-      "dailyVolume": 71638,
+      "dailyVolume": 71994,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -74138,7 +74138,7 @@
       "ma20": 3.305,
       "ma50": 6.5639,
       "ma200": 2174.4322,
-      "vwap": 3.4288,
+      "vwap": 3.4286,
       "newsFlags": [],
       "candles": [
         {
@@ -76139,7 +76139,7 @@
           "high": 2.625,
           "low": 2.44,
           "close": 2.5,
-          "volume": 71638
+          "volume": 71994
         }
       ],
       "candleCount": 250,
@@ -76178,7 +76178,7 @@
         6.1,
         6.15
       ],
-      "dailyVolume": 19446,
+      "dailyVolume": 19772,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -76186,7 +76186,7 @@
       "ma20": 5.9702,
       "ma50": 31.8782,
       "ma200": 262.972,
-      "vwap": 8.482,
+      "vwap": 8.4818,
       "newsFlags": [],
       "candles": [
         {
@@ -78187,7 +78187,7 @@
           "high": 5.5999,
           "low": 5.34,
           "close": 5.485,
-          "volume": 19446
+          "volume": 19772
         }
       ],
       "candleCount": 250,
@@ -78217,7 +78217,7 @@
       "floatShares": 2422495,
       "shortShares": 83860,
       "shortUnknown": false,
-      "mcapUSD": 732615,
+      "mcapUSD": 2113992,
       "openPrice": 2.2699999809265137,
       "openHigh": 2.490000009536743,
       "support": 0.765,
@@ -78226,7 +78226,7 @@
         1.52,
         2.61
       ],
-      "dailyVolume": 136822,
+      "dailyVolume": 138123,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -78234,7 +78234,7 @@
       "ma20": 1.1631,
       "ma50": 3.4061,
       "ma200": 26.9673,
-      "vwap": 1.291,
+      "vwap": 1.2909,
       "newsFlags": [],
       "candles": [
         {
@@ -80235,7 +80235,7 @@
           "high": 0.8787,
           "low": 0.8085,
           "close": 0.8619,
-          "volume": 136822
+          "volume": 138123
         }
       ],
       "candleCount": 250,
@@ -80274,7 +80274,7 @@
         3.0,
         5.55
       ],
-      "dailyVolume": 198091,
+      "dailyVolume": 198277,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -82283,7 +82283,7 @@
           "high": 2.52,
           "low": 2.2231,
           "close": 2.435,
-          "volume": 198091
+          "volume": 198277
         }
       ],
       "candleCount": 250,
@@ -82322,7 +82322,7 @@
         1.87,
         2.9
       ],
-      "dailyVolume": 6712,
+      "dailyVolume": 5195,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
@@ -82330,7 +82330,7 @@
       "ma20": 1.8947,
       "ma50": 2.2159,
       "ma200": 33.4685,
-      "vwap": 1.9536,
+      "vwap": 1.9549,
       "newsFlags": [],
       "candles": [
         {
@@ -84327,11 +84327,11 @@
         },
         {
           "time": "2026-09-17",
-          "open": 1.54,
-          "high": 1.54,
-          "low": 1.47,
+          "open": 1.5285,
+          "high": 1.5309,
+          "low": 1.486,
           "close": 1.5309,
-          "volume": 6712
+          "volume": 5195
         }
       ],
       "candleCount": 250,
@@ -84370,7 +84370,7 @@
         10.84,
         17.84
       ],
-      "dailyVolume": 1018412,
+      "dailyVolume": 1026499,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -86379,7 +86379,7 @@
           "high": 4.2422,
           "low": 3.85,
           "close": 4.2,
-          "volume": 1018412
+          "volume": 1026499
         }
       ],
       "candleCount": 250,
@@ -86418,7 +86418,7 @@
         3.33,
         3.75
       ],
-      "dailyVolume": 906607,
+      "dailyVolume": 931533,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -86426,7 +86426,7 @@
       "ma20": 2.019,
       "ma50": 4.5657,
       "ma200": 179.951,
-      "vwap": 2.8155,
+      "vwap": 2.815,
       "newsFlags": [],
       "candles": [
         {
@@ -88427,7 +88427,7 @@
           "high": 1.9799,
           "low": 1.68,
           "close": 1.8,
-          "volume": 906607
+          "volume": 931533
         }
       ],
       "candleCount": 250,
@@ -90471,7 +90471,7 @@
         },
         {
           "time": "2026-09-17",
-          "open": 2.97,
+          "open": 3.01,
           "high": 3.06,
           "low": 2.96,
           "close": 3.01,
@@ -90514,7 +90514,7 @@
         2.97,
         3.1
       ],
-      "dailyVolume": 178349,
+      "dailyVolume": 179919,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -90522,7 +90522,7 @@
       "ma20": 2.6395,
       "ma50": 3.0522,
       "ma200": 22.3851,
-      "vwap": 2.7461,
+      "vwap": 2.7459,
       "newsFlags": [],
       "candles": [
         {
@@ -92523,7 +92523,7 @@
           "high": 2.58,
           "low": 2.22,
           "close": 2.31,
-          "volume": 178349
+          "volume": 179919
         }
       ],
       "candleCount": 250,
@@ -94567,7 +94567,7 @@
         },
         {
           "time": "2026-09-17",
-          "open": 9.82,
+          "open": 10.01,
           "high": 10.01,
           "low": 9.82,
           "close": 9.99,
@@ -94610,7 +94610,7 @@
         1.22,
         2.9
       ],
-      "dailyVolume": 1267566,
+      "dailyVolume": 1271111,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -96619,7 +96619,7 @@
           "high": 0.53,
           "low": 0.452,
           "close": 0.4975,
-          "volume": 1267566
+          "volume": 1271111
         }
       ],
       "candleCount": 250,
@@ -96658,7 +96658,7 @@
         11.05,
         15.9
       ],
-      "dailyVolume": 91812842,
+      "dailyVolume": 92174162,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -96666,7 +96666,7 @@
       "ma20": 2.2345,
       "ma50": 2.757,
       "ma200": 9.2463,
-      "vwap": 5.4217,
+      "vwap": 5.4264,
       "newsFlags": [],
       "candles": [
         {
@@ -98663,11 +98663,11 @@
         },
         {
           "time": "2026-09-17",
-          "open": 8.48,
+          "open": 8.54,
           "high": 9.5,
           "low": 6.01,
           "close": 6.78,
-          "volume": 91812842
+          "volume": 92174162
         }
       ],
       "candleCount": 250,
@@ -100481,7 +100481,7 @@
       "floatShares": 361589,
       "shortShares": 58428,
       "shortUnknown": false,
-      "mcapUSD": 32576,
+      "mcapUSD": 32574,
       "openPrice": 3.740000009536743,
       "openHigh": 4.260000228881836,
       "support": 1.86,
@@ -100490,7 +100490,7 @@
         2.68,
         3.35
       ],
-      "dailyVolume": 82425,
+      "dailyVolume": 83499,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -100498,7 +100498,7 @@
       "ma20": 2.5915,
       "ma50": 50.3124,
       "ma200": 4659.1581,
-      "vwap": 2.5091,
+      "vwap": 2.509,
       "newsFlags": [],
       "candles": [
         {
@@ -102499,7 +102499,7 @@
           "high": 2.05,
           "low": 1.86,
           "close": 1.94,
-          "volume": 82425
+          "volume": 83499
         }
       ],
       "candleCount": 250,
@@ -102538,7 +102538,7 @@
         14.37,
         15.15
       ],
-      "dailyVolume": 157473,
+      "dailyVolume": 159736,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
@@ -102546,7 +102546,7 @@
       "ma20": 8.898,
       "ma50": 8.2844,
       "ma200": 10.4003,
-      "vwap": 8.1278,
+      "vwap": 8.1234,
       "newsFlags": [],
       "candles": [
         {
@@ -104547,7 +104547,7 @@
           "high": 4.0,
           "low": 2.91,
           "close": 3.29,
-          "volume": 157473
+          "volume": 159736
         }
       ],
       "candleCount": 250,
@@ -104586,7 +104586,7 @@
         1.7,
         1.93
       ],
-      "dailyVolume": 3558266,
+      "dailyVolume": 3576424,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -106604,7 +106604,7 @@
           "high": 1.855,
           "low": 1.62,
           "close": 1.63,
-          "volume": 3558266
+          "volume": 3576424
         }
       ],
       "candleCount": 250,
@@ -108691,7 +108691,7 @@
         10.2,
         11.13
       ],
-      "dailyVolume": 209926,
+      "dailyVolume": 213619,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -108699,7 +108699,7 @@
       "ma20": 5.8875,
       "ma50": 5.317,
       "ma200": 43.1042,
-      "vwap": 6.8251,
+      "vwap": 6.825,
       "newsFlags": [
         {
           "headline": "Picard Medical (PMI): Assessing Valuation After Share Expansion and Dilution Concerns Spark Sell-Off",
@@ -110705,7 +110705,7 @@
           "high": 7.0496,
           "low": 5.5,
           "close": 5.6,
-          "volume": 209926
+          "volume": 213619
         }
       ],
       "candleCount": 250,
@@ -110744,7 +110744,7 @@
         3.7,
         4.795
       ],
-      "dailyVolume": 26142,
+      "dailyVolume": 29563,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -110752,7 +110752,7 @@
       "ma20": 2.8805,
       "ma50": 3.4654,
       "ma200": 6.7803,
-      "vwap": 2.9368,
+      "vwap": 2.9373,
       "newsFlags": [],
       "candles": [
         {
@@ -112753,7 +112753,7 @@
           "high": 3.28,
           "low": 2.9708,
           "close": 3.04,
-          "volume": 26142
+          "volume": 29563
         }
       ],
       "candleCount": 250,
@@ -114797,7 +114797,7 @@
         },
         {
           "time": "2026-09-17",
-          "open": 15.1,
+          "open": 15.01,
           "high": 15.53,
           "low": 15.01,
           "close": 15.2,
@@ -114840,7 +114840,7 @@
         2.8,
         53.59
       ],
-      "dailyVolume": 20141489,
+      "dailyVolume": 20328872,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -114848,7 +114848,7 @@
       "ma20": 9.1533,
       "ma50": 19.3689,
       "ma200": 57.0347,
-      "vwap": 6.1107,
+      "vwap": 6.105,
       "newsFlags": [],
       "candles": [
         {
@@ -116845,11 +116845,11 @@
         },
         {
           "time": "2026-09-17",
-          "open": 2.12,
+          "open": 2.11,
           "high": 2.21,
           "low": 1.8,
           "close": 1.86,
-          "volume": 20141489
+          "volume": 20328872
         }
       ],
       "candleCount": 250,
@@ -116888,7 +116888,7 @@
         1.41,
         1.42
       ],
-      "dailyVolume": 188697,
+      "dailyVolume": 188849,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -118897,7 +118897,7 @@
           "high": 1.29,
           "low": 1.05,
           "close": 1.27,
-          "volume": 188697
+          "volume": 188849
         }
       ],
       "candleCount": 250,
@@ -120984,7 +120984,7 @@
         1.95,
         2.0
       ],
-      "dailyVolume": 2702323,
+      "dailyVolume": 2722305,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -120992,7 +120992,7 @@
       "ma20": 1.8947,
       "ma50": 2.9404,
       "ma200": 50.1548,
-      "vwap": 1.8642,
+      "vwap": 1.8638,
       "newsFlags": [],
       "candles": [
         {
@@ -122993,7 +122993,7 @@
           "high": 1.78,
           "low": 1.55,
           "close": 1.64,
-          "volume": 2702323
+          "volume": 2722305
         }
       ],
       "candleCount": 250,
@@ -123032,7 +123032,7 @@
         0.976,
         1.2
       ],
-      "dailyVolume": 234119,
+      "dailyVolume": 236460,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "إيجابي خفيف",
@@ -125041,7 +125041,7 @@
           "high": 0.5882,
           "low": 0.5401,
           "close": 0.5775,
-          "volume": 234119
+          "volume": 236460
         }
       ],
       "candleCount": 250,
@@ -125080,7 +125080,7 @@
         3.02,
         3.04
       ],
-      "dailyVolume": 29446,
+      "dailyVolume": 30322,
       "entryPhase": "not-applicable",
       "entryModel": null,
       "macd": "سلبي",
@@ -125088,7 +125088,7 @@
       "ma20": 1.9197,
       "ma50": 1.7909,
       "ma200": 1.3381,
-      "vwap": 2.449,
+      "vwap": 2.4489,
       "newsFlags": [],
       "candles": [
         {
@@ -127089,7 +127089,7 @@
           "high": 1.3499,
           "low": 1.26,
           "close": 1.3,
-          "volume": 29446
+          "volume": 30322
         }
       ],
       "candleCount": 250,
