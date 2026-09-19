@@ -27,7 +27,17 @@ WATCHLIST_PATH = os.path.join(REPO_ROOT, "watchlist.json")
 OUTPUT_PATH = os.path.join(REPO_ROOT, "docs", "data.json")
 
 SUPPORT_HOLD_SESSIONS = 5
+# ثبات ثلاث جلسات على الأقل عند إعادة اختبار المقاومة/الدعم — سواء كان الثبات عند
+# دعم ثانوي (مزدوج) فوق الدعم الرئيسي، أو رجوع لاختبار الدعم الرئيسي نفسه.
 RETEST_HOLD_SESSIONS = 3
+# مدى التذبذب المسموح بيه عشان نعتبر الجلسات "ثابتة" عند نفس المستوى (٪ من
+# متوسط سعر الإغلاق في نافذة الثبات).
+RETEST_STABILITY_BUFFER = 0.025
+# نسبة الهامش المسموح بيها تحت الدعم الرئيسي قبل ما نعتبر النموذج ملغى (كسر).
+SUPPORT_BREAK_BUFFER = 0.03
+# أقل مسافة فوق الدعم الرئيسي عشان نعتبر مستوى الثبات "دعم ثانوي/مزدوج"
+# مستقل، مش مجرد إعادة اختبار للدعم الرئيسي نفسه.
+DOUBLE_SUPPORT_MIN_PCT = 0.05
 BREAKOUT_PCT = 0.20
 RSI_MAX = 30
 # نافذة البحث عن "هل دخل تشبع بيعي مؤخرًا" + نافذة تتبع التعافي بعدها.
@@ -265,19 +275,45 @@ def detect_entry_phase(df, support, support_hold, dropped_candles=None, rsi_seri
     after_breakout = window[breakout_idx + 1:]
     if not after_breakout:
         return "testing-resistance", {"breakoutHigh": round(breakout_high, 4)}
-    if min(after_breakout) < support * 0.97:
+    if min(after_breakout) < support * (1 - SUPPORT_BREAK_BUFFER):
         return "invalidated", None
-    near_support = [c for c in after_breakout if c <= support * 1.06]
-    if len(near_support) < RETEST_HOLD_SESSIONS:
-        return "retesting-support", {"breakoutHigh": round(breakout_high, 4)}
 
-    retest_low = min(after_breakout[-RETEST_HOLD_SESSIONS:])
+    # اختبار أقرب مقاومة = أعلى نقطة وصلها السعر بعد الاختراق. لو لسه بيصنع
+    # قمم جديدة (آخر إغلاق هو نفسه أعلى نقطة) يبقى لسه بيختبر المقاومة ولم
+    # يرتد بعد — ننتظر.
+    peak = max(after_breakout)
+    peak_idx = after_breakout.index(peak)
+    pullback = after_breakout[peak_idx + 1:]
+    if not pullback:
+        return "testing-resistance", {"breakoutHigh": round(breakout_high, 4), "resistanceTested": round(peak, 3)}
+    if len(pullback) < RETEST_HOLD_SESSIONS:
+        return "retesting-support", {"breakoutHigh": round(breakout_high, 4), "resistanceTested": round(peak, 3)}
+
+    # الشرط التأكيدي: بعد اختبار المقاومة والارتداد منها، لازم يثبت على الأقل
+    # RETEST_HOLD_SESSIONS جلسات متتالية عند نفس المستوى (تذبذب ضيق) — سواء كان
+    # المستوى ده:
+    #  (أ) دعم ثانوي/مزدوج فوق الدعم الرئيسي (الحالة الأغلب — قاع أعلى من القاع
+    #      الأصلي)، أو
+    #  (ب) رجوع كامل لاختبار الدعم الرئيسي نفسه والثبات فوقه.
+    # الحالتان صحيحتان طالما ما كسرش الدعم الرئيسي؛ اللي يفرّق بينهم بس مستوى
+    # الثبات نفسه، مش قاعدة منفصلة.
+    last_n = pullback[-RETEST_HOLD_SESSIONS:]
+    retest_low = min(pullback)
+    band_mid = sum(last_n) / len(last_n)
+    stabilized = (max(last_n) - min(last_n)) <= band_mid * RETEST_STABILITY_BUFFER and min(last_n) >= support * (1 - SUPPORT_BREAK_BUFFER)
+    if not stabilized:
+        return "retesting-support", {"breakoutHigh": round(breakout_high, 4), "resistanceTested": round(peak, 3), "retestLow": round(retest_low, 3)}
+
+    retest_level = round(band_mid, 3)
+    is_double_support = retest_level > support * (1 + DOUBLE_SUPPORT_MIN_PCT)
     entry_low = round(support + 0.05, 3)
     entry_high = round(support + (breakout_high - support) * 0.4, 3)
     entry_mid = round((entry_low + entry_high) / 2, 3)
     base_info = {
         "support1": round(support, 3), "breakoutHigh": round(breakout_high, 3),
-        "breakoutPct": round(BREAKOUT_PCT * 100), "retestLow": round(retest_low, 3),
+        "breakoutPct": round(BREAKOUT_PCT * 100), "resistanceTested": round(peak, 3),
+        "retestLow": round(retest_low, 3), "retestLevel": retest_level,
+        "isDoubleSupport": is_double_support,
         "retestSessions": RETEST_HOLD_SESSIONS, "entryLow": entry_low,
         "entryMid": entry_mid, "entryHigh": entry_high,
         "stopLoss": round(support, 3),
