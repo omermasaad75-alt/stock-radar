@@ -30,10 +30,10 @@ SUPPORT_HOLD_SESSIONS = 5
 RETEST_HOLD_SESSIONS = 3
 BREAKOUT_PCT = 0.20
 RSI_MAX = 30
-# شرط إضافي بعد تحقق الشروط السبعة: تأكيد تحسّن RSI (خروج من تشبع بيعي)
-# قبل إعطاء إشارة الدخول الفعلية — مش مجرد وصول السعر لمنطقة إعادة الاختبار.
-RSI_RECOVERY_LEVEL = 40
-RSI_RECOVERY_LOOKBACK = 20
+# نافذة البحث عن "هل دخل تشبع بيعي مؤخرًا" + نافذة تتبع التعافي بعدها.
+RSI_OVERSOLD_LOOKBACK = 20
+# مستوى التعافي المطلوب لإعطاء إشارة الدخول الفعلية بعد التشبع البيعي.
+RSI_RECOVERY_LEVEL = 35
 FLOAT_MAX = 5_000_000
 SHORT_SHARES_MAX = 20_000
 PRICE_MIN, PRICE_MAX = 1.0, 5.0
@@ -251,7 +251,7 @@ def find_dropped_candles(df, lookback=250, current_price=None, max_levels=2):
         candidates = [c for c in candidates if c > current_price * 0.95]
     return candidates[:max_levels]
 
-def detect_entry_phase(df, support, support_hold, dropped_candles=None):
+def detect_entry_phase(df, support, support_hold, dropped_candles=None, rsi_series=None):
     if support is None or support_hold < SUPPORT_HOLD_SESSIONS:
         return "awaiting-breakout", None
     breakout_level = support * (1 + BREAKOUT_PCT)
@@ -284,11 +284,12 @@ def detect_entry_phase(df, support, support_hold, dropped_candles=None):
     }
 
     # الشرط الإضافي بعد تحقق الشروط السبعة + نموذج الاختراق/إعادة الاختبار:
-    # لازم RSI يكون طلع فعلاً من تشبع بيعي (تحت 30) ووصل فوق 40 الآن — يعني
-    # زخم الشراء رجع فعليًا، مش بس السعر لمس منطقة الدعم تاني.
-    rsi_series = rsi(df["c"])
-    recent_rsi = rsi_series.tail(RSI_RECOVERY_LOOKBACK)
-    was_oversold = bool((recent_rsi < RSI_MAX).any())
+    # لازم RSI يكون طلع فعلاً من تشبع بيعي (تحت 30) ووصل فوق مستوى التعافي
+    # الآن — يعني زخم الشراء رجع فعليًا، مش بس السعر لمس منطقة الدعم تاني.
+    if rsi_series is None:
+        rsi_series = rsi(df["c"])
+    recent_rsi = rsi_series.tail(RSI_OVERSOLD_LOOKBACK)
+    was_oversold = bool((not recent_rsi.empty) and (recent_rsi < RSI_MAX).any())
     current_rsi = rsi_series.iloc[-1] if len(rsi_series) else float("nan")
     rsi_recovered = bool(was_oversold and not pd.isna(current_rsi) and current_rsi >= RSI_RECOVERY_LEVEL)
     base_info["rsiNow"] = None if pd.isna(current_rsi) else round(float(current_rsi), 1)
@@ -352,7 +353,9 @@ def score_split_model(symbol, df, split_date, split_ratio, fin, news_hits):
     support, support_hold = find_support(df)
     dropped = find_dropped_candles(df, current_price=price)
     daily_vol = int(df["v"].iloc[-1])
-    r = rsi(df["c"]).iloc[-1]
+    rsi_series = rsi(df["c"])
+    r = rsi_series.iloc[-1]
+    recent_rsi = rsi_series.tail(RSI_OVERSOLD_LOOKBACK)
     macd_line, signal_line, hist = macd(df["c"])
     macd_state = classify_macd(macd_line, signal_line, hist)
     ma20 = df["c"].rolling(20).mean().iloc[-1] if len(df) >= 20 else None
@@ -380,7 +383,11 @@ def score_split_model(symbol, df, split_date, split_ratio, fin, news_hits):
     cond_support = support_hold >= SUPPORT_HOLD_SESSIONS
     cond_news = len(news_hits) == 0
     cond_macd = macd_state in ("سلبي", "محايد", "إيجابي خفيف")
-    cond_rsi = (r is not None) and (not math.isnan(r)) and r < RSI_MAX
+    # مهم: الشرط هنا "دخل تشبع بيعي خلال آخر جلسات" وليس "متشبع الآن". لو
+    # خليناه على RSI الحالي بس، أي سهم "جاهز" هيخرج من التصنيف فور ما RSI
+    # يرتد فوق 30 — وهو بالظبط اللحظة المطلوب نبني عليها إشارة الدخول
+    # (تحسّن RSI بعد التشبع)، مش نلغي الجاهزية بسببها.
+    cond_rsi = bool((not recent_rsi.empty) and (recent_rsi < RSI_MAX).any())
     cond_below_ma = all([
         ma20 is None or pd.isna(ma20) or price < ma20,
         ma50 is None or pd.isna(ma50) or price < ma50,
@@ -400,7 +407,7 @@ def score_split_model(symbol, df, split_date, split_ratio, fin, news_hits):
     # السهم شبه الجاهز يبقى مراقبة/انتظار فقط مهما كانت حالة نموذج الدخول.
     entry_phase, entry_model = ("not-applicable", None)
     if status == "ready" and support is not None:
-        entry_phase, entry_model = detect_entry_phase(df, support, support_hold, dropped)
+        entry_phase, entry_model = detect_entry_phase(df, support, support_hold, dropped, rsi_series)
     return {
         "tk": symbol, "price": round(price, 4), "chg": chg, "status": status, "model": "split",
         "conds": conds, "exclusionReason": excluded_reason,
