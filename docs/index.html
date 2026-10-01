@@ -170,6 +170,8 @@ td:before{content:attr(data-l);color:var(--muted);font-size:12px;flex:0 0 auto}
 .sc-foot{margin-top:13px;padding-top:11px;border-top:1px dashed #3a4a5c;display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:12.5px}.sc-foot b{color:#7fb0dc;white-space:nowrap}
 @media(max-width:900px){.tablewrap{display:none}.cardlist{display:grid;gap:16px}}
 @media(min-width:620px) and (max-width:900px){.cardlist{grid-template-columns:1fr 1fr}}
+.b-moved{background:#3a3550;color:#c9bdea}
+.scard.moved{--c:#a98bd0}
 </style>
 </head>
 <body>
@@ -198,6 +200,7 @@ td:before{content:attr(data-l);color:var(--muted);font-size:12px;flex:0 0 auto}
 <button class="filter" data-filter="جاهز فنيًا" onclick="setFilter(this)">🟢 جاهز فنيًا</button>
 <button class="filter" data-filter="شبه جاهز" onclick="setFilter(this)">🟠 شبه جاهز</button>
 <button class="filter" data-filter="قيد المتابعة" onclick="setFilter(this)">🟡 قيد المتابعة</button>
+<button class="filter" data-filter="انطلق بالفعل" onclick="setFilter(this)">🚀 انطلق بالفعل</button>
 <button class="filter" data-filter="تحذيرات" onclick="setFilter(this)">🚨 تحذيرات</button>
 <button class="filter" data-filter="محفزات" onclick="setFilter(this)">📅 محفزات قادمة</button>
 </div>
@@ -223,14 +226,14 @@ td:before{content:attr(data-l);color:var(--muted);font-size:12px;flex:0 0 auto}
 
 <script>
 let D={signals:[],params:{},stats:{}},currentFilter='الكل';
-const ST={WATCH:'قيد المتابعة',SEMI:'شبه جاهز',READY:'جاهز فنيًا'};
-const ORDER={[ST.READY]:3,[ST.SEMI]:2,[ST.WATCH]:1};
+const ST={WATCH:'قيد المتابعة',SEMI:'شبه جاهز',READY:'جاهز فنيًا',MOVED:'انطلق بالفعل'};
+const ORDER={[ST.READY]:4,[ST.SEMI]:3,[ST.WATCH]:2,[ST.MOVED]:1};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=v=>(v===null||v===undefined||v==='')?'—':'$'+Number(v).toFixed(2);
 const num=(v,d=1)=>(v===null||v===undefined||v==='')?'—':Number(v).toFixed(d);
 const pctFmt=v=>(v>0?'+':'')+Number(v).toFixed(1)+'%';
-function sc(s){return s===ST.READY?'ready':s===ST.SEMI?'semi':'watch'}
-function badge(s){return '<span class="badge b-'+sc(s)+'">'+(s===ST.READY?'🟢 ':s===ST.SEMI?'🟠 ':'🟡 ')+esc(s)+'</span>'}
+function sc(s){return s===ST.READY?'ready':s===ST.SEMI?'semi':s===ST.MOVED?'moved':'watch'}
+function badge(s){return '<span class="badge b-'+sc(s)+'">'+(s===ST.READY?'🟢 ':s===ST.SEMI?'🟠 ':s===ST.MOVED?'🚀 ':'🟡 ')+esc(s)+'</span>'}
 function fmtFloat(v){if(!v)return '—';if(typeof v==='string')return esc(v);return Number(v)>=1e6?(v/1e6).toFixed(1)+'M':Math.round(v/1e3)+'K'}
 function fmtTime(iso){
   if(!iso)return '—';
@@ -238,7 +241,14 @@ function fmtTime(iso){
 }
 function ind(x){return x.indicators||(x.technical||{})}
 /* ---- قراءة بيانات الإشارة (العقد المتفق عليه مع scanner) ---- */
-const stageOf=x=>String(x.stage||ST.WATCH).replace(/^[^\u0600-\u06FF]+/,'').trim()||ST.WATCH;
+const lateOf=x=>{
+  const ext=x.ext_neck_pct??(x.neckline?(x.price/x.neckline-1)*100:null),age=x.breakout_age;
+  return (ext!=null&&ext>8)||(age!=null&&age>3);
+};
+const stageOf=x=>{
+  const s=String(x.stage||ST.WATCH).replace(/^[^\u0600-\u06FF]+/,'').trim()||ST.WATCH;
+  return (s===ST.READY&&lateOf(x))?ST.MOVED:s;
+};
 const splitOf=x=>x.split||{};
 const daysOf=x=>splitOf(x).days_since??x.days_since_split??null;
 const baseOf=x=>x.support??null;
@@ -353,7 +363,7 @@ function renderRules(){
   const el=document.getElementById('rulesNote');if(!el)return;
   el.innerHTML='<b>شروط الدخول للرادار:</b> تقسيم عكسي قبل 20–50 يومًا · لم يصعد أكثر من 20% منذ إغلاق شمعة يوم التقسيم.'+
   ' <b>النقاط:</b> '+CK_DEF.map(c=>esc(c.rule.split(' (')[0])+' '+c.points).join(' · ')+'.'+
-  ' <b>المراحل:</b> 30–50 قيد المتابعة · 55–75 شبه جاهز · 80–100 جاهز فنيًا. <b>سحب السيولة</b> تحت الدعم ميزة إيجابية تُعرض عند حدوثها وليست شرطًا.'+
+  ' <b>المراحل:</b> 30–50 قيد المتابعة · 55–75 شبه جاهز · 80–100 جاهز فنيًا (اختراق حديث وما زال قريبًا من منطقة الدخول). <b>🚀 انطلق بالفعل:</b> اخترق خط العنق لكنه ابتعد أكثر من 8% فوق خط العنق أو مرّ على اختراقه أكثر من 3 جلسات — لا يُعد دخولًا جديدًا. <b>سحب السيولة</b> تحت الدعم ميزة إيجابية تُعرض عند حدوثها وليست شرطًا.'+
   ' <b>التحليل:</b> على الفريم اليومي و4 ساعات.';
 }
 function setFilter(el){
@@ -471,7 +481,10 @@ function planHtml(x){
   if(!T.length&&x.resistance)T=[{level:x.resistance,label:'أقرب مقاومة'}];
   const g=v=>(v==null||!entry)?null:(Number(v)-entry)/entry*100;
   const tb=T.map((t,i)=>'<div class="planbox'+(t.final?' final':'')+'"><span>'+(t.final?'🎯 ':'الهدف '+(i+1)+' · ')+esc(t.label)+'</span><b class="target">'+money(t.level)+'</b><small class="ok">'+pctFmt(g(t.level))+' من الدخول</small></div>').join('');
-  return (ready?'':'<div class="muted">تُولّد الخطة كاملة عند «جاهز فنيًا» (الدرجة 80 أو أكثر). الدرجة الحالية '+esc(x.readiness_score)+'/100 — المستويات أدناه مبدئية.</div>')+
+  const mv=stageOf(x)===ST.MOVED;
+  const run=x.run_pct??(sup?(x.price/sup-1)*100:null),ext=x.ext_neck_pct??(x.neckline?(x.price/x.neckline-1)*100:null);
+  const mvMsg='<div class="sweep no"><b>🚀 السهم انطلق بالفعل — تجاوز منطقة الدخول</b><span>صعد '+(run==null?'—':num(run))+'% من الدعم'+(ext==null?'':'، وهو '+num(ext)+'% '+(ext>=0?'فوق':'تحت')+' خط العنق')+(x.breakout_age!=null?'، ومرّ '+x.breakout_age+' جلسات على الاختراق':'')+'. لا يُعد دخولًا جديدًا — المستويات أدناه للمتابعة فقط.</span></div>';
+  return (mv?mvMsg:ready?'':'<div class="muted">تُولّد الخطة كاملة عند «جاهز فنيًا» (الدرجة 80 أو أكثر). الدرجة الحالية '+esc(x.readiness_score)+'/100 — المستويات أدناه مبدئية.</div>')+
   '<div class="plan">'+
   '<div class="planbox"><span>'+(ready?'الدخول':'مستوى الدخول (خط العنق)')+'</span><b class="entry">'+money(ready?entry:(x.neckline??entry))+'</b><small class="muted">الدعم: '+money(sup)+'</small></div>'+
   '<div class="planbox"><span>وقف الخسارة (الدعم -2%)</span><b class="stop">'+money(stop)+'</b><small class="no">'+(g(stop)==null?'':pctFmt(g(stop))+' من الدخول')+'</small></div>'+tb+'</div>'+
