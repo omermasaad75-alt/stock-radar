@@ -155,6 +155,21 @@ td:before{content:attr(data-l);color:var(--muted);font-size:12px;flex:0 0 auto}
 .sweep b{display:block}.sweep span{font-size:13.5px}
 .sweep.yes{border-color:#3e8573;background:rgba(91,185,140,.09)}.sweep.yes b{color:#c3e6dc}
 .sweep.no{background:#141c25}.sweep.no span{color:var(--muted)}
+.cardlist{display:none}
+.ev.none-bg{background:#222e3b;color:#c1ccd6}
+.scard{background:#18222d;border:1px solid #324152;border-inline-start:5px solid var(--c,#8795a3);border-radius:16px;padding:15px;box-shadow:0 3px 8px rgba(0,0,0,.35);cursor:pointer}
+.scard.ready{--c:#5bb98c}.scard.semi{--c:#d99560}.scard.watch{--c:#d9b160}
+.scard:active{background:#1d2935}
+.sc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sc-top .tk{font-size:21px}.sc-sub{margin-top:7px}.sc-price{font-size:22px;font-weight:700}
+.sc-score{display:flex;align-items:center;gap:10px;margin:14px 0 9px}.sc-score b{min-width:62px}.sc-score .bar{flex:1}
+.dots{display:flex;gap:4px;margin-bottom:14px}.dots i{flex:1;height:6px;border-radius:4px;background:#e07a7a}.dots i.y{background:#5bb98c}
+.sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#2a3644;border:1px solid #2a3644;border-radius:12px;overflow:hidden}
+.sc-grid>div{background:#141c25;padding:10px 12px}.sc-grid span{display:block;color:var(--muted);font-size:11.5px}.sc-grid b{display:block;margin-top:3px;font-size:15px}
+.sc-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.sc-foot{margin-top:13px;padding-top:11px;border-top:1px dashed #3a4a5c;display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:12.5px}.sc-foot b{color:#7fb0dc;white-space:nowrap}
+@media(max-width:900px){.tablewrap{display:none}.cardlist{display:grid;gap:16px}}
+@media(min-width:620px) and (max-width:900px){.cardlist{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -191,6 +206,7 @@ td:before{content:attr(data-l);color:var(--muted);font-size:12px;flex:0 0 auto}
 <thead><tr><th>السهم</th><th>السعر</th><th>Float</th><th>المرحلة</th><th>درجة الجاهزية</th><th>منذ التقسيم</th><th>التغير منذ التقسيم</th><th>أقصى هبوط</th><th>النمط</th><th>المحفز</th><th>تحذير</th></tr></thead>
 <tbody id="rows"></tbody>
 </table></div>
+<div class="cardlist" id="cardlist"></div>
 <div class="note" id="rulesNote"></div>
 <div class="section" id="diagPanel">
 <h3>🔍 تشخيص المسح — لماذا هذه النتائج؟</h3>
@@ -374,6 +390,27 @@ function chgCell(x){
   const c=Number(x.change_since_split_pct??0);
   return '<b class="'+(c<=20?(c<0?'no':'ok'):'mid')+'">'+pctFmt(c)+'</b>';
 }
+function cardHtml(x){
+  const st=stageOf(x),score=Math.min(100,Number(x.readiness_score||0)),ck=checklistOf(x),okN=ck.filter(c=>c.status).length;
+  const c=Number(x.change_since_split_pct??0),d=daysOf(x);
+  const tags=[];
+  if(patternOf(x)!=='—')tags.push('<span class="ev none-bg">'+esc(patternOf(x))+'</span>');
+  if(x.liquidity_sweep)tags.push('<span class="ev cat">💧 سحب سيولة</span>');
+  if(hasCat(x))tags.push(catCell(x));
+  if(hasWarn(x)||x.stale)tags.push(eventCell(x));
+  return '<div class="scard '+sc(st)+'" data-ticker="'+esc(x.ticker)+'">'+
+  '<div class="sc-top"><div><span class="tk">'+esc(x.ticker)+'</span><div class="sc-sub">'+badge(st)+'</div></div>'+
+  '<div style="text-align:left"><div class="sc-price">'+money(x.price)+'</div><div class="'+(c<=20?(c<0?'no':'ok'):'mid')+'" style="font-size:13px;font-weight:600">'+pctFmt(c)+' منذ التقسيم</div></div></div>'+
+  '<div class="sc-score"><b>'+score+'/100</b><div class="bar"><i style="width:'+score+'%"></i></div></div>'+
+  (ck.length?'<div class="dots" title="الشروط">'+ck.map(k=>'<i class="'+(k.status?'y':'')+'"></i>').join('')+'</div>':'')+
+  '<div class="sc-grid">'+
+  '<div><span>منذ التقسيم</span><b class="'+((d>=20&&d<=50)?'ok':'no')+'">'+(d==null?'—':esc(d)+' / 50 يوم')+'</b></div>'+
+  '<div><span>أقصى هبوط</span><b class="no">'+(x.max_drawdown_pct==null?'—':'-'+num(Math.abs(x.max_drawdown_pct))+'%')+'</b></div>'+
+  '<div><span>Float</span><b>'+fmtFloat(floatOf(x))+'</b></div>'+
+  '<div><span>الدعم</span><b>'+money(baseOf(x))+'</b></div></div>'+
+  (tags.length?'<div class="sc-tags">'+tags.join('')+'</div>':'')+
+  '<div class="sc-foot"><span>'+(ck.length?'الشروط المتحققة '+okN+' من '+ck.length+' (الأحمر = ناقص)':'')+'</span><b>التفاصيل ‹</b></div></div>';
+}
 function render(){
   const s=D.signals||[];
   const cnt=st=>s.filter(x=>stageOf(x)===st).length;
@@ -397,6 +434,9 @@ function render(){
     '<td data-l="المحفز">'+catCell(x)+'</td>'+
     '<td data-l="تحذير">'+eventCell(x)+'</td></tr>';
   }).join(''):'<tr><td colspan="11" class="empty">لا توجد أسهم مطابقة للفلتر الحالي.<br>راجع <b>🔍 تشخيص المسح</b> بالأسفل لمعرفة أين يتساقط المرشحون.</td></tr>';
+  const cl=document.getElementById('cardlist');
+  if(cl)cl.innerHTML=a.length?a.map(cardHtml).join(''):'<div class="empty">لا توجد أسهم مطابقة للفلتر الحالي.<br>راجع <b>🔍 تشخيص المسح</b> بالأسفل لمعرفة أين يتساقط المرشحون.</div>';
+  document.querySelectorAll('.scard').forEach(r=>r.addEventListener('click',()=>openStock(r.dataset.ticker,'')));
   document.querySelectorAll('#rows tr[data-ticker]').forEach(r=>r.addEventListener('click',()=>openStock(r.dataset.ticker,'')));
 }
 
