@@ -156,7 +156,6 @@ td:before{content:attr(data-l);color:var(--muted);font-size:12px;flex:0 0 auto}
 <header class="top">
 <div class="brand"><div class="logo">📡</div><div><div class="title">رادار التقسيم العكسي — ارتكاز الدعم</div><div class="sub">تقسيم عكسي (20–50 يومًا) ← هبوط قوي + تشبع بيعي ← ثبات الدعم ← اختبار مقاومة ← إعادة اختبار الدعم ← اختراق خط العنق</div></div></div>
 <div class="actions">
-<button class="btn" onclick="loadDemo()">👁️ عرض تجريبي</button>
 <button class="btn primary" id="refreshBtn" onclick="refreshData()">🔄 تحديث البيانات</button>
 <a class="btn" href="https://github.com/omermasaad75-alt/stock-radar/actions" target="_blank" rel="noopener">⚙️ تشغيل مسح جديد</a>
 </div>
@@ -263,6 +262,7 @@ async function loadData(){
   const stamp=Date.now();
   /* نجلب كل المصادر المتاحة ونختار الأحدث (updated_at) — لأن نسخة GitHub Pages
      قد تكون أقدم من ملف المستودع بين نشرين. */
+  const errs=[];
   const loaders=[
     ['النسخة المنشورة',()=>fetchJson('data.json?x='+stamp)],
     ['المستودع (raw)',()=>fetchJson('https://raw.githubusercontent.com/omermasaad75-alt/stock-radar/main/data.json?x='+stamp)],
@@ -270,16 +270,16 @@ async function loadData(){
     ['GitHub API',()=>fetchGithubApi()]
   ];
   const results=await Promise.all(loaders.map(async([name,load])=>{
-    try{return [name,await load()]}catch(e){console.warn(name,e);return null}
+    try{return [name,await load()]}catch(e){console.warn(name,e);errs.push(name+' ← '+((e&&e.message)||e));return null}
   }).map(p=>p.catch(e=>null)));
   const ok=results.filter(Boolean).map(([name,d])=>({name,d,ts:Date.parse(d.updated_at||'')||0}));
-  if(!ok.length){loadDemo(true);return true}
+  if(!ok.length){loadDemo(true,errs);return true}
   ok.sort((a,b)=>b.ts-a.ts);
   const pick=ok[0];
   D=pick.d;
   D._source=pick.name;
   if(D.demo){const dn=document.getElementById('demoNote');if(dn)dn.style.display='block'}
-  document.getElementById('updated').innerHTML='آخر تحديث: <b>'+esc(fmtTime(D.updated_at))+'</b> · الأسهم في الرادار: <b>'+esc(D.count??(D.signals||[]).length)+'</b> · محفزات قادمة: <b>'+esc((D.stats||{}).catalysts??0)+'</b> · المصدر: '+esc(pick.name)+' · بيانات الرادار من Yahoo Finance فقط';
+  document.getElementById('updated').innerHTML='آخر تحديث: <b>'+esc(fmtTime(D.updated_at))+'</b> · الأسهم في الرادار: <b>'+esc(D.count??(D.signals||[]).length)+'</b> · محفزات قادمة: <b>'+esc((D.stats||{}).catalysts??0)+'</b> · المصدر: '+esc(pick.name)+(errs.length?' (تعذّر '+errs.length+' من '+loaders.length+' مصادر)':'')+' · بيانات الرادار من Yahoo Finance فقط';
   renderRules();renderDiag();render();route();return true;
 }
 function toast(msg,err){
@@ -504,10 +504,10 @@ function drawChart(x){
   svg+='<text x="'+L+'" y="'+(H-12)+'" fill="#7a8a9b" font-size="11">'+esc(data[0].date)+'</text><text x="'+(W-R)+'" y="'+(H-12)+'" text-anchor="end" fill="#7a8a9b" font-size="11">'+esc(data[data.length-1].date)+'</text></svg>';
   el.innerHTML='<div style="padding:5px 4px 10px;font-weight:600">📈 حركة السهم اليومية — آخر 30 جلسة (الدعم + المقاومة + خط العنق + VWAP + EMA20)</div>'+svg;
 }
-function loadDemo(auto){
+function loadDemo(auto,errs){
   D=makeDemo();
   const dn=document.getElementById('demoNote');
-  dn.innerHTML='⚠️ <b>بيانات تجريبية للعرض فقط</b> — '+(auto?'لم تتوفر بيانات حقيقية بعد (لا يوجد <code>data.json</code>)، فتُعرض أسهم تجريبية لتشوف التصميم. ':'')+'اضغط على أي سهم لفتح بطاقته. زر 🔄 تحديث البيانات يرجع للبيانات الحقيقية.';
+  dn.innerHTML='⚠️ <b>بيانات تجريبية للعرض فقط</b> — '+(auto?'لم تتوفر بيانات حقيقية بعد (لا يوجد <code>data.json</code>)، فتُعرض أسهم تجريبية لتشوف التصميم. ':'')+'اضغط على أي سهم لفتح بطاقته. زر 🔄 تحديث البيانات يرجع للبيانات الحقيقية.'+((errs&&errs.length)?'<br><small>سبب تعذر التحميل: '+errs.map(esc).join(' &nbsp;|&nbsp; ')+'</small>':'');
   dn.style.display='block';
   document.getElementById('updated').innerHTML='آخر تحديث: <b>'+esc(fmtTime(D.updated_at))+'</b> · وضع العرض التجريبي';
   renderRules();renderDiag();render();route();
