@@ -17,6 +17,7 @@ HIGHER_LOW = 3.0               # أعلى من الدعم بهذه النسبة 
 HOLD_AFTER_MIN = 2             # جلسات الثبات بعد الاختبار
 NECK_MAX = 30.0                # أقصى بُعد لخط العنق عن الدعم (٪)
 EXT_NECK_MAX = 8.0             # أبعد من هذا (٪) فوق خط العنق = تجاوز منطقة الدخول
+EXCLUDE_RUN = 70.0              # صعد أكثر من هذا (٪) من الدعم بعد الثبات = حقق المطلوب، يُستبعد نهائيًا
 BRK_AGE_MAX = 3                # مرّ على الاختراق أكثر من هذه الجلسات = متأخر
 NEAR = 0.02                    # "يقترب" من EMA20/VWAP = ضمن 2٪
 STAGES = [(80, "جاهز فنيًا"), (55, "شبه جاهز"), (30, "قيد المتابعة")]
@@ -86,7 +87,9 @@ def evaluate(d, split_date, extra_sweep=False):
     if not f["rsi"]: return "rsi_not_oversold", {**info, "f": f, "note": note}
     ci = pk + int(np.argmin(cl[pk:])); S = float(cl[ci]); hold = len(cl) - 1 - ci
     f["hold5"] = hold >= HOLD_MIN; note["hold5"] = f"{hold} جلسات منذ القاع"
-    info.update(S=S, hold=hold)
+    peak_run = (float(hi[ci:].max()) / S - 1) * 100
+    info.update(S=S, hold=hold, peak_run=peak_run)
+    if peak_run >= EXCLUDE_RUN: return "target_achieved", {**info, "f": f, "note": note}
     H = ri = None; bounce = None; S2 = S; pattern = "—"; sweep = False; hold_after = None; r_i = None
     if hold >= 1:
         # أول قمة ارتداد مؤكدة: نتتبع أعلى سعر حتى يتراجع الإغلاق 7% عنه بعد بلوغ حد الارتداد
@@ -265,7 +268,7 @@ def build_signal(t, d, sdate, ratio, info, today):
             "change_since_split_pct": info["chg"], "max_drawdown_pct": info["dd"], "rsi_min": info["rsi_min"], "support": S,
             "support_hold_sessions": info["hold"], "resistance": H, "resistance_bounce_pct": info.get("bounce"),
             "neckline": H if f["retest"] else None, "neckline_distance_pct": info.get("ndist"), "pattern_type": info["pattern"],
-            "retest_hold_sessions": info["hold_after"], "run_pct": info["run_pct"], "ext_neck_pct": info["ext_neck"], "breakout_age": info["brk_age"], "liquidity_sweep": sweep, "sweep": sweep_info, "targets": targets, "final_target": {"level": info["F"], "date": info["F_date"]}, "stage": stage, "readiness_score": score,
+            "retest_hold_sessions": info["hold_after"], "run_pct": info["run_pct"], "peak_run_pct": info["peak_run"], "ext_neck_pct": info["ext_neck"], "breakout_age": info["brk_age"], "liquidity_sweep": sweep, "sweep": sweep_info, "targets": targets, "final_target": {"level": info["F"], "date": info["F_date"]}, "stage": stage, "readiness_score": score,
             "checklist": checklist, "missing_conditions": [r for k, r, _ in CK if not f.get(k)], "plan": plan,
             "indicators": {"rsi": info["rsi_now"], "rsi_4h": rsi4, "ema20": info["ema"][0], "ema30": info["ema"][1], "ema50": info["ema"][2],
                            "vwap": info["vwap"], "ema20_reclaim": info["r20"], "vwap_reclaim": info["rv"]},
@@ -298,9 +301,8 @@ def main():
     for t, d, sdate, ratio in cand:
         try:
             reason, info = evaluate(d, sdate)
-            if reason is None or reason in ("no_strong_drop", "rsi_not_oversold"):
-                if reason != "rose_over_20" and reason != "no_data": diag["rise_ok_pass"] += 1
-            if reason is None or reason == "rsi_not_oversold": diag["drop_rsi_pass"] += 1 if reason is None else 0
+            if reason not in ("rose_over_20", "no_data"): diag["rise_ok_pass"] += 1
+            if reason in (None, "target_achieved"): diag["drop_rsi_pass"] += 1
             if reason is None and info["hold"] >= HOLD_MIN: diag["support_hold_pass"] += 1
             sig = None
             if reason is None:
@@ -308,7 +310,7 @@ def main():
                 if sig is None: reason = "support_broken"
             if sig: signals.append(sig); continue
             reason = reason or "unknown"; reasons[reason] = reasons.get(reason, 0) + 1
-            if len(near) < 10 and info:
+            if len(near) < 10 and info and reason != "target_achieved":
                 near.append({"ticker": t, "price": float(d["Close"].iloc[-1]), "days_since_split": (today - sdate.date()).days,
                              "change_since_split_pct": info.get("chg", 0), "float": fundamentals(yf.Ticker(t))["float"], "reason": reason})
         except Exception as e:
