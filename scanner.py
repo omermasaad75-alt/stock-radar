@@ -17,7 +17,7 @@ HIGHER_LOW = 3.0               # أعلى من الدعم بهذه النسبة 
 HOLD_AFTER_MIN = 2             # جلسات الثبات بعد الاختبار
 NECK_MAX = 30.0                # أقصى بُعد لخط العنق عن الدعم (٪)
 NEAR = 0.02                    # "يقترب" من EMA20/VWAP = ضمن 2٪
-STAGES = [(80, "🟢 جاهز فنيًا"), (55, "🟠 شبه جاهز"), (30, "🟡 قيد المتابعة")]
+STAGES = [(80, "جاهز فنيًا"), (55, "شبه جاهز"), (30, "قيد المتابعة")]
 BATCH = 200
 CK = [("drop", "هبوط قوي بعد التقسيم (قد يتخطى 50%)", 10), ("rsi", "RSI لمس التشبع البيعي (تحت 30)", 10),
       ("hold5", "ثبات الدعم 5 جلسات دون كسر", 15), ("res", "اختبار أقرب مقاومة (ارتداد ≈ 20%)", 10),
@@ -67,7 +67,7 @@ def evaluate(d, split_date, extra_sweep=False):
     i0 = d.index.searchsorted(split_date)
     if i0 >= len(d) - 3: return "no_data", {}
     post = d.iloc[i0:]
-    cl, hi, lo = post["Close"].values, post["High"].values, post["Low"].values
+    cl, hi, lo, op = post["Close"].values, post["High"].values, post["Low"].values, post["Open"].values
     c0, last = cl[0], cl[-1]
     rise_peak = (cl.max() / c0 - 1) * 100
     info = {"c0": c0, "last": last, "chg": (last / c0 - 1) * 100, "rise_peak": rise_peak}
@@ -75,7 +75,9 @@ def evaluate(d, split_date, extra_sweep=False):
     pk = int(np.argmax(cl)); peak = cl[pk]
     dd = (1 - lo[pk:].min() / peak) * 100
     rs = rsi(d["Close"]); rsi_min = float(rs.loc[post.index].min())
-    info.update(dd=dd, rsi_min=rsi_min, rsi_now=float(rs.iloc[-1]))
+    kh = int(np.argmax(hi))                                  # أعلى قمة (High) بعد التقسيم = الهدف الأخير
+    info.update(dd=dd, rsi_min=rsi_min, rsi_now=float(rs.iloc[-1]), top=float(hi[kh]), low_all=float(lo[pk:].min()),
+                F=float(hi[kh]), F_date=str(post.index[kh].date()))
     f = {k: False for k, _, _ in CK}; note = {}
     f["drop"] = dd >= DROP_MIN; f["rsi"] = rsi_min < RSI_OS
     if not f["drop"]: return "no_strong_drop", {**info, "f": f, "note": note}
@@ -101,7 +103,11 @@ def evaluate(d, split_date, extra_sweep=False):
         hold_after = len(cl) - 1 - r_i
         f["hold_after"] = f["retest"] and hold_after >= HOLD_AFTER_MIN; note["hold_after"] = f"{hold_after} جلسات"
     sw = (lo[ci + 1:] < S * 0.998) & (cl[ci + 1:] >= S)
-    sweep = bool(sw.any()) or extra_sweep
+    sweep_info = None
+    if sw.any():
+        jj = ci + 1 + int(np.where(sw)[0][-1])
+        sweep_info = {"date": str(post.index[jj].date()), "low": float(lo[jj]), "close": float(cl[jj]), "tf": "يومي"}
+    sweep = sweep_info is not None or extra_sweep
     if f["retest"] and H:
         ndist = (H / S2 - 1) * 100
         f["neck"] = last > H and ndist <= NECK_MAX; info["ndist"] = ndist
@@ -112,7 +118,7 @@ def evaluate(d, split_date, extra_sweep=False):
     vwap = float((tp * vol).sum() / vol.sum()) if vol.notna().any() else float(tp.mean())
     r20 = last >= e20.iloc[-1] * (1 - NEAR); rv = last >= vwap * (1 - NEAR)
     f["ema"] = bool(below and r20 and rv)
-    info.update(f=f, note=note, H=H, bounce=bounce, S2=S2, pattern=pattern, sweep=sweep, hold_after=hold_after,
+    info.update(f=f, note=note, H=H, bounce=bounce, S2=S2, pattern=pattern, sweep=sweep, sweep_info=sweep_info, hold_after=hold_after,
                 ema=(float(e20.iloc[-1]), float(e30.iloc[-1]), float(e50.iloc[-1])), vwap=vwap, r20=bool(r20), rv=bool(rv))
     return None, info
 
@@ -130,9 +136,13 @@ def tf4h(t):
 
 
 def sweep_4h(h4, S, since):
-    if h4 is None or S is None: return False
-    x = h4[h4.index.tz_localize(None) >= since] if h4.index.tz is not None else h4[h4.index >= since]
-    return bool(((x["Low"] < S * 0.998) & (x["Close"] >= S)).any())
+    """سحب سيولة على 4 ساعات: شمعة كسرت الدعم بذيلها وأغلقت فوقه."""
+    if h4 is None or S is None: return None
+    idx = h4.index.tz_localize(None) if h4.index.tz is not None else h4.index
+    x = h4[idx >= since]; m = (x["Low"] < S * 0.998) & (x["Close"] >= S)
+    if not m.any(): return None
+    r = x[m].iloc[-1]
+    return {"date": str(x[m].index[-1])[:16], "low": float(r["Low"]), "close": float(r["Close"]), "tf": "4 ساعات"}
 
 
 def parse_news(tk):
@@ -173,11 +183,39 @@ def news_block(tk, today):
 
 
 def fundamentals(tk):
-    try: i = tk.info or {}
-    except Exception: i = {}
-    fl, so = i.get("floatShares"), i.get("sharesOutstanding")
-    return {"float": fl or so, "float_exact": bool(fl), "float_source": "yahoo_float" if fl else ("yahoo_outstanding" if so else "unknown"),
-            "shares_outstanding": so, "market_cap": i.get("marketCap")}
+    i = {}
+    for k in range(3):
+        try:
+            i = tk.info or {}
+            if i: break
+        except Exception as e:
+            print("info", e)
+        time.sleep(2 * (k + 1))
+    fl, so, mc = i.get("floatShares"), i.get("sharesOutstanding"), i.get("marketCap")
+    if not so or not mc:
+        try:
+            fi = tk.fast_info
+            so = so or fi["shares"]; mc = mc or fi["marketCap"]
+        except Exception as e:
+            print("fast_info", e)
+    fl = fl or so
+    return {"float": fl, "float_exact": bool(i.get("floatShares")), "float_source": "yahoo_float" if i.get("floatShares") else ("yahoo_outstanding" if so else "unknown"),
+            "shares_outstanding": so, "market_cap": mc}
+
+
+def make_targets(last, H, top, low, F):
+    """أهداف موزعة فوق السعر: مقاومة/خط العنق ثم فيبو لموجة الهبوط، والأخير = أعلى قمة بعد التقسيم."""
+    cands = [(H, "مقاومة / خط العنق")] if H and H > last * 1.02 else []
+    for r, nm in ((0.382, "فيبو 38.2%"), (0.5, "فيبو 50%"), (0.618, "فيبو 61.8%"), (0.786, "فيبو 78.6%")):
+        cands.append((low + (top - low) * r, nm))
+    out = []
+    for lv, nm in sorted(cands):
+        if lv <= last * 1.02 or lv >= F * 0.97: continue
+        if out and lv < out[-1]["level"] * 1.04: continue
+        out.append({"level": lv, "label": nm, "final": False})
+    out = out[:3]
+    if F > last * 1.02: out.append({"level": F, "label": "الهدف الأخير — أعلى قمة بعد التقسيم", "final": True})
+    return out
 
 
 def clean(o):
@@ -194,25 +232,25 @@ def build_signal(t, d, sdate, ratio, info, today):
     f = dict(info["f"]); f["news"] = not warns
     since = d.index[d.index.searchsorted(sdate)]
     h4 = tf4h(t); S, S2, H = info.get("S"), info.get("S2"), info.get("H")
-    sweep = info["sweep"] or sweep_4h(h4, S, pd.Timestamp(since))
+    sweep_info = info.get("sweep_info") or sweep_4h(h4, S, pd.Timestamp(since)); sweep = sweep_info is not None
     rsi4 = float(rsi(h4["Close"]).iloc[-1]) if h4 is not None and len(h4) > 20 else None
     score = sum(p for k, _, p in CK if f.get(k)); stage = None
     for th, name in STAGES:
         if score >= th: stage = name; break
-    if stage and stage.startswith("🟢") and not (f["neck"] and f["retest"] and f["news"]): stage = "🟠 شبه جاهز"
+    if stage == "جاهز فنيًا" and not (f["neck"] and f["retest"] and f["news"]): stage = "شبه جاهز"
     if not stage: return None, score
     note = info.get("note", {}); last = info["last"]
     checklist = [{"key": k, "rule": r, "points": p, "status": bool(f.get(k)), "note": note.get(k, "")} for k, r, p in CK]
-    low_ref = min(S, S2) if S2 else S; unit = (H - S2) if (H and S2) else 0
-    plan = {"entry_price": round(last, 4), "stop_loss": round(low_ref * 0.98, 4), "target_1": round(H + unit * 0.5, 4) if f["neck"] and H else H,
-            "target_2": round(H + unit, 4) if f["neck"] and H else None} if stage.startswith("🟢") else {}
+    low_ref = min(S, S2) if S2 else S
+    targets = make_targets(last, H, info["top"], info["low_all"], info["F"])
+    plan = {"entry_price": round(last, 4), "stop_loss": round(low_ref * 0.98, 4)} if stage == "جاهز فنيًا" else {}
     ch = d.tail(30)
     chart = [{"date": str(i.date()), "open": r.Open, "high": r.High, "low": r.Low, "close": r.Close} for i, r in ch.iterrows()]
     return {"ticker": t, "price": last, **fu, "split": {"date": str(sdate.date()), "ratio": ratio, "days_since": (today - sdate.date()).days, "close_on_split_day": info["c0"]},
             "change_since_split_pct": info["chg"], "max_drawdown_pct": info["dd"], "rsi_min": info["rsi_min"], "support": S,
             "support_hold_sessions": info["hold"], "resistance": H, "resistance_bounce_pct": info.get("bounce"),
             "neckline": H if f["retest"] else None, "neckline_distance_pct": info.get("ndist"), "pattern_type": info["pattern"],
-            "retest_hold_sessions": info["hold_after"], "liquidity_sweep": sweep, "stage": stage, "readiness_score": score,
+            "retest_hold_sessions": info["hold_after"], "liquidity_sweep": sweep, "sweep": sweep_info, "targets": targets, "final_target": {"level": info["F"], "date": info["F_date"]}, "stage": stage, "readiness_score": score,
             "checklist": checklist, "missing_conditions": [r for k, r, _ in CK if not f.get(k)], "plan": plan,
             "indicators": {"rsi": info["rsi_now"], "rsi_4h": rsi4, "ema20": info["ema"][0], "ema30": info["ema"][1], "ema50": info["ema"][2],
                            "vwap": info["vwap"], "ema20_reclaim": info["r20"], "vwap_reclaim": info["rv"]},
