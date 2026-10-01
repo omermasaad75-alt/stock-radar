@@ -149,6 +149,12 @@ td:before{content:attr(data-l);color:var(--muted);font-size:12px;flex:0 0 auto}
 @media(min-width:701px) and (max-width:1050px){.hero{grid-template-columns:1fr}.checks{grid-template-columns:repeat(2,1fr)}.app{padding:18px}}
 @media(min-width:1500px){.app{max-width:1560px}}
 @media(max-width:700px){body{font-size:14.5px}.bigprice{font-size:30px}}
+.plan{grid-template-columns:repeat(auto-fit,minmax(132px,1fr))!important}
+.planbox.final{border-color:#a98bd0;background:rgba(169,139,208,.09)}
+.sweep{margin-top:12px;border-radius:12px;padding:12px 14px;border:1px solid var(--line);line-height:1.8}
+.sweep b{display:block}.sweep span{font-size:13.5px}
+.sweep.yes{border-color:#3e8573;background:rgba(91,185,140,.09)}.sweep.yes b{color:#c3e6dc}
+.sweep.no{background:#141c25}.sweep.no span{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -216,7 +222,7 @@ function fmtTime(iso){
 }
 function ind(x){return x.indicators||(x.technical||{})}
 /* ---- قراءة بيانات الإشارة (العقد المتفق عليه مع scanner) ---- */
-const stageOf=x=>x.stage||ST.WATCH;
+const stageOf=x=>String(x.stage||ST.WATCH).replace(/^[^\u0600-\u06FF]+/,'').trim()||ST.WATCH;
 const splitOf=x=>x.split||{};
 const daysOf=x=>splitOf(x).days_since??x.days_since_split??null;
 const baseOf=x=>x.support??null;
@@ -421,15 +427,22 @@ function newsHtml(x){
 function planHtml(x){
   const p=x.plan||{},sup=baseOf(x),ready=stageOf(x)===ST.READY;
   const entry=Number(p.entry_price||x.price),stop=p.stop_loss??(sup?sup*0.98:null);
-  const t1=p.target_1??x.resistance??null,t2=p.target_2??null;
+  let T=Array.isArray(x.targets)?x.targets:[];
+  if(!T.length&&x.resistance)T=[{level:x.resistance,label:'أقرب مقاومة'}];
   const g=v=>(v==null||!entry)?null:(Number(v)-entry)/entry*100;
-  const gs=v=>g(v)==null?'':'<small class="ok">'+pctFmt(g(v))+' من الدخول</small>';
+  const tb=T.map((t,i)=>'<div class="planbox'+(t.final?' final':'')+'"><span>'+(t.final?'🎯 ':'الهدف '+(i+1)+' · ')+esc(t.label)+'</span><b class="target">'+money(t.level)+'</b><small class="ok">'+pctFmt(g(t.level))+' من الدخول</small></div>').join('');
   return (ready?'':'<div class="muted">تُولّد الخطة كاملة عند «جاهز فنيًا» (الدرجة 80 أو أكثر). الدرجة الحالية '+esc(x.readiness_score)+'/100 — المستويات أدناه مبدئية.</div>')+
   '<div class="plan">'+
   '<div class="planbox"><span>'+(ready?'الدخول':'مستوى الدخول (خط العنق)')+'</span><b class="entry">'+money(ready?entry:(x.neckline??entry))+'</b><small class="muted">الدعم: '+money(sup)+'</small></div>'+
-  '<div class="planbox"><span>وقف الخسارة (الدعم -2%)</span><b class="stop">'+money(stop)+'</b><small class="no">'+(g(stop)==null?'':pctFmt(g(stop))+' من الدخول')+'</small></div>'+
-  '<div class="planbox"><span>الهدف الأول (أقرب مقاومة)</span><b class="target">'+money(t1)+'</b>'+gs(t1)+'</div>'+
-  '<div class="planbox"><span>الهدف الثاني</span><b class="target">'+money(t2)+'</b>'+gs(t2)+'</div></div>';
+  '<div class="planbox"><span>وقف الخسارة (الدعم -2%)</span><b class="stop">'+money(stop)+'</b><small class="no">'+(g(stop)==null?'':pctFmt(g(stop))+' من الدخول')+'</small></div>'+tb+'</div>'+
+  (T.length?'':'<div class="muted" style="margin-top:8px">لا توجد أهداف فوق السعر الحالي.</div>');
+}
+function sweepHtml(x){
+  const S=baseOf(x),w=x.sweep;
+  if(!x.liquidity_sweep)return '<div class="sweep no"><b>⚪ لا يوجد سحب سيولة</b><span>السعر لم يهبط تحت الدعم '+money(S)+' ثم يعود فوقه حتى الآن. وجوده ميزة إيجابية وليس شرطًا.</span></div>';
+  if(!w)return '<div class="sweep yes"><b>💧 حدث سحب سيولة تحت الدعم</b><span>هبط السعر لحظيًا تحت الدعم '+money(S)+' ثم أُغلق فوقه. (تاريخ الحدث يظهر بعد المسح القادم.)</span></div>';
+  const pct=S?((S-w.low)/S*100):null;
+  return '<div class="sweep yes"><b>💧 حدث سحب سيولة تحت الدعم ('+esc(w.tf)+')</b><span>بتاريخ '+esc(w.date)+': هبط السعر إلى '+money(w.low)+(pct!=null?' ('+num(pct)+'% تحت الدعم '+money(S)+')':'')+' ثم أُغلق عند '+money(w.close)+' فوق الدعم — ميزة إيجابية.</span></div>';
 }
 function checklistHtml(x){
   const items=checklistOf(x);
@@ -462,7 +475,7 @@ function showStock(ticker){
   inf('Float',fmtFloat(floatOf(x))+(x.float_exact===false?' <span class="muted">(حد أعلى)</span>':''))+
   inf('الأسهم المُصدَرة',fmtFloat(x.shares_outstanding))+
   inf('القيمة السوقية',x.market_cap==null?'—':'$'+(Number(x.market_cap)/1e6).toFixed(1)+'M')+'</div>'+
-  '<div class="note">مصدر الـ Float: '+esc(FLOAT_SRC_AR[x.float_source]||'—')+'</div>'+warn+cat+'</div></div>'+
+  '<div class="note">'+(x.float_source==='unknown'||!x.float_source?'تعذّر جلب Float والقيمة السوقية من Yahoo لهذا السهم في آخر مسح — تُحدَّث تلقائيًا في المسح القادم.':'مصدر الـ Float: '+esc(FLOAT_SRC_AR[x.float_source]||'—'))+'</div>'+warn+cat+'</div></div>'+
   '<div class="section"><h3>🎯 درجة الجاهزية — '+esc(x.readiness_score)+'/100 ('+esc(stageOf(x))+')</h3>'+checklistHtml(x)+''+
   ((x.missing_conditions||[]).length?'<div class="note"><b>ما ينقص السهم:</b><ul style="margin:6px 0 0;padding-right:18px">'+x.missing_conditions.map(m=>'<li>'+esc(m)+'</li>').join('')+'</ul></div>':'')+'</div>'+
   '<div class="section"><h3>🧱 الدعم والمقاومة والنمط</h3><div class="info-grid">'+
@@ -470,7 +483,7 @@ function showStock(ticker){
   inf('أقرب مقاومة مُختبرة',money(x.resistance))+inf('الارتداد نحو المقاومة',x.resistance_bounce_pct==null?'—':pctFmt(Number(x.resistance_bounce_pct)))+
   inf('النمط',esc(patternOf(x)))+inf('ثبات بعد الاختبار (2–5 جلسات)',esc(x.retest_hold_sessions??'—'))+
   inf('خط العنق',money(x.neckline))+inf('بعد خط العنق عن الدعم',x.neckline_distance_pct==null?'—':num(x.neckline_distance_pct)+'%')+'</div>'+
-  (x.liquidity_sweep?'<div class="banner cat" style="margin-top:12px"><b>💧 سحب سيولة تحت الدعم</b> — كُسر الدعم لحظيًا ثم أُغلق فوقه. ميزة إيجابية.</div>':'<div class="note">لم يحدث سحب سيولة تحت الدعم (ليس شرطًا).</div>')+'</div>'+
+  sweepHtml(x)+'</div>'+
   '<div class="section"><h3>📊 المؤشرات الفنية (يومي / 4 ساعات)</h3><div class="info-grid">'+
   inf('أقصى هبوط بعد التقسيم','-'+num(Math.abs(x.max_drawdown_pct??0))+'%','no')+inf('أدنى RSI (يومي)',num(x.rsi_min??t.rsi_min))+
   inf('RSI الحالي (يومي)',num(i.rsi))+inf('RSI الحالي (4h)',num(i.rsi_4h))+
@@ -488,7 +501,7 @@ function drawChart(x){
   const W=1200,H=380,L=62,R=22,T=25,B=45,hi=data.map(d=>d.high),lo=data.map(d=>d.low);
   const base=baseOf(x)||0;
   const min=Math.min(...lo,p.stop_loss||Infinity,base||Infinity)*.97;
-  const max=Math.max(...hi,(x.resistance||0),(x.neckline||0))*1.03;
+  const max=Math.max(...hi,(x.resistance||0),(x.neckline||0),(function(){const f=(x.final_target||{}).level;return f&&f<=x.price*2.2?f:0})())*1.03;
   const sx=i=>L+i*(W-L-R)/Math.max(1,data.length-1),sy=v=>T+(max-v)*(H-T-B)/(max-min);
   let svg='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none">';
   for(let k=0;k<5;k++){const y=T+k*(H-T-B)/4,v=max-k*(max-min)/4;svg+='<line x1="'+L+'" y1="'+y+'" x2="'+(W-R)+'" y2="'+y+'" stroke="#243140"/><text x="'+(L-9)+'" y="'+(y+4)+'" text-anchor="end" fill="#7a8a9b" font-size="11">'+v.toFixed(2)+'</text>'}
@@ -496,6 +509,7 @@ function drawChart(x){
   if(x.resistance)lines.push(['#7fb8d9',x.resistance,'المقاومة']);
   if(x.neckline)lines.push(['#d99560',x.neckline,'خط العنق']);
   if(stageOf(x)===ST.READY&&p.stop_loss)lines.push(['#e07a7a',p.stop_loss,'الوقف']);
+  if((x.final_target||{}).level)lines.push(['#a98bd0',x.final_target.level,'الهدف الأخير']);
   const ii=x.indicators||{};
   if(ii.vwap)lines.push(['#a98bd0',ii.vwap,'VWAP']);
   if(ii.ema20)lines.push(['#6fa8d6',ii.ema20,'EMA20']);
@@ -524,7 +538,7 @@ function makeDemo(){
      split:{date:day(o.d),ratio:o.r,days_since:o.d,close_on_split_day:o.c0},change_since_split_pct:+((last-o.c0)/o.c0*100).toFixed(1),
      max_drawdown_pct:o.dd,rsi_min:o.rsi,support:o.s,support_hold_sessions:Math.min(n*1.3|0,6),resistance:o.res,resistance_bounce_pct:n>=4?19:null,
      neckline:n>=7?o.res*.8:null,neckline_distance_pct:n>=7?9.5:null,pattern_type:n>=5?(o.ds?'قاع أعلى (دعم مزدوج)':'دعم رئيسي'):'—',
-     retest_hold_sessions:n>=6?3:null,liquidity_sweep:!!o.sw,stage:n>=8?ST.READY:n>=5?ST.SEMI:ST.WATCH,
+     retest_hold_sessions:n>=6?3:null,liquidity_sweep:!!o.sw,sweep:o.sw?{date:day(10),low:+(o.s*.97).toFixed(2),close:+(o.s*1.02).toFixed(2),tf:'يومي'}:null,targets:[{level:o.res,label:'مقاومة / خط العنق'},{level:+(o.res*1.2).toFixed(2),label:'فيبو 61.8%'},{level:+(o.res*1.5).toFixed(2),label:'الهدف الأخير — أعلى قمة بعد التقسيم',final:true}],final_target:{level:+(o.res*1.5).toFixed(2),date:day(o.d-2)},stage:n>=8?ST.READY:n>=5?ST.SEMI:ST.WATCH,
      readiness_score:ck.filter(c=>c.status).reduce((a,c)=>a+c.points,0),checklist:ck,
      missing_conditions:ck.filter(c=>!c.status).map(c=>c.rule),
      plan:n>=8?{entry_price:+last.toFixed(2),stop_loss:+(o.s*.98).toFixed(2),target_1:o.res,target_2:+(o.res*1.25).toFixed(2)}:{},
