@@ -266,7 +266,9 @@ def main():
            "stats": {"catalysts": sum(1 for s in signals if s["has_upcoming_catalyst"])}, "signals": signals,
            "diagnostics": {"symbols_total": total, **diag, "data_coverage_pct": round(100 * got / max(1, total)),
                            "reject_reasons": reasons, "near_misses": near}}
-    json.dump(clean(out), open("data.json", "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+    import os
+    for path in ["data.json"] + (["docs/data.json"] if os.path.isdir("docs") else []):
+        json.dump(clean(out), open(path, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
     print("signals", len(signals), "candidates", len(cand))
 
 
