@@ -16,6 +16,8 @@ RETEST_NEAR = 12.0             # العودة لاختبار الدعم تعني
 HIGHER_LOW = 3.0               # أعلى من الدعم بهذه النسبة = قاع أعلى (دعم مزدوج)
 HOLD_AFTER_MIN = 2             # جلسات الثبات بعد الاختبار
 NECK_MAX = 30.0                # أقصى بُعد لخط العنق عن الدعم (٪)
+EXT_NECK_MAX = 8.0             # أبعد من هذا (٪) فوق خط العنق = تجاوز منطقة الدخول
+BRK_AGE_MAX = 3                # مرّ على الاختراق أكثر من هذه الجلسات = متأخر
 NEAR = 0.02                    # "يقترب" من EMA20/VWAP = ضمن 2٪
 STAGES = [(80, "جاهز فنيًا"), (55, "شبه جاهز"), (30, "قيد المتابعة")]
 BATCH = 200
@@ -111,6 +113,11 @@ def evaluate(d, split_date, extra_sweep=False):
     if f["retest"] and H:
         ndist = (H / S2 - 1) * 100
         f["neck"] = last > H and ndist <= NECK_MAX; info["ndist"] = ndist
+    brk_age = ext_neck = None
+    if H:
+        below = np.where(cl <= H)[0]; brk_age = len(cl) - 1 - int(below[-1]) if len(below) else len(cl)
+        ext_neck = (last / H - 1) * 100
+    run_pct = (last / min(S, S2) - 1) * 100
     e20, e30, e50 = ema(d["Close"], 20), ema(d["Close"], 30), ema(d["Close"], 50)
     gi = i0 + ci
     below = d["Close"].iloc[gi] < min(e20.iloc[gi], e30.iloc[gi], e50.iloc[gi])
@@ -118,7 +125,7 @@ def evaluate(d, split_date, extra_sweep=False):
     vwap = float((tp * vol).sum() / vol.sum()) if vol.notna().any() else float(tp.mean())
     r20 = last >= e20.iloc[-1] * (1 - NEAR); rv = last >= vwap * (1 - NEAR)
     f["ema"] = bool(below and r20 and rv)
-    info.update(f=f, note=note, H=H, bounce=bounce, S2=S2, pattern=pattern, sweep=sweep, sweep_info=sweep_info, hold_after=hold_after,
+    info.update(f=f, note=note, brk_age=brk_age, ext_neck=ext_neck, run_pct=run_pct, H=H, bounce=bounce, S2=S2, pattern=pattern, sweep=sweep, sweep_info=sweep_info, hold_after=hold_after,
                 ema=(float(e20.iloc[-1]), float(e30.iloc[-1]), float(e50.iloc[-1])), vwap=vwap, r20=bool(r20), rv=bool(rv))
     return None, info
 
@@ -203,6 +210,13 @@ def fundamentals(tk):
             "shares_outstanding": so, "market_cap": mc}
 
 
+def is_moved(f, info):
+    """السهم اخترق خط العنق لكنه انطلق بالفعل: ابتعد عن خط العنق أكثر من EXT_NECK_MAX، أو مرّ على الاختراق أكثر من BRK_AGE_MAX جلسات."""
+    if not f.get("neck"): return False
+    return bool((info["ext_neck"] is not None and info["ext_neck"] > EXT_NECK_MAX)
+                or (info["brk_age"] is not None and info["brk_age"] > BRK_AGE_MAX))
+
+
 def make_targets(last, H, top, low, F):
     """أهداف موزعة فوق السعر: مقاومة/خط العنق ثم فيبو لموجة الهبوط، والأخير = أعلى قمة بعد التقسيم."""
     cands = [(H, "مقاومة / خط العنق")] if H and H > last * 1.02 else []
@@ -238,6 +252,7 @@ def build_signal(t, d, sdate, ratio, info, today):
     for th, name in STAGES:
         if score >= th: stage = name; break
     if stage == "جاهز فنيًا" and not (f["neck"] and f["retest"] and f["news"]): stage = "شبه جاهز"
+    if stage and is_moved(f, info): stage = "انطلق بالفعل"
     if not stage: return None, score
     note = info.get("note", {}); last = info["last"]
     checklist = [{"key": k, "rule": r, "points": p, "status": bool(f.get(k)), "note": note.get(k, "")} for k, r, p in CK]
@@ -250,7 +265,7 @@ def build_signal(t, d, sdate, ratio, info, today):
             "change_since_split_pct": info["chg"], "max_drawdown_pct": info["dd"], "rsi_min": info["rsi_min"], "support": S,
             "support_hold_sessions": info["hold"], "resistance": H, "resistance_bounce_pct": info.get("bounce"),
             "neckline": H if f["retest"] else None, "neckline_distance_pct": info.get("ndist"), "pattern_type": info["pattern"],
-            "retest_hold_sessions": info["hold_after"], "liquidity_sweep": sweep, "sweep": sweep_info, "targets": targets, "final_target": {"level": info["F"], "date": info["F_date"]}, "stage": stage, "readiness_score": score,
+            "retest_hold_sessions": info["hold_after"], "run_pct": info["run_pct"], "ext_neck_pct": info["ext_neck"], "breakout_age": info["brk_age"], "liquidity_sweep": sweep, "sweep": sweep_info, "targets": targets, "final_target": {"level": info["F"], "date": info["F_date"]}, "stage": stage, "readiness_score": score,
             "checklist": checklist, "missing_conditions": [r for k, r, _ in CK if not f.get(k)], "plan": plan,
             "indicators": {"rsi": info["rsi_now"], "rsi_4h": rsi4, "ema20": info["ema"][0], "ema30": info["ema"][1], "ema50": info["ema"][2],
                            "vwap": info["vwap"], "ema20_reclaim": info["r20"], "vwap_reclaim": info["rv"]},
