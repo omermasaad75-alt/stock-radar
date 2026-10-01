@@ -310,6 +310,18 @@ async function loadData(){
   const pick=ok[0];
   D=pick.d;
   D._source=pick.name;
+  /* استبعاد الأسهم التي حققت المطلوب: ثبتت على الدعم ثم صعدت 70% أو أكثر */
+  const peakRun=x=>{
+    if(x.peak_run_pct!=null)return x.peak_run_pct;
+    const sd=(x.split||{}).date,ch=(x.chart||[]).filter(b=>!sd||b.date>=sd);
+    if(ch.length<3)return 0;
+    let pk=0;ch.forEach((b,i)=>{if(b.close>ch[pk].close)pk=i});
+    let ci=pk;ch.forEach((b,i)=>{if(i>=pk&&b.close<ch[ci].close)ci=i});
+    return (Math.max(...ch.slice(ci).map(b=>b.high))/ch[ci].close-1)*100;
+  };
+  const before=(D.signals||[]).length;
+  D.signals=(D.signals||[]).filter(x=>peakRun(x)<70);
+  D._achieved=before-D.signals.length;D.count=D.signals.length;
   if(D.demo){const dn=document.getElementById('demoNote');if(dn)dn.style.display='block'}
   document.getElementById('updated').innerHTML='آخر تحديث: <b>'+esc(fmtTime(D.updated_at))+'</b> · الأسهم في الرادار: <b>'+esc(D.count??(D.signals||[]).length)+'</b> · محفزات قادمة: <b>'+esc((D.stats||{}).catalysts??0)+'</b> · المصدر: '+esc(pick.name)+(errs.length?' (تعذّر '+errs.length+' من '+loaders.length+' مصادر)':'')+' · بيانات الرادار من Yahoo Finance فقط';
   renderRules();renderDiag();render();route();return true;
@@ -336,6 +348,7 @@ const FLOAT_SRC_AR={
   unknown:'غير معروف'
 };
 const REASON_AR={
+  target_achieved:'حقق المطلوب: صعد 70% أو أكثر من الدعم بعد الثبات (مستبعد)',
   split_out_of_window:'التقسيم خارج نافذة 20–50 يومًا',
   rose_over_20:'صعد أكثر من 20% منذ إغلاق يوم التقسيم',
   no_strong_drop:'لا يوجد هبوط قوي بعد التقسيم',
@@ -350,7 +363,7 @@ function diagHtml(){
     ['لم يصعد أكثر من 20% منذ التقسيم',g.rise_ok_pass],['هبوط قوي + RSI تحت 30',g.drop_rsi_pass],['ثبات الدعم 5 جلسات',g.support_hold_pass]];
   let h='<div class="funnel">'+steps.map(([l,v])=>'<div class="fstep"><span>'+esc(l)+'</span><b>'+esc(v??0)+'</b></div>').join('')+'</div>';
   h+='<div class="note" style="margin:0 0 10px">تغطية بيانات Yahoo في آخر مسح: <b>'+esc(g.data_coverage_pct??0)+'%</b> · الفريمات: <b>يومي + 4 ساعات</b> (4h مُجمَّع من شموع الساعة)</div>';
-  const rr=g.reject_reasons||{};
+  const rr={...(g.reject_reasons||{})};if(D._achieved)rr.target_achieved=(rr.target_achieved||0)+D._achieved;
   const chips=Object.keys(rr).sort((a,b)=>rr[b]-rr[a]).map(k=>'<span class="rchip">'+esc(REASON_AR[k]||k)+': <b>'+esc(rr[k])+'</b></span>').join('');
   if(chips)h+='<div class="reasons">'+chips+'</div>';
   const nm=g.near_misses||[];
@@ -363,7 +376,7 @@ function renderRules(){
   const el=document.getElementById('rulesNote');if(!el)return;
   el.innerHTML='<b>شروط الدخول للرادار:</b> تقسيم عكسي قبل 20–50 يومًا · لم يصعد أكثر من 20% منذ إغلاق شمعة يوم التقسيم.'+
   ' <b>النقاط:</b> '+CK_DEF.map(c=>esc(c.rule.split(' (')[0])+' '+c.points).join(' · ')+'.'+
-  ' <b>المراحل:</b> 30–50 قيد المتابعة · 55–75 شبه جاهز · 80–100 جاهز فنيًا (اختراق حديث وما زال قريبًا من منطقة الدخول). <b>🚀 انطلق بالفعل:</b> اخترق خط العنق لكنه ابتعد أكثر من 8% فوق خط العنق أو مرّ على اختراقه أكثر من 3 جلسات — لا يُعد دخولًا جديدًا. <b>سحب السيولة</b> تحت الدعم ميزة إيجابية تُعرض عند حدوثها وليست شرطًا.'+
+  ' <b>المراحل:</b> 30–50 قيد المتابعة · 55–75 شبه جاهز · 80–100 جاهز فنيًا (اختراق حديث وما زال قريبًا من منطقة الدخول). <b>⛔ مستبعد نهائيًا:</b> سهم ثبت على الدعم ثم صعد 70% أو أكثر منه (حقق المطلوب). <b>🚀 انطلق بالفعل:</b> اخترق خط العنق لكنه ابتعد أكثر من 8% فوق خط العنق أو مرّ على اختراقه أكثر من 3 جلسات — لا يُعد دخولًا جديدًا. <b>سحب السيولة</b> تحت الدعم ميزة إيجابية تُعرض عند حدوثها وليست شرطًا.'+
   ' <b>التحليل:</b> على الفريم اليومي و4 ساعات.';
 }
 function setFilter(el){
