@@ -272,7 +272,7 @@ function wDetail(x){return x.warning_detail||'🚨 تحذير: خافض لقيم
 function cDetail(x){return x.catalyst_detail||('📅 '+((((x.news||{}).catalysts||[])[0]||{}).type||'محفز مستقبلي'))}
 
 async function fetchJson(url){
-  const r=await fetch(url,{cache:'no-store',headers:{'Accept':'application/json'}});
+  const r=await fetch(url,{cache:'no-store'});
   if(!r.ok)throw new Error('HTTP '+r.status);
   const j=await r.json();
   if(!j||!Array.isArray(j.signals))throw new Error('صيغة البيانات غير صحيحة');
@@ -299,6 +299,7 @@ async function loadData(){
     ['النسخة المنشورة',()=>fetchJson('data.json?x='+stamp)],
     ['المستودع (raw)',()=>fetchJson('https://raw.githubusercontent.com/omermasaad75-alt/stock-radar/main/data.json?x='+stamp)],
     ['المستودع docs (raw)',()=>fetchJson('https://raw.githubusercontent.com/omermasaad75-alt/stock-radar/main/docs/data.json?x='+stamp)],
+    ['jsDelivr',()=>fetchJson('https://cdn.jsdelivr.net/gh/omermasaad75-alt/stock-radar@main/docs/data.json?x='+stamp)],
     ['GitHub API',()=>fetchGithubApi()]
   ];
   const results=await Promise.all(loaders.map(async([name,load])=>{
