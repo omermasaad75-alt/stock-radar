@@ -1,13 +1,17 @@
 name: scan
 
 on:
-  schedule:
-    - cron: "0 12 * * 1-5"    # قبل افتتاح السوق الأمريكي
-    - cron: "30 21 * * 1-5"   # بعد إغلاق السوق الأمريكي
+  schedule:            # توقيت UTC، أيام الأسبوع. الأوقات متباعدة عمدًا لتعويض أي تشغيل تُسقطه GitHub
+    - cron: "23 7 * * 1-5"
+    - cron: "41 11 * * 1-5"
+    - cron: "53 14 * * 1-5"
+    - cron: "17 18 * * 1-5"
+    - cron: "37 21 * * 1-5"
   workflow_dispatch:
 
 permissions:
   contents: write
+  pages: write
 
 concurrency:
   group: scan
@@ -19,21 +23,50 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+
+      - name: Check freshness
+        id: fresh
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          python3 - <<'PY'
+          import json, os, datetime as dt
+          skip = False
+          try:
+              t = json.load(open("data.json"))["updated_at"]
+              age = (dt.datetime.now(dt.timezone.utc) - dt.datetime.fromisoformat(t)).total_seconds() / 3600
+              skip = os.environ.get("EVENT") == "schedule" and age < 5
+              print("data age (hours):", round(age, 1), "| skip:", skip)
+          except Exception as e:
+              print("no usable data.json:", e)
+          open(os.environ["GITHUB_OUTPUT"], "a").write("skip=" + ("true" if skip else "false") + "\n")
+          PY
+
       - uses: actions/setup-python@v5
+        if: steps.fresh.outputs.skip != 'true'
         with:
           python-version: "3.11"
           cache: pip
-      - run: pip install -r requirements.txt
-      - run: python scanner.py
+
+      - name: Install
+        if: steps.fresh.outputs.skip != 'true'
+        run: pip install -r requirements.txt
+
+      - name: Scan
+        if: steps.fresh.outputs.skip != 'true'
+        run: python scanner.py
+
       - name: Commit data.json
+        if: steps.fresh.outputs.skip != 'true'
         run: |
           git config user.name "radar-bot"
           git config user.email "radar-bot@users.noreply.github.com"
           git add data.json
           [ -f docs/data.json ] && git add docs/data.json || true
           git diff --cached --quiet || (git commit -m "data: update $(date -u '+%F %H:%M')" && git push)
-                - name: Trigger Pages rebuild
-        if: always()
+
+      - name: Trigger Pages rebuild
+        if: always() && steps.fresh.outputs.skip != 'true'
         run: |
           curl -s -X POST \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
