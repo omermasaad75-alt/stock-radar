@@ -28,7 +28,7 @@
     ["retest", "إعادة اختبار الدعم / قاع أعلى", 15], ["hold_after", "ثبات بعد الاختبار", 10],
     ["neck", "اختراق خط العنق", 10], ["ema", "استعادة EMA20 وVWAP", 10], ["news", "مراجعة التحذيرات الإخبارية", 10]
   ].map(([key,label,weight]) => ({key,label,weight,core:true}));
-  let D = null, items = [], activeTab = "radar", selected = null, lastFocus = null;
+  let D = null, items = [], activeTab = "radar", selected = null, lastFocus = null, savedScrollY = 0;
   let fetching = false, offline = false, loadError = false, auto = true, nextRefresh = Date.now() + REFRESH_MS;
   let pane = "cmf", timeframe = "1D", baseZoom = false, overlays = true, hoverIndex = null, chartObserver = null, drawFrame = null;
   const filters = {stage:"all", liquidity:"all", score:0, dormant:false, sweep:false, sort:"default", ascending:false};
@@ -302,13 +302,14 @@
     const scroll=keep ? $("dbody").scrollTop : 0;
     const oldFocus=keep && $("drawer").contains(document.activeElement) ? {id:document.activeElement.id,pane:document.activeElement.dataset.pane,timeframe:document.activeElement.dataset.timeframe} : null;
     if(!keep && !selected) lastFocus=document.activeElement;
-    if(!keep) { pane="cmf"; timeframe="1D"; baseZoom=false; hoverIndex=null; overlays=true; }
+    if(!keep) { pane="cmf"; timeframe="1D"; baseZoom=false; hoverIndex=null; overlays=true; savedScrollY=window.scrollY||document.documentElement.scrollTop||0; }
     selected=x.ticker;
     if(timeframe==='4H' && !x.chart_4h.length) timeframe='1D';
     const l=x.liquidity, b=x.dormant_base, d=l.divergence, r=x.risk;
     const dclass=d.direction==='positive' ? 'positive' : d.direction==='negative' ? 'negative' : '';
-    $("dhead").innerHTML=`<div style="flex:1;min-width:0"><div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap"><h2 id="dTitle" class="big" style="margin:0">${esc(x.ticker)}</h2>${stageBadge(x)}<span class="rs-tag">RS ${esc(x.split?.ratio || '—')}</span></div><div class="co">${esc(x.company || 'اسم الشركة غير متاح')}</div><div class="d-summary"><span class="num price">${money(x.price)}</span><span class="num neg">${valid(x.max_drawdown_pct) ? '−'+n(x.max_drawdown_pct,1)+'% من القمة' : '—'}</span><span class="small-line">آخر يومي <b class="num">${esc(x.chart.at(-1)?.date?.slice(0,10) || '—')}</b></span></div></div><div>${grade(x)}<div class="small-line num">${i0(x.composite_score)} /100</div></div><div class="drawer-actions"><button class="btn theme-toggle" id="drawerThemeBtn" type="button" data-theme-toggle aria-label="الوضع الفاتح" aria-pressed="false" title="التبديل إلى الوضع الفاتح"><span class="theme-icon" aria-hidden="true"></span><span class="theme-label">داكن</span></button><button class="xbtn" id="closeDrawerBtn" aria-label="إغلاق تحليل السهم">×</button></div>`;
-    $("dbody").innerHTML=`<div class="grid3">${metric('الدعم المرجعي',money(x.support))}${metric('المقاومة / خط العنق',money(x.neckline || x.resistance))}${metric('ثبات الدعم',unit(x.support_hold_sessions,' جلسات',0))}${metric('RSI اليومي',n(x.indicators.rsi,1),'أدنى قراءة '+n(x.rsi_min,1))}${metric('RSI 4 ساعات',n(x.indicators.rsi_4h,1),'قراءة محفوظة / غير مستنتجة')}${metric('Float',(!x.float_exact && valid(x.float) ? '≈ ' : '')+compact(x.float),x.float_exact ? 'فلوت Yahoo' : 'بديل من الأسهم القائمة / غير متاح')}</div>
+    $("dhead").innerHTML=`<h2 id="dTitle" class="big" style="margin:0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis">${esc(x.ticker)}</h2><div class="drawer-actions"><button class="btn theme-toggle" id="drawerThemeBtn" type="button" data-theme-toggle aria-label="الوضع الفاتح" aria-pressed="false" title="التبديل إلى الوضع الفاتح"><span class="theme-icon" aria-hidden="true"></span><span class="theme-label">داكن</span></button><button class="xbtn" id="closeDrawerBtn" type="button" aria-label="إغلاق تحليل السهم">×</button></div>`;
+    $("dbody").innerHTML=`<div class="d-summary-bar"><div style="flex:1;min-width:0"><div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">${stageBadge(x)}<span class="rs-tag">RS ${esc(x.split?.ratio || '—')}</span></div><div class="co">${esc(x.company || 'اسم الشركة غير متاح')}</div><div class="d-summary"><span class="num price">${money(x.price)}</span><span class="num neg">${valid(x.max_drawdown_pct) ? '−'+n(x.max_drawdown_pct,1)+'% من القمة' : '—'}</span><span class="small-line">آخر يومي <b class="num">${esc(x.chart.at(-1)?.date?.slice(0,10) || '—')}</b></span></div></div><div>${grade(x)}<div class="small-line num">${i0(x.composite_score)} /100</div></div></div>
+      <div class="grid3">${metric('الدعم المرجعي',money(x.support))}${metric('المقاومة / خط العنق',money(x.neckline || x.resistance))}${metric('ثبات الدعم',unit(x.support_hold_sessions,' جلسات',0))}${metric('RSI اليومي',n(x.indicators.rsi,1),'أدنى قراءة '+n(x.rsi_min,1))}${metric('RSI 4 ساعات',n(x.indicators.rsi_4h,1),'قراءة محفوظة / غير مستنتجة')}${metric('Float',(!x.float_exact && valid(x.float) ? '≈ ' : '')+compact(x.float),x.float_exact ? 'فلوت Yahoo' : 'بديل من الأسهم القائمة / غير متاح')}</div>
       <article class="liq-card ${dclass}"><header><h3>كشف السيولة التجميعية</h3>${divBadge(x)}</header><p>${esc(d.summary || 'لا تحليل سيولة محفوظ')}</p>${d.type!=='unavailable' && d.type!=='none' ? `<div class="comparison"><span class="num">السعر ${pct(d.price_change_pct)}</span><span class="num">ΔCMF ${signed(d.cmf_delta)}</span><span class="num">ΔMFI ${signed(d.mfi_delta,1)}</span><span>${esc(d.strength || '')} · ${esc((d.indicators_involved || []).join(' / '))}</span></div><p>${esc(d.detail)}</p>` : `<p>${esc(l.data_quality?.note || d.detail || '')}</p>`}<div class="grid3" style="margin-top:11px">${metric('CMF(20)',signed(l.cmf),l.cmf_label || '')}${metric('CMF(10) السريع',signed(l.cmf_10),'قراءة منفصلة عن CMF(20)')}${metric('CMF(20) · 4H',signed(l.cmf_4h))}${metric('MFI(14)',n(l.mfi,1),'أدنى '+n(l.mfi_min,1))}${metric('درجة التجميع',unit(l.accumulation_score,' /100',0),'تقييم آلي غير مُختبر تاريخيًا')}${metric('حالة السيولة',l.accumulation_state || 'غير متاحة','',true)}</div></article>
       <section class="sect"><h3>الشموع والارتكاز والانحراف</h3><div class="chart-controls"><div class="pane-tabs" id="timeframeTabs"><button class="pane-tab ${timeframe==='1D' ? 'on' : ''}" data-timeframe="1D" aria-pressed="${timeframe==='1D'}">يومي · 1D</button><button class="pane-tab ${timeframe==='4H' ? 'on' : ''}" data-timeframe="4H" aria-pressed="${timeframe==='4H'}" ${x.chart_4h.length ? '' : 'disabled title="شموع 4 ساعات غير محفوظة؛ تتوفر بعد مسح جديد"'}>4 ساعات · 4H</button></div><div class="chart-options"><label><input type="checkbox" id="showOverlays" ${overlays ? 'checked' : ''}> EMA / VWAP</label><button class="pane-tab ${baseZoom ? 'on' : ''}" id="zoomBase" aria-pressed="${baseZoom}">تقريب القاعدة</button></div></div><div class="pane-tabs" id="paneTabs"></div><div class="chart-box"><div class="ohlc" id="ohlc"></div><canvas class="chart" id="cPrice" role="img" aria-label="رسم الشموع والدعم والمقاومة وخط الانحراف"></canvas><canvas class="volume" id="cVolume" role="img" aria-label="أحجام التداول الفعلية"></canvas><canvas class="pane" id="cPane" role="img" aria-label="رسم مؤشر السيولة المحدد وخط الانحراف"></canvas><div class="legend" id="legend"></div></div><p class="chart-notice" id="chartNotice"></p></section>
       <section class="sect"><h3>تحليل قاعدة الارتكاز الخاملة</h3><p class="note">${esc(b.dormancy_label || 'بيانات القاعدة غير متاحة')} · لا يُفترض أن كل سهم عند القاع قد شكّل ارتكازًا.</p><div class="grid3">${metric('درجة جودة الارتكاز',unit(b.dormancy_score,' /100',0))}${metric('نطاق آخر 10 شموع',unit(b.base_range_pct,'%'))}${metric('انكماش التذبذب',unit(b.volatility_compression_pct,'%'))}${metric('حجم القاعدة / ما قبلها',unit(b.volume_dryup_ratio,'×',2),'جفاف الحجم عند ≤ 0.65×')}${metric('لمسات الدعم',i0(b.support_touches))}${metric('البعد عن الدعم',pct(b.distance_to_support_pct))}${metric('النمط السعري المحتمل',b.pattern || '—','',true)}${metric('منذ التقسيم',unit(x.split?.days_since,' يومًا',0),x.split?.date || '')}${metric('ثبات بعد الاختبار',unit(x.retest_hold_sessions,' جلسات',0))}</div></section>
@@ -319,7 +320,9 @@
       <section class="sect"><h3>الأخبار والمخاطر المحفوظة</h3>${newsHTML(x)}</section><p class="note">${esc(x.analysis_quality?.note || '')}<br>الأسعار ومؤشرات الجاهزية من آخر مسح محفوظ. المؤشرات الحجمية تعتمد على الحجم الفعلي فقط.</p>`;
     window.RadarTheme?.syncControls();
     $("drawer").inert=false; $("drawer").removeAttribute("inert"); $("drawer").setAttribute("aria-hidden","false");
-    $("drawer").classList.add("on"); $("scrim").classList.add("on"); document.body.style.overflow="hidden";
+    $("drawer").classList.add("on"); $("scrim").classList.add("on");
+    document.body.style.overflow="hidden";
+    if(!keep){document.body.style.position="fixed";document.body.style.top=`-${savedScrollY}px`;document.body.style.width="100%";}
     $("main").inert=true; document.querySelector(".topbar").inert=true;
     $("dbody").scrollTop=scroll;
     $("closeDrawerBtn").addEventListener("click",closeDrawer);
@@ -351,11 +354,15 @@
     $("drawer").classList.remove("on"); $("scrim").classList.remove("on");
     $("drawer").setAttribute("aria-hidden","true"); $("drawer").inert=true; $("drawer").setAttribute("inert","");
     document.body.style.overflow="";
+    document.body.style.position="";
+    document.body.style.top="";
+    document.body.style.width="";
     $("main").inert=false; document.querySelector(".topbar").inert=false;
     const focusWasConnected=lastFocus?.isConnected;
     if(D) renderGrid();
-    if(focusWasConnected && lastFocus?.isConnected) lastFocus.focus();
-    else Array.from(document.querySelectorAll("[data-open]")).find(b=>b.dataset.open===closingTicker && b.getClientRects().length>0)?.focus();
+    try{window.scrollTo(0,savedScrollY);}catch(_){}
+    if(focusWasConnected && lastFocus?.isConnected) lastFocus.focus({preventScroll:true});
+    else {const fb=Array.from(document.querySelectorAll("[data-open]")).find(b=>b.dataset.open===closingTicker && b.getClientRects().length>0);if(fb)fb.focus({preventScroll:true});}
     lastFocus=null;
   }
   const PANES=[['cmf','CMF (20 / 10)'],['mfi','MFI (14)'],['rsi','RSI (14)'],['obv','OBV'],['macd','MACD']];

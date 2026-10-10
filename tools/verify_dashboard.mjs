@@ -33,6 +33,7 @@ async function setup(entry, url, options = {}) {
       else if (options.savedTheme !== undefined) w.localStorage.setItem('radar-theme',options.savedTheme);
       Object.defineProperty(w,'devicePixelRatio',{value:2});
       w.ResizeObserver=class {observe(){} disconnect(){}};
+      Object.defineProperty(w,'scrollTo',{value:()=>{},writable:true,configurable:true});
       w.fetch=async input=>{
         const endpoint=String(input);requests.push(endpoint);
         if(fail)throw new Error('Intentional offline test');
