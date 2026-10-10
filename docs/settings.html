@@ -1,6 +1,44 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>إعدادات الرادار</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>
-:root{--bg:#0b1119;--panel:#111b27;--line:#26374a;--text:#e8eff7;--muted:#91a1b4;--blue:#4d8dff;--green:#1fc58c}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Cairo,system-ui,sans-serif}.wrap{max-width:1000px;margin:auto;padding:28px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px}.title{font-size:24px;font-weight:800}.sub,.muted{color:var(--muted);font-size:12px}.btn{display:inline-block;text-decoration:none;color:#fff;background:#162333;border:1px solid var(--line);border-radius:9px;padding:9px 13px}.btn:hover{border-color:var(--blue)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}.card h2{font-size:16px;margin:0 0 14px}.row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #1e2d3d;font-size:13px}.row:last-child{border-bottom:0}.row span{color:var(--muted)}.row b{color:#fff}.path{line-height:2.2;color:#c6d3e0;font-size:13px}.pill{display:inline-block;color:#9be6ca;background:#12392f;border:1px solid #2d7d67;border-radius:99px;padding:3px 9px;font-size:11px}@media(max-width:700px){.wrap{padding:18px 13px}.top{align-items:flex-start;flex-direction:column}.grid{grid-template-columns:1fr}}
-</style></head>
-<body><div class="wrap"><header class="top"><div><div class="title">إعدادات رادار التقسيم العكسي</div><div class="sub">معلومات النظام والاستراتيجية — منفصلة عن شاشة الرصد الرئيسية</div></div><a class="btn" href="index.html">العودة إلى الرادار</a></header><div class="grid"><section class="card"><h2>حالة النظام</h2><div class="row"><span>مصدر الأسعار والشموع</span><b>Yahoo Finance</b></div><div class="row"><span>التحديث الآلي</span><b>GitHub Actions</b></div><div class="row"><span>الفريمات المستخدمة</span><b>يومي + 4 ساعات</b></div><div class="row"><span>حالة المنصة</span><b class="pill">نشطة</b></div></section><section class="card"><h2>استراتيجية الرصد</h2><div class="path">تقسيم عكسي خلال 20–50 يومًا<br>هبوط قوي وتشبع بيعي<br>ثبات الدعم<br>اختبار المقاومة<br>إعادة اختبار الدعم<br>اختراق خط العنق واستعادة EMA20 وVWAP</div></section><section class="card"><h2>مراحل الإشارة</h2><div class="row"><span>جاهز فنيًا</span><b>80–100 نقطة</b></div><div class="row"><span>شبه جاهز</span><b>55–75 نقطة</b></div><div class="row"><span>قيد المتابعة</span><b>30–50 نقطة</b></div><div class="row"><span>تحذيرات</span><b>أخبار سلبية أو مخاطر حديثة</b></div></section><section class="card"><h2>تنبيه الاستخدام</h2><p class="muted">النتائج آلية لغرض الرصد الأولي وليست توصية استثمارية. راجع البيانات والخطة يدويًا قبل اتخاذ أي قرار.</p></section></div></div></body></html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0a0e17">
+  <title>إعدادات ومنهجية الرادار</title>
+  <script src="./theme.js"></script>
+  <link rel="stylesheet" href="./terminal.css">
+</head>
+<body>
+<main class="wrap" style="max-width:1000px">
+  <header class="terminal-heading">
+    <div><span class="eyebrow">SYSTEM / STRATEGY</span><h1>رادار التقسيم العكسي — معلومات النظام</h1></div>
+    <div class="settings-actions">
+      <button class="btn theme-toggle" id="themeBtn" type="button" data-theme-toggle aria-label="الوضع الفاتح" aria-pressed="false" title="التبديل إلى الوضع الفاتح"><span class="theme-icon" aria-hidden="true"></span><span class="theme-label">داكن</span></button>
+      <a class="btn action-link" href="./index.html">العودة إلى الطرفية</a>
+    </div>
+  </header>
+  <div class="two-col">
+    <section class="card"><header><h2>البيانات والتشغيل</h2></header><div class="body">
+      <div class="lvl"><span>الشموع والأسعار والحجم</span><b>Yahoo Finance</b></div>
+      <div class="lvl"><span>الفريمات</span><b>يومي + 4 ساعات</b></div>
+      <div class="lvl"><span>المسح الخلفي</span><b>GitHub Actions</b></div>
+      <div class="lvl"><span>تحديث الواجهة</span><b>قراءة الملف كل 60 ثانية</b></div>
+      <p class="note">الأسعار ليست لحظية. زر تحديث النتائج لا يُشغّل مسحًا؛ التشغيل اليدوي من Actions على فرع يحتوي النسخة الجديدة.</p>
+    </div></section>
+    <section class="card"><header><h2>السيولة والتصنيف</h2></header><div class="body">
+      <div class="lvl"><span>CMF القياسي</span><b class="num">20 / 10</b></div>
+      <div class="lvl"><span>MFI</span><b class="num">14</b></div>
+      <div class="lvl"><span>الدرجة المركبة</span><b>70% جاهزية + 30% تأكيد</b></div>
+      <p class="note">الحجم المفقود لا يُستنتج من السعر أو الفلوت. القراءات تظهر «غير متاحة»، والتصنيف يظل مبدئيًا عند نقص التأكيدات. تفاصيل المعايير في تبويب الشروط والمنهجية.</p>
+    </div></section>
+  </div>
+  <section class="card summary-panels"><header><h2>المظهر</h2></header><div class="body">
+    <p class="method-text">اختر الوضع الداكن أو الفاتح من زر المظهر. يُحفظ اختيارك على هذا الجهاز ويُطبّق على الطرفية وصفحة الإعدادات، بما فيها الشموع ومؤشرات السيولة. التبديل لا يغيّر الفلاتر أو بيانات السوق.</p>
+  </div></section>
+  <section class="card summary-panels"><header><h2>مسار الاستراتيجية</h2></header><div class="body">
+    <p class="method-text">تقسيم عكسي خلال 20–50 يومًا ← هبوط قوي وتشبع RSI ← ثبات الدعم ← اختبار المقاومة ← إعادة الاختبار ← اختراق خط العنق واستعادة EMA20 وVWAP.</p>
+    <p class="note">أداة رصد آلية وليست توصية. لا أوامر تداول أو أرباح مؤكدة. فحص الأخبار محدود، وأسهم التقسيم عالية المخاطر وقد تتعرض للتخفيف والفجوات.</p>
+  </div></section>
+</main>
+</body>
+</html>

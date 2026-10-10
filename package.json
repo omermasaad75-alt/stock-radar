@@ -1,0 +1,12 @@
+{
+  "name": "stock-radar-terminal",
+  "private": true,
+  "version": "3.0.0",
+  "description": "Offline verification tools for the static Arabic radar dashboard",
+  "scripts": {
+    "test": "node tools/verify_dashboard.mjs",
+    "sync": "python3 tools/sync_dashboard.py --write",
+    "check": "node --check docs/theme.js && node --check docs/terminal.js && node --check docs/sw.js && python3 tools/sync_dashboard.py && npm test"
+  },
+  "devDependencies": {"jsdom": "^26.1.0"}
+}
