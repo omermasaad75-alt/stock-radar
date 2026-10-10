@@ -2,7 +2,14 @@
 """رادار التقسيم العكسي — ارتكاز الدعم.
 يبحث عن أسهم قُسّمت عكسيًا قبل 20–50 يومًا، ويقيّمها على فريم اليومي و4 ساعات، ويكتب data.json للداشبورد.
 البيانات من Yahoo Finance فقط. للتعديل على الشروط غيّر الثوابت بالأسفل."""
+import argparse
 import datetime as dt, io, json, math, re, time, urllib.request
+from pathlib import Path
+
+from radar.analytics import (
+    CMF_PERIOD, CMF_FAST, MFI_PERIOD, CONFIRM_DEFS, STATE_LABELS,
+    anchored_vwap, attach_analytics, frame_from_bars, rsi, ema,
+)
 import numpy as np, pandas as pd, yfinance as yf
 
 # ───────── الشروط (قابلة للتعديل) ─────────
@@ -54,15 +61,6 @@ def universe():
     except FileNotFoundError:
         pass
     return sorted(s)
-
-
-def rsi(c, n=14):
-    d = c.diff(); ru = d.clip(lower=0).ewm(alpha=1 / n, adjust=False).mean(); rd = (-d.clip(upper=0)).ewm(alpha=1 / n, adjust=False).mean()
-    out = 100 - 100 / (1 + ru / rd.replace(0, np.nan)); out[rd == 0] = 100
-    return out
-
-
-def ema(c, n): return c.ewm(span=n, adjust=False).mean()
 
 
 def evaluate(d, split_date, extra_sweep=False):
@@ -124,9 +122,9 @@ def evaluate(d, split_date, extra_sweep=False):
     e20, e30, e50 = ema(d["Close"], 20), ema(d["Close"], 30), ema(d["Close"], 50)
     gi = i0 + ci
     below = d["Close"].iloc[gi] < min(e20.iloc[gi], e30.iloc[gi], e50.iloc[gi])
-    tp = (post["High"] + post["Low"] + post["Close"]) / 3; vol = post["Volume"].replace(0, np.nan)
-    vwap = float((tp * vol).sum() / vol.sum()) if vol.notna().any() else float(tp.mean())
-    r20 = last >= e20.iloc[-1] * (1 - NEAR); rv = last >= vwap * (1 - NEAR)
+    vw = anchored_vwap(post)
+    vwap = float(vw.iloc[-1]) if pd.notna(vw.iloc[-1]) else None
+    r20 = last >= e20.iloc[-1] * (1 - NEAR); rv = vwap is not None and last >= vwap * (1 - NEAR)
     f["ema"] = bool(below and r20 and rv)
     info.update(f=f, note=note, brk_age=brk_age, ext_neck=ext_neck, run_pct=run_pct, H=H, bounce=bounce, S2=S2, pattern=pattern, sweep=sweep, sweep_info=sweep_info, hold_after=hold_after,
                 ema=(float(e20.iloc[-1]), float(e30.iloc[-1]), float(e50.iloc[-1])), vwap=vwap, r20=bool(r20), rv=bool(rv))
@@ -134,13 +132,15 @@ def evaluate(d, split_date, extra_sweep=False):
 
 
 def tf4h(t):
-    """فريم 4 ساعات: تجميع شموع الساعة. يرجع (rsi4h, أدنى سعر خلال سحب سيولة تحت الدعم لاحقًا يُفحص بـ sweep4h)."""
+    """فريم 4 ساعات من أحجام ساعة فعلية؛ بداية تجميع الجلسة 09:30 نيويورك."""
     try:
         h = yf.download(t, period="60d", interval="1h", progress=False, auto_adjust=True)
         if isinstance(h.columns, pd.MultiIndex): h.columns = h.columns.get_level_values(0)
         h = h.dropna(subset=["Close"])
-        return h.resample("4h", origin="start_day", offset="1h30min").agg(
-            {"Open": "first", "High": "max", "Low": "min", "Close": "last", "Volume": "sum"}).dropna()
+        if h.index.tz is not None:
+            h.index = h.index.tz_convert("America/New_York")
+        return h.resample("4h", origin="start_day", offset="9h30min").agg(
+            {"Open": "first", "High": "max", "Low": "min", "Close": "last", "Volume": lambda v: v.sum() if v.notna().all() else np.nan}).dropna(subset=["Open", "High", "Low", "Close"])
     except Exception as e:
         print("4h", t, e); return None
 
@@ -209,7 +209,7 @@ def fundamentals(tk):
         except Exception as e:
             print("fast_info", e)
     fl = fl or so
-    return {"float": fl, "float_exact": bool(i.get("floatShares")), "float_source": "yahoo_float" if i.get("floatShares") else ("yahoo_outstanding" if so else "unknown"),
+    return {"company": i.get("shortName") or i.get("longName") or "", "float": fl, "float_exact": bool(i.get("floatShares")), "float_source": "yahoo_float" if i.get("floatShares") else ("yahoo_outstanding" if so else "unknown"),
             "shares_outstanding": so, "market_cap": mc}
 
 
@@ -238,7 +238,7 @@ def make_targets(last, H, top, low, F):
 def clean(o):
     if isinstance(o, dict): return {k: clean(v) for k, v in o.items()}
     if isinstance(o, (list, tuple)): return [clean(v) for v in o]
-    if isinstance(o, (np.floating, float)): return None if (math.isnan(o) or math.isinf(o)) else round(float(o), 4)
+    if isinstance(o, (np.floating, float)): return None if (math.isnan(o) or math.isinf(o)) else round(float(o), 6)
     if isinstance(o, np.integer): return int(o)
     if isinstance(o, np.bool_): return bool(o)
     return o
@@ -264,7 +264,7 @@ def build_signal(t, d, sdate, ratio, info, today):
     plan = {"entry_price": round(last, 4), "stop_loss": round(low_ref * 0.98, 4)} if stage == "جاهز فنيًا" else {}
     ch = d.tail(30)
     chart = [{"date": str(i.date()), "open": r.Open, "high": r.High, "low": r.Low, "close": r.Close} for i, r in ch.iterrows()]
-    return {"ticker": t, "price": last, **fu, "split": {"date": str(sdate.date()), "ratio": ratio, "days_since": (today - sdate.date()).days, "close_on_split_day": info["c0"]},
+    signal = {"ticker": t, "price": last, **fu, "split": {"date": str(sdate.date()), "ratio": ratio, "days_since": (today - sdate.date()).days, "close_on_split_day": info["c0"]},
             "change_since_split_pct": info["chg"], "max_drawdown_pct": info["dd"], "rsi_min": info["rsi_min"], "support": S,
             "support_hold_sessions": info["hold"], "resistance": H, "resistance_bounce_pct": info.get("bounce"),
             "neckline": H if f["retest"] else None, "neckline_distance_pct": info.get("ndist"), "pattern_type": info["pattern"],
@@ -272,12 +272,15 @@ def build_signal(t, d, sdate, ratio, info, today):
             "checklist": checklist, "missing_conditions": [r for k, r, _ in CK if not f.get(k)], "plan": plan,
             "indicators": {"rsi": info["rsi_now"], "rsi_4h": rsi4, "ema20": info["ema"][0], "ema30": info["ema"][1], "ema50": info["ema"][2],
                            "vwap": info["vwap"], "ema20_reclaim": info["r20"], "vwap_reclaim": info["rv"]},
-            "news": {"warnings": warns, "catalysts": cats}, "has_warning": bool(warns), "has_upcoming_catalyst": bool(cats), "chart": chart}, score
+            "news": {"warnings": warns, "catalysts": cats}, "has_warning": bool(warns), "has_upcoming_catalyst": bool(cats), "chart": chart}
+    return attach_analytics(signal, d, h4), score
 
 
 def main():
     today = dt.datetime.now(dt.timezone.utc).date()
     syms = universe(); print("universe", len(syms))
+    if not syms:
+        raise RuntimeError("Universe unavailable; previous data.json preserved")
     cand, total, got = [], 0, 0
     diag = {"split_window_pass": 0, "rise_ok_pass": 0, "drop_rsi_pass": 0, "support_hold_pass": 0}; reasons = {}; near = []
     for i in range(0, len(syms), BATCH):
@@ -315,17 +318,93 @@ def main():
                              "change_since_split_pct": info.get("chg", 0), "float": fundamentals(yf.Ticker(t))["float"], "reason": reason})
         except Exception as e:
             print("eval", t, e); reasons["error"] = reasons.get("error", 0) + 1
-    order = {s[1]: i for i, s in enumerate(STAGES)}
-    signals.sort(key=lambda x: -x["readiness_score"])
-    out = {"updated_at": dt.datetime.now(dt.timezone.utc).isoformat(), "count": len(signals),
-           "stats": {"catalysts": sum(1 for s in signals if s["has_upcoming_catalyst"])}, "signals": signals,
-           "diagnostics": {"symbols_total": total, **diag, "data_coverage_pct": round(100 * got / max(1, total)),
-                           "reject_reasons": reasons, "near_misses": near}}
-    import os
-    for path in ["data.json"] + (["docs/data.json"] if os.path.isdir("docs") else []):
-        json.dump(clean(out), open(path, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+    if not got:
+        raise RuntimeError("No Yahoo frames fetched; previous data.json preserved")
+    if cand and reasons.get("error", 0) == len(cand):
+        raise RuntimeError("All candidate evaluations failed; previous data.json preserved")
+    diag = {"symbols_total": total, **diag, "data_coverage_pct": round(100 * got / max(1, total)),
+            "reject_reasons": reasons, "near_misses": near}
+    save_payload(build_payload(signals, diag))
     print("signals", len(signals), "candidates", len(cand))
 
 
+def build_payload(signals, diagnostics, updated_at=None):
+    """Do not duplicate signals or fabricate coverage when unavailable."""
+    signals = sorted(signals, key=lambda s: (-s.get("readiness_score", 0), -s.get("confirm_score", 0), s["ticker"]))
+    def count(test):
+        return sum(bool(test(s)) for s in signals)
+    states = {key: count(lambda s: s.get("stage") == label) for key, label in STATE_LABELS.items()}
+    valid = [s["liquidity"] for s in signals if (s.get("liquidity") or {}).get("available")]
+    stats = {
+        "ready": states["READY"], "semi": states["SEMI"], "watch": states["WATCH"], "moved": states["MOVED"],
+        "catalysts": count(lambda s: s.get("has_upcoming_catalyst")), "warnings": count(lambda s: s.get("has_warning")),
+        "dormant_bases": count(lambda s: (s.get("dormant_base") or {}).get("is_dormant")),
+        "liquidity_sweeps": count(lambda s: s.get("liquidity_sweep")),
+        "liquidity_available": len(valid), "liquidity_unavailable": len(signals) - len(valid),
+        "accumulation_detected": count(lambda s: (s.get("liquidity") or {}).get("accumulation_detected")),
+        "bullish_divergence": count(lambda s: ((s.get("liquidity") or {}).get("divergence") or {}).get("direction") == "positive"),
+        "bearish_divergence": count(lambda s: ((s.get("liquidity") or {}).get("divergence") or {}).get("direction") == "negative"),
+        "avg_cmf": sum(l["cmf"] for l in valid) / len(valid) if valid else None,
+    }
+    rules = {
+        "split_window_days": [WIN_MIN, WIN_MAX], "max_rise_from_split_pct": MAX_RISE, "min_drop_pct": DROP_MIN,
+        "rsi_oversold": RSI_OS, "support_hold_sessions": HOLD_MIN, "resistance_bounce_pct": RES_MIN,
+        "retest_near_pct": RETEST_NEAR, "higher_low_pct": HIGHER_LOW, "hold_after_retest_sessions": HOLD_AFTER_MIN,
+        "neckline_max_dist_pct": NECK_MAX, "max_extension_above_neck_pct": EXT_NECK_MAX,
+        "exclude_run_from_support_pct": EXCLUDE_RUN, "cmf_period": CMF_PERIOD, "cmf_fast_period": CMF_FAST, "mfi_period": MFI_PERIOD,
+        "divergence_cmf_delta": .04, "divergence_mfi_delta": 5, "pivot_radius": 2, "pivot_min_separation": 4,
+        "composite_weights": [70, 30], "timeframes": ["1D", "4H"],
+    }
+    return {
+        "schema_version": 3, "updated_at": updated_at or dt.datetime.now(dt.timezone.utc).isoformat(),
+        "count": len(signals), "stats": stats, "signals": signals, "diagnostics": diagnostics,
+        "states": STATE_LABELS, "rules": rules,
+        "conditions": [{"key": k, "label": r, "weight": w, "core": True} for k, r, w in CK]
+                      + [{"key": k, "label": r, "weight": w, "core": False} for k, r, w in CONFIRM_DEFS],
+        "analysis": {"engine": "cmf-liquidity-v1", "recalculated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+                     "note": "وقت إعادة الحساب منفصل عن وقت مسح السوق. لا أحجام اصطناعية أو قراءات 4H مستنتجة من اليومي."},
+    }
+
+
+def save_payload(payload):
+    encoded = json.dumps(clean(payload), ensure_ascii=False, allow_nan=False, separators=(",", ":")) + "\n"
+    for file in (Path("data.json"), Path("docs/data.json")):
+        file.parent.mkdir(parents=True, exist_ok=True)
+        temporary = file.with_suffix(".json.tmp")
+        temporary.write_text(encoded, encoding="utf-8")
+        temporary.replace(file)
+
+
+def enrich_from_disk(input_path="data.json", metadata_path=None):
+    """Offline upgrade. OHLC-only snapshots deliberately keep money-flow values null."""
+    raw = json.loads(Path(input_path).read_text(encoding="utf-8"))
+    names = {}
+    if metadata_path:
+        metadata = json.loads(Path(metadata_path).read_text(encoding="utf-8"))
+        rows = metadata if isinstance(metadata, list) else metadata.get("all", metadata.get("tickers", []))
+        names = {r.get("ticker") or r.get("symbol"): r["company"] for r in rows if r.get("company")}
+    signals = []
+    for s in raw.get("signals", []):
+        if not s.get("chart"):
+            signals.append(s)
+            continue
+        copy = {**s, "company": s.get("company") or names.get(s["ticker"], "")}
+        h4 = frame_from_bars(s["chart_4h"]) if s.get("chart_4h") else None
+        signals.append(attach_analytics(copy, frame_from_bars(s["chart"]), h4, snapshot=True))
+    payload = build_payload(signals, raw.get("diagnostics") or {}, raw.get("updated_at"))
+    save_payload(payload)
+    print("enriched", len(signals), "| liquidity available", payload["stats"]["liquidity_available"],
+          "| pending actual volume", payload["stats"]["liquidity_unavailable"])
+    return payload
+
+
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Reverse-split scanner and honest offline CMF enrichment")
+    parser.add_argument("--enrich", action="store_true", help="recalculate saved data without accessing Yahoo")
+    parser.add_argument("--input", default="data.json", help="snapshot to enrich")
+    parser.add_argument("--metadata", help="optional JSON containing observed company names (not volume proxies)")
+    args = parser.parse_args()
+    if args.enrich:
+        enrich_from_disk(args.input, args.metadata)
+    else:
+        main()
