@@ -1,5 +1,5 @@
 /* Network-first PWA; never cache-bust a new data entry every minute. */
-const CACHE = 'stock-radar-terminal-v4';
+const CACHE = 'stock-radar-terminal-v5';
 const CORE = ['./', './index.html', './terminal.css', './terminal.js', './theme.js', './manifest.json', './icon.svg', './settings.html'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));
